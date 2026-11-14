@@ -1,0 +1,59 @@
+name: Unpack zip uploads
+
+# Upload a .zip to the repo root on github.com (Add file > Upload files) and this unpacks it into the repo,
+# makes the repo match the zip, deletes the zip and commits. Vercel then deploys the new commit by itself.
+on:
+  push:
+    branches: [main, master]
+    paths: ['*.zip']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: unpack-zip
+  cancel-in-progress: false
+
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Unpack any .zip in the repo root
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          zips=(*.zip)
+          if [ ${#zips[@]} -eq 0 ]; then echo "No .zip uploaded, nothing to unpack."; exit 0; fi
+          for z in "${zips[@]}"; do
+            echo "Unpacking $z"
+            tmp=$(mktemp -d)
+            unzip -q -o "$z" -d "$tmp"
+            rm -rf "$tmp/__MACOSX"
+            src="$tmp"
+            # a zip made with right-click > Compress wraps everything in one folder: step into it
+            if [ "$(find "$tmp" -mindepth 1 -maxdepth 1 | wc -l)" -eq 1 ] && [ -d "$(find "$tmp" -mindepth 1 -maxdepth 1)" ]; then
+              src="$(find "$tmp" -mindepth 1 -maxdepth 1)"
+            fi
+            rm -rf "$src/.git" "$src/.github" "$src/node_modules"
+            find "$src" -maxdepth 1 -name '*.zip' -delete
+            # a full project zip (has index.html) replaces the site files, so deleted or renamed files disappear too;
+            # .github and any other zips are kept. A partial zip only adds and replaces files.
+            if [ -f "$src/index.html" ]; then
+              find . -mindepth 1 -maxdepth 1 ! -name .git ! -name .github ! -name '*.zip' -exec rm -rf {} +
+            fi
+            cp -a "$src"/. .
+            rm -f "$z"
+          done
+          # commit as the person who uploaded the zip, so Vercel recognises the author and deploys
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR_ID}+${GITHUB_ACTOR}@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -q -m "Update site from ${zips[*]}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi

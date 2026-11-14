@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://kajersathi.vercel.app/sitemap.xml

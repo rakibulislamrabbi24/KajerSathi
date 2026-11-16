@@ -5,7 +5,7 @@
 
 const CACHE_PREFIX = 'kajersathi-';
 const LEGACY_PREFIXES = ['aether-'];                // caches from the old brand name are removed on activate
-const CACHE_VERSION = 'kajersathi-14594dbb30';
+const CACHE_VERSION = 'kajersathi-fixed-mwiw56f4';
 
 // Every file the app needs. Paths are relative to this file, so it works under /repo-name/ on GitHub Pages.
 const PRECACHE = [

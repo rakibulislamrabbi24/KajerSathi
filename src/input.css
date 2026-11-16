@@ -41,3 +41,16 @@
       .opt { @apply flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-slate-300/80 bg-white/60 px-3.5 py-2.5 text-sm transition hover:bg-white dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10; }
       .badge { @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold; }
     }
+
+/* SutonnyMJ — Bijoy ANSI live preview font */
+@font-face {
+  font-family: 'SutonnyMJ';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('SutonnyMJ'), local('SutonnyMJ Regular'), url('../fonts/SutonnyMJ.woff2') format('woff2'), url('../fonts/SutonnyMJ.ttf') format('truetype');
+}
+.font-bijoy, #avro-bijoy {
+  font-family: 'SutonnyMJ', 'Noto Sans Bengali', monospace !important;
+  font-variant-ligatures: none;
+}

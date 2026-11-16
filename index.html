@@ -199,6 +199,9 @@
         <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="password" id="tab-password" aria-controls="panel-password" aria-selected="false">
           <i data-lucide="key-round" class="h-4 w-4"></i><span data-i18n="common.password">পাসওয়ার্ড</span>
         </button>
+        <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="avro" id="tab-avro" aria-controls="panel-avro" aria-selected="false">
+          <i data-lucide="languages" class="h-4 w-4"></i><span data-i18n="nav.avro">অভ্র ↔ বিজয়</span>
+        </button>
         <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="upcoming" id="tab-upcoming" aria-controls="panel-upcoming" aria-selected="false">
           <i data-lucide="sparkles" class="h-4 w-4"></i><span data-i18n="nav.upcoming">আসছে</span>
         </button>
@@ -847,6 +850,83 @@
       </form>
     </section>
 
+    <!-- ============ MODULE 6: AVRO <-> BIJOY CONVERTER ============ -->
+    <section id="panel-avro" data-panel="avro" role="tabpanel" aria-labelledby="tab-avro" class="hidden space-y-6">
+      <div class="card space-y-6 p-5 sm:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/70 pb-4 dark:border-white/10">
+          <div>
+            <h2 class="flex items-center gap-2 text-sm font-bold">
+              <i data-lucide="languages" class="h-4 w-4 text-indigo-500"></i>
+              <span data-i18n="avro.title">অভ্র থেকে বিজয় / ইউনিকোড ↔ ANSI কনভার্টার</span>
+            </h2>
+            <p class="mt-1 text-xs text-slate-500 dark:text-slate-400" data-i18n="avro.subtitle">
+              যেকোনো বক্সে লিখুন বা পেস্ট করুন — সাথে সাথে অন্য বক্সে রূপান্তর হয়ে যাবে।
+            </p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" id="avro-sample" class="btn btn-soft !px-3 !py-1.5 !text-xs">
+              <i data-lucide="wand-sparkles" class="h-3.5 w-3.5"></i>
+              <span data-i18n="avro.sample">নমুনা লেখা</span>
+            </button>
+            <button type="button" id="avro-clear" class="btn btn-danger !px-3 !py-1.5 !text-xs" disabled>
+              <i data-lucide="trash-2" class="h-3.5 w-3.5"></i>
+              <span data-i18n="common.clear">মুছুন</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid gap-6 sm:grid-cols-2">
+          <!-- Unicode (Avro) Box -->
+          <div class="flex flex-col space-y-2">
+            <div class="flex items-center justify-between gap-2">
+              <label for="avro-unicode" class="label !mb-0" data-i18n="avro.unicode_label">ইউনিকোড (অভ্র / ওয়েব বাংলা)</label>
+              <span id="avro-uni-stats" class="font-mono text-[11px] text-slate-400"></span>
+            </div>
+            <textarea id="avro-unicode" rows="9" class="input min-h-[220px] resize-y text-lg leading-relaxed"
+              placeholder="এখানে ইউনিকোড (অভ্র) বাংলা লিখুন বা পেস্ট করুন…"
+              data-i18n-attr="placeholder:avro.unicode_placeholder"></textarea>
+            <div class="flex flex-wrap gap-2 pt-1">
+              <button type="button" id="avro-copy-uni" class="btn btn-primary flex-1" disabled>
+                <i data-lucide="copy" class="h-4 w-4"></i>
+                <span data-i18n="avro.copy_unicode">ইউনিকোড কপি</span>
+              </button>
+              <button type="button" id="avro-to-bijoy" class="btn btn-soft" title="ইউনিকোড থেকে বিজয়ে রূপান্তর করুন" data-i18n-attr="title:avro.convert_to_bijoy">
+                <span data-i18n="avro.btn_to_bijoy">বিজয় করুন</span>
+                <i data-lucide="arrow-right" class="h-4 w-4"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Bijoy (ANSI / SutonnyMJ) Box -->
+          <div class="flex flex-col space-y-2">
+            <div class="flex items-center justify-between gap-2">
+              <label for="avro-bijoy" class="label !mb-0" data-i18n="avro.bijoy_label">বিজয় ANSI (SutonnyMJ)</label>
+              <span id="avro-bij-stats" class="font-mono text-[11px] text-slate-400"></span>
+            </div>
+            <textarea id="avro-bijoy" rows="9" class="input min-h-[220px] resize-y font-mono text-lg leading-relaxed"
+              spellcheck="false" autocapitalize="off" autocorrect="off"
+              placeholder="এখানে বিজয় (SutonnyMJ) লেখা পেস্ট করুন বা বাঁয়ে লিখলে এখানে রূপান্তর হবে…"
+              data-i18n-attr="placeholder:avro.bijoy_placeholder"></textarea>
+            <div class="flex flex-wrap gap-2 pt-1">
+              <button type="button" id="avro-copy-bij" class="btn btn-primary flex-1" disabled>
+                <i data-lucide="copy" class="h-4 w-4"></i>
+                <span data-i18n="avro.copy_bijoy">বিজয় কপি</span>
+              </button>
+              <button type="button" id="avro-to-uni" class="btn btn-soft" title="বিজয় থেকে ইউনিকোডে রূপান্তর করুন" data-i18n-attr="title:avro.convert_to_unicode">
+                <i data-lucide="arrow-left" class="h-4 w-4"></i>
+                <span data-i18n="avro.btn_to_unicode">ইউনিকোড করুন</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <p class="flex items-start gap-2 border-t border-slate-200/70 pt-4 text-xs text-slate-500 dark:border-white/10 dark:text-slate-400">
+          <i data-lucide="shield-check" class="mt-px h-4 w-4 shrink-0 text-emerald-500"></i>
+          <span data-i18n="avro.privacy_note">সব লেখা আপনার ডিভাইসেই রূপান্তর হয় — কোনো সার্ভার বা ইন্টারনেটে পাঠানো হয় না। MS Word, Photoshop বা Illustrator-এ বিজয় আউটপুট ব্যবহার করতে ফন্ট হিসেবে SutonnyMJ সিলেক্ট করুন।</span>
+        </p>
+      </div>
+    </section>
+
     <!-- ============ UPCOMING ============ -->
     <section id="panel-upcoming" data-panel="upcoming" role="tabpanel" aria-labelledby="tab-upcoming" class="hidden">
       <div class="mx-auto mb-8 max-w-2xl text-center">
@@ -1060,7 +1140,7 @@
      * Tabs
      * ===================================================================== */
     const Tabs = {
-      names: ['generator', 'scanner', 'image', 'jobphoto', 'password', 'upcoming'],
+      names: ['generator', 'scanner', 'image', 'jobphoto', 'password', 'avro', 'upcoming'],
       show(name, updateHash = true) {
         if (!this.names.includes(name)) name = 'generator';
         $$('[data-tab]').forEach(b => {
@@ -2899,6 +2979,224 @@
     })();
 
     /* =====================================================================
+     * Module 6 — Avro (Unicode) <-> Bijoy (ANSI / SutonnyMJ) Converter
+     * ===================================================================== */
+    const AvroConverter = (() => {
+      // Ordered longest-first so 3-consonant conjuncts match before 2-consonant ones
+      const CONJUNCTS = [
+        ['ক্ষ্ণ', 'ÿ'], ['ক্ষ্ম', '²'], ['ঙ্ক্ষ', 'O¶'], ['চ্ছ্ব', '”Q¡'], ['চ্ছ্র', '”Qª'],
+        ['জ্জ্ব', '¾¡'], ['জ্জ্র', '¾ª'], ['ত্ত্ব', 'Ë¡'], ['ত্ম্য', 'Z¥¨'], ['দ্ধ্ব', '×¡'],
+        ['দ্ব্য', 'Ø¨'], ['ন্ত্ব', 'šÍ¡'], ['ন্দ্ব', '›Ø'], ['ন্ধ্র', 'Üª'], ['ন্ত্র', 'š¿'],
+        ['ম্প্র', '¤úª'], ['ম্ভ্র', '¤¢ª'], ['স্ক্র', '¯‹ª'], ['স্ট্র', '÷ª'], ['স্ত্র', '¯¿'],
+        ['স্প্র', '¯úª'], ['ষ্ণ্র', 'òª'],
+        // Special vowel-attached forms in SutonnyMJ
+        ['ত্রু', 'Îæ'], ['দ্রু', '`ªæ'], ['ধ্রু', 'aªæ'], ['ভ্রু', 'åæ'], ['ভ্রূ', 'åƒ'],
+        ['শ্রু', 'kÖæ'], ['শ্রূ', 'kÖƒ'], ['ক্রু', 'µæ'], ['গ্রু', 'MÖæ'], ['প্রু', 'cÖæ'],
+        ['গু', '¸'], ['রু', 'iy'], ['রূ', 'iƒ'], ['শু', 'ï'], ['হু', 'û'], ['হৃ', 'ü'],
+        // 2-consonant conjuncts
+        ['ক্ক', '°'], ['ক্ট', '±'], ['ক্ত', '³'], ['ক্ব', 'K¡'], ['ক্ম', '²'], ['ক্র', 'µ'],
+        ['ক্ল', '¬'], ['ক্ষ', '¶'], ['ক্স', '·'], ['খ্র', 'Lª'], ['গ্দ', 'M˜'], ['গ্ধ', '×'],
+        ['গ্ন', 'Mœ'], ['গ্ব', 'M¡'], ['গ্ম', 'M¥'], ['গ্র', 'MÖ'], ['গ্ল', 'Mø'], ['ঘ্ন', 'Nœ'],
+        ['ঘ্র', 'Nª'], ['ঙ্ক', '¼'], ['ঙ্খ', 'O•L'], ['ঙ্গ', '½'], ['ঙ্ঘ', 'O•N'], ['ঙ্ম', 'O¥'],
+        ['চ্চ', '”P'], ['চ্ছ', '”Q'], ['চ্ঞ', '”T'], ['জ্জ', '¾'], ['জ্ঝ', 'À'], ['জ্ঞ', 'Á'],
+        ['জ্ব', 'R¡'], ['জ্র', 'Rª'], ['ঞ্চ', 'Â'], ['ঞ্ছ', 'Ã'], ['ঞ্জ', 'Ä'], ['ঞ্ঝ', 'Å'],
+        ['ট্ট', 'Æ'], ['ট্ব', 'U¡'], ['ট্ম', 'U¥'], ['ট্র', 'Uª'], ['ড্ড', 'Ç'], ['ড্র', 'Wª'],
+        ['ণ্ট', 'È'], ['ণ্ঠ', 'É'], ['ণ্ড', 'Ê'], ['ণ্ব', 'Y¡'], ['ণ্ম', 'Y¥'], ['ত্ত', 'Ë'],
+        ['ত্থ', 'Ì'], ['ত্ন', 'Zœ'], ['ত্ব', 'Z¡'], ['ত্ম', 'Z¥'], ['ত্র', 'Î'], ['থ্ব', '_¡'],
+        ['থ্র', '_ª'], ['দ্গ', '˜M'], ['দ্ঘ', '˜N'], ['দ্দ', 'Ï'], ['দ্ধ', '×'], ['দ্ব', 'Ø'],
+        ['দ্ভ', '™¢'], ['দ্ম', 'Ù'], ['দ্র', '`ª'], ['ধ্ন', 'aœ'], ['ধ্ব', 'aŸ'], ['ধ্ম', 'a¥'],
+        ['ধ্র', 'aª'], ['ন্ট', '›U'], ['ন্ঠ', 'Ú'], ['ন্ড', 'Û'], ['ন্ত', 'šÍ'], ['ন্থ', 'š’'],
+        ['ন্দ', '›`'], ['ন্ধ', 'Ü'], ['ন্ন', 'bœ'], ['ন্ব', 'š^'], ['ন্ম', 'b¥'], ['ন্স', 'Ý'],
+        ['প্ট', 'Þ'], ['প্ত', 'ß'], ['প্ন', 'cœ'], ['প্প', 'à'], ['প্র', 'cÖ'], ['প্ল', 'cø'],
+        ['প্স', 'á'], ['ফ্র', 'dª'], ['ফ্ল', 'dø'], ['ব্জ', 'â'], ['ব্দ', 'ã'], ['ব্ধ', 'ä'],
+        ['ব্ব', 'eŸ'], ['ব্র', 'eÖ'], ['ব্ল', 'eø'], ['ভ্র', 'å'], ['ভ্ল', 'fø'], ['ম্ন', 'gœ'],
+        ['ম্প', '¤ú'], ['ম্ফ', '¤¢'], ['ম্ব', '¤^'], ['ম্ভ', '¤£'], ['ম্ম', '¤¥'], ['ম্র', 'gÖ'],
+        ['ম্ল', '¤ø'], ['য্র', 'hÖ'], ['ল্ক', 'é'], ['ল্গ', 'ê'], ['ল্ট', 'ë'], ['ল্ড', 'ì'],
+        ['ল্প', 'í'], ['ল্ফ', 'î'], ['ল্ব', 'j¡'], ['ল্ম', 'j¥'], ['ল্ল', 'jø'], ['শ্চ', 'ð'],
+        ['শ্ছ', 'kQ'], ['শ্ন', 'kœ'], ['শ্ব', 'k¡'], ['শ্ম', 'k¥'], ['শ্র', 'kÖ'], ['শ্ল', 'kø'],
+        ['ষ্ক', 'ñ'], ['ষ্ট', 'ó'], ['ষ্ঠ', 'ô'], ['ষ্ণ', 'ò'], ['ষ্প', 'õ'], ['ষ্ফ', 'ö'],
+        ['ষ্ব', 'l¡'], ['ষ্ম', '÷'], ['স্ক', '¯‹'], ['স্ট', '÷'], ['স্ত', '¯Í'], ['স্থ', '¯’'],
+        ['স্ন', '¯œ'], ['স্প', '¯ú'], ['স্ফ', 'ù'], ['স্ব', '¯^'], ['স্ম', '¯¥'], ['স্র', '¯ª'],
+        ['স্ল', '¯ø'], ['হ্ণ', 'nè'], ['হ্ন', 'ý'], ['হ্ব', 'nŸ'], ['হ্ম', 'þ'], ['হ্র', 'nª'],
+        ['হ্ল', 'n¬'], ['ড়্গ', 'ÿ'],
+        // Folla & Hoshonto
+        ['্য', '¨'], ['্র', 'ª'], ['্ব', '¡'], ['্ম', '¥'], ['্ল', 'ø'], ['্ন', 'œ']
+      ];
+
+      const CHAR_MAP = [
+        ['অ', 'A'], ['আ', 'Av'], ['ই', 'B'], ['ঈ', 'C'], ['উ', 'D'], ['ঊ', 'E'],
+        ['ঋ', 'F'], ['এ', 'G'], ['ঐ', 'H'], ['ও', 'I'], ['ঔ', 'J'],
+        ['ক', 'K'], ['খ', 'L'], ['গ', 'M'], ['ঘ', 'N'], ['ঙ', 'O'],
+        ['চ', 'P'], ['ছ', 'Q'], ['জ', 'R'], ['ঝ', 'S'], ['ঞ', 'T'],
+        ['ট', 'U'], ['ঠ', 'V'], ['ড', 'W'], ['ঢ', 'X'], ['ণ', 'Y'],
+        ['ত', 'Z'], ['থ', '_'], ['দ', '`'], ['ধ', 'a'], ['ন', 'b'],
+        ['প', 'c'], ['ফ', 'd'], ['ব', 'e'], ['ভ', 'f'], ['ম', 'g'],
+        ['য', 'h'], ['র', 'i'], ['ল', 'j'], ['শ', 'k'], ['ষ', 'l'],
+        ['স', 'm'], ['হ', 'n'], ['ড়', 'o'], ['ঢ়', 'p'], ['য়', 'q'],
+        ['ৎ', 'r'], ['ং', 's'], ['ঃ', 't'], ['ঁ', 'u'],
+        ['০', '0'], ['১', '1'], ['২', '2'], ['৩', '3'], ['৪', '4'],
+        ['৫', '5'], ['৬', '6'], ['৭', '7'], ['৮', '8'], ['৯', '9'],
+        ['া', 'v'], ['ি', 'w'], ['ী', 'x'], ['ু', 'y'], ['ূ', '~'],
+        ['ৃ', '…'], ['ে', '†'], ['ৈ', '‡'], ['ৗ', 'Š'], ['্', '&'], ['।', '|']
+      ];
+
+      const UNI_TO_BIJ = Object.fromEntries(CHAR_MAP);
+      const BIJ_TO_UNI_TOKENS = [...CONJUNCTS, ...CHAR_MAP]
+        .sort((a, b) => b[1].length - a[1].length);
+
+      function unicodeToBijoy(input) {
+        if (!input) return '';
+        let s = input
+          .replace(/ড\u09BC/g, 'ড়')
+          .replace(/ঢ\u09BC/g, 'ঢ়')
+          .replace(/য\u09BC/g, 'য়')
+          .replace(/\u200C|\u200D/g, '');
+
+        s = s.replace(/ো/g, 'ো').replace(/ৌ/g, 'ৌ');
+
+        const clusterRe = /র্((?:[ক-হড়ঢ়য়]্)*[ক-হড়ঢ়য়](?:[্য্র্ব্ম্ল্ন])?)([িেৈ])?/g;
+        s = s.replace(clusterRe, (_, cluster, preKar) => (preKar || '') + cluster + '©');
+
+        const preKarRe = /((?:[ক-হড়ঢ়য়]্)*[ক-হড়ঢ়য়](?:[্য্র্ব্ম্ল্ন])?)([িেৈ])/g;
+        s = s.replace(preKarRe, '$2$1');
+
+        for (const [uni, bij] of CONJUNCTS) {
+          if (s.includes(uni)) s = s.split(uni).join(bij);
+        }
+
+        let out = '';
+        for (const ch of s) {
+          out += UNI_TO_BIJ[ch] !== undefined ? UNI_TO_BIJ[ch] : ch;
+        }
+        return out;
+      }
+
+      function bijoyToUnicode(input) {
+        if (!input) return '';
+        let s = input
+          .replace(/‰/g, '‡')
+          .replace(/ˆ/g, '†')
+          .replace(/„/g, '…')
+          .replace(/‚/g, '~')
+          .replace(/z/g, 'y');
+
+        let decoded = '';
+        let i = 0;
+        while (i < s.length) {
+          let matched = false;
+          for (const [uni, bij] of BIJ_TO_UNI_TOKENS) {
+            if (s.startsWith(bij, i)) {
+              decoded += uni;
+              i += bij.length;
+              matched = true;
+              break;
+            }
+          }
+          if (!matched) {
+            decoded += s[i];
+            i++;
+          }
+        }
+
+        const moveKarBack = /([িেৈ])((?:[ক-হড়ঢ়য়]্)*[ক-হড়ঢ়য়])/g;
+        decoded = decoded.replace(moveKarBack, '$2$1');
+
+        const moveRephBack = /((?:[ক-হড়ঢ়য়]্)*[ক-হড়ঢ়য়])([া-ৌৗ]?)©/g;
+        decoded = decoded.replace(moveRephBack, 'র্$1$2');
+
+        decoded = decoded
+          .replace(/অা/g, 'আ')
+          .replace(/ো/g, 'ো')
+          .replace(/ৌ/g, 'ৌ');
+
+        return decoded;
+      }
+
+      function countStats(str) {
+        const trimmed = str.trim();
+        const words = trimmed ? trimmed.split(/\s+/).length : 0;
+        const chars = [...str].length;
+        return t('avro.stats', { w: words, c: chars });
+      }
+
+      function init() {
+        const uniEl = $('#avro-unicode');
+        const bijEl = $('#avro-bijoy');
+        const uniStats = $('#avro-uni-stats');
+        const bijStats = $('#avro-bij-stats');
+        const btnCopyUni = $('#avro-copy-uni');
+        const btnCopyBij = $('#avro-copy-bij');
+        const btnClear = $('#avro-clear');
+
+        function syncMeta() {
+          const hasUni = uniEl.value.length > 0;
+          const hasBij = bijEl.value.length > 0;
+          uniStats.textContent = countStats(uniEl.value);
+          bijStats.textContent = countStats(bijEl.value);
+          btnCopyUni.disabled = !hasUni;
+          btnCopyBij.disabled = !hasBij;
+          btnClear.disabled = !(hasUni || hasBij);
+        }
+
+        uniEl.addEventListener('input', () => {
+          bijEl.value = unicodeToBijoy(uniEl.value);
+          syncMeta();
+        });
+
+        bijEl.addEventListener('input', () => {
+          uniEl.value = bijoyToUnicode(bijEl.value);
+          syncMeta();
+        });
+
+        $('#avro-to-bijoy').addEventListener('click', () => {
+          bijEl.value = unicodeToBijoy(uniEl.value);
+          syncMeta();
+        });
+
+        $('#avro-to-uni').addEventListener('click', () => {
+          uniEl.value = bijoyToUnicode(bijEl.value);
+          syncMeta();
+        });
+
+        $('#avro-sample').addEventListener('click', () => {
+          uniEl.value = t('avro.sample_text');
+          bijEl.value = unicodeToBijoy(uniEl.value);
+          syncMeta();
+        });
+
+        btnClear.addEventListener('click', () => {
+          uniEl.value = '';
+          bijEl.value = '';
+          syncMeta();
+          uniEl.focus();
+        });
+
+        btnCopyUni.addEventListener('click', async () => {
+          try {
+            await copyText(uniEl.value);
+            toast('toast.copied', 'success');
+            setButton(btnCopyUni, 'check', 'btn.copied');
+            setTimeout(() => setButton(btnCopyUni, 'copy', 'avro.copy_unicode'), 1500);
+          } catch { toast('toast.copy_failed', 'error'); }
+        });
+
+        btnCopyBij.addEventListener('click', async () => {
+          try {
+            await copyText(bijEl.value);
+            toast('toast.copied', 'success');
+            setButton(btnCopyBij, 'check', 'btn.copied');
+            setTimeout(() => setButton(btnCopyBij, 'copy', 'avro.copy_bijoy'), 1500);
+          } catch { toast('toast.copy_failed', 'error'); }
+        });
+
+        I18N.onChange(syncMeta);
+        syncMeta();
+      }
+
+      return { init, unicodeToBijoy, bijoyToUnicode };
+    })();
+
+    /* =====================================================================
      * Roadmap cards
      * ===================================================================== */
     const CATEGORIES = ['all', 'qr', 'images', 'docs', 'bangla', 'utilities'];     // labels: road.cat.*
@@ -2908,7 +3206,7 @@
       { id: 'chat',     icon: 'message-circle', cat: 'qr',        eta: 'live', href: '#generator', type: 'whatsapp' },
       { id: 'image',    icon: 'image-down',     cat: 'images',    eta: 'live', href: '#image' },
       { id: 'jobphoto', icon: 'id-card',        cat: 'images',    eta: 'live', href: '#jobphoto' },
-      { id: 'avro',     icon: 'languages',      cat: 'bangla',    eta: 'next' },
+      { id: 'avro',     icon: 'languages',      cat: 'bangla',    eta: 'live', href: '#avro' },
       { id: 'pdf',      icon: 'file-text',      cat: 'docs',      eta: 'planned' },
       { id: 'invoice',  icon: 'receipt',        cat: 'docs',      eta: 'planned' },
       { id: 'bndate',   icon: 'calendar-days',  cat: 'bangla',    eta: 'planned' },
@@ -3045,6 +3343,7 @@
       Generator.init();
       Scanner.init();
       Password.init();
+      AvroConverter.init();
       ImageTool.init();
       JobPhoto.init();
       Tabs.init();

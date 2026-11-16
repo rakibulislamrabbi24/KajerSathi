@@ -3041,33 +3041,47 @@
       ];
 
       const UNI_TO_BIJ = Object.fromEntries(CHAR_MAP);
+      // Longest-match-first is essential: ক্ষ্ম must be consumed before ক্ষ/ক্ম,
+      // and multi-character Bijoy codes must be decoded before their prefixes.
+      const CONJUNCTS_LONGEST = [...CONJUNCTS].sort((a, b) => [...b[0]].length - [...a[0]].length);
       const BIJ_TO_UNI_TOKENS = [...CONJUNCTS, ...CHAR_MAP]
         .sort((a, b) => b[1].length - a[1].length);
 
+      // Bengali consonant clusters may contain more than one conjunct. Keep the
+      // complete virama-linked cluster together while moving pre-base kar/reph.
+      const CONS = '[ক-হড়ঢ়য়ৎ]';
+      const CLUSTER = `${CONS}(?:্${CONS})*`;
+
       function unicodeToBijoy(input) {
         if (!input) return '';
-        let s = input
-          .replace(/ড\u09BC/g, 'ড়')
-          .replace(/ঢ\u09BC/g, 'ঢ়')
-          .replace(/য\u09BC/g, 'য়')
+        // Canonicalise decomposed Bengali nukta letters before applying mappings.
+        let s = input.normalize('NFC')
+          // Bengali precomposed nukta letters and the common য় spelling are
+          // not all represented by the same Unicode code point.
+          // These three letters are canonically decomposed by NFC, so map
+          // the base+nukta pair as a unit rather than character-by-character.
+          .replace(/ড\u09BC/g, 'o')
+          .replace(/ঢ\u09BC/g, 'p')
+          .replace(/য\u09BC/g, 'q')
           .replace(/\u200C|\u200D/g, '');
 
+        // Bijoy stores o/ou-kar as e-kar followed by the post-base component.
         s = s.replace(/ো/g, 'ো').replace(/ৌ/g, 'ৌ');
 
-        const clusterRe = /র্((?:[ক-হড়ঢ়য়]্)*[ক-হড়ঢ়য়](?:[্য্র্ব্ম্ল্ন])?)([িেৈ])?/g;
-        s = s.replace(clusterRe, (_, cluster, preKar) => (preKar || '') + cluster + '©');
+        // Reph is encoded after the full consonant cluster in Bijoy.
+        const rephRe = new RegExp(`র্(${CLUSTER})([িেৈ]?)`, 'g');
+        s = s.replace(rephRe, (_, cluster, preKar) => (preKar || '') + cluster + '©');
 
-        const preKarRe = /((?:[ক-হড়ঢ়য়]্)*[ক-হড়ঢ়য়](?:[্য্র্ব্ম্ল্ন])?)([িেৈ])/g;
+        // ই/এ/ঐ-কার are typed before the entire conjunct cluster in Bijoy.
+        const preKarRe = new RegExp(`(${CLUSTER})([িেৈ])`, 'g');
         s = s.replace(preKarRe, '$2$1');
 
-        for (const [uni, bij] of CONJUNCTS) {
+        for (const [uni, bij] of CONJUNCTS_LONGEST) {
           if (s.includes(uni)) s = s.split(uni).join(bij);
         }
 
         let out = '';
-        for (const ch of s) {
-          out += UNI_TO_BIJ[ch] !== undefined ? UNI_TO_BIJ[ch] : ch;
-        }
+        for (const ch of s) out += UNI_TO_BIJ[ch] !== undefined ? UNI_TO_BIJ[ch] : ch;
         return out;
       }
 
@@ -3109,7 +3123,11 @@
           .replace(/ো/g, 'ো')
           .replace(/ৌ/g, 'ৌ');
 
-        return decoded;
+        // Restore canonical Bengali nukta forms and normalize combining marks.
+        return decoded
+          .replace(/ড়/g, 'ড়')
+          .replace(/ঢ়/g, 'ঢ়')
+          .normalize('NFC');
       }
 
       function countStats(str) {

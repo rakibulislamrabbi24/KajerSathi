@@ -34,3 +34,9 @@ A zip without `index.html` is treated as a patch: it only adds and replaces file
 - `index.html`, `sw.js`, `manifest.json`, `vercel.json`, `robots.txt`, `sitemap.xml`
 - `assets/` compiled CSS, fonts (Inter, Noto Sans Bengali), i18n dictionaries, vendored libraries (+ licenses), icons, share image
 - `src/input.css`, `tailwind.config.js`, `scripts/` build tooling
+
+## Bangla Unicode (Avro) → Bijoy converter
+
+The Unicode-to-Bijoy path keeps complete virama-linked consonant clusters together when reordering pre-base vowel signs and reph, applies longest-conjunct-first replacement, normalizes Bengali text, and handles the decomposed `ড়`, `ঢ়`, and `য়` code points. The converter remains fully client-side.
+
+A lightweight regression check is available with `node test-avro-converter.cjs` (10 representative Unicode-to-Bijoy cases). Bijoy output is legacy ANSI text; select **SutonnyMJ** in Word/Photoshop/Illustrator when pasting it. Conversion coverage can still vary with uncommon legacy glyph sequences and should be validated against the exact documents/fonts used in production.

@@ -903,11 +903,17 @@
               <label for="avro-bijoy" class="label !mb-0" data-i18n="avro.bijoy_label">বিজয় ANSI (SutonnyMJ)</label>
               <span id="avro-bij-stats" class="font-mono text-[11px] text-slate-400"></span>
             </div>
-            <textarea id="avro-bijoy" rows="9" class="input font-mono min-h-[180px] resize-y text-lg leading-relaxed"
-              spellcheck="false" autocapitalize="off" autocorrect="off"
-              placeholder="এখানে বিজয় (SutonnyMJ) ANSI লেখা পেস্ট করুন…"
-              data-i18n-attr="placeholder:avro.bijoy_placeholder"></textarea>
-            <section class="bijoy-preview-wrap" aria-labelledby="avro-preview-heading">
+            <div class="bijoy-view-switch" role="tablist" aria-label="বিজয় আউটপুট ভিউ">
+              <button type="button" id="avro-view-code" class="bijoy-view-tab is-active" role="tab" aria-selected="true" aria-controls="avro-code-panel">ANSI কোড</button>
+              <button type="button" id="avro-view-preview" class="bijoy-view-tab" role="tab" aria-selected="false" aria-controls="avro-preview-panel">লাইভ প্রিভিউ</button>
+            </div>
+            <div id="avro-code-panel" role="tabpanel" aria-labelledby="avro-view-code">
+              <textarea id="avro-bijoy" rows="9" class="input font-mono min-h-[220px] resize-y text-lg leading-relaxed"
+                spellcheck="false" autocapitalize="off" autocorrect="off"
+                placeholder="এখানে বিজয় (SutonnyMJ) ANSI লেখা পেস্ট করুন…"
+                data-i18n-attr="placeholder:avro.bijoy_placeholder"></textarea>
+            </div>
+            <section id="avro-preview-panel" class="bijoy-preview-wrap hidden" role="tabpanel" aria-labelledby="avro-view-preview" aria-labelledby="avro-preview-heading">
               <div class="bijoy-preview-head">
                 <div>
                   <h3 id="avro-preview-heading">বিজয় ANSI — লাইভ প্রিভিউ</h3>
@@ -3142,6 +3148,22 @@
         const previewEl = $('#avro-bijoy-preview');
         const fontStatusEl = $('#avro-font-status');
         const fontFileEl = $('#avro-font-file');
+        const codePanel = $('#avro-code-panel');
+        const previewPanel = $('#avro-preview-panel');
+        const codeTab = $('#avro-view-code');
+        const previewTab = $('#avro-view-preview');
+
+        function showBijoyView(view) {
+          const isPreview = view === 'preview';
+          codePanel.classList.toggle('hidden', isPreview);
+          previewPanel.classList.toggle('hidden', !isPreview);
+          codeTab.classList.toggle('is-active', !isPreview);
+          previewTab.classList.toggle('is-active', isPreview);
+          codeTab.setAttribute('aria-selected', String(!isPreview));
+          previewTab.setAttribute('aria-selected', String(isPreview));
+        }
+        codeTab.addEventListener('click', () => showBijoyView('code'));
+        previewTab.addEventListener('click', () => showBijoyView('preview'));
 
         function syncMeta() {
           const hasUni = uniEl.value.length > 0;

@@ -27,3 +27,29 @@
 .bijoy-view-tab:focus-visible{outline:2px solid #818cf8;outline-offset:2px;}
 #avro-preview-panel{min-height:220px;}
 #avro-preview-panel .bijoy-preview{min-height:220px;max-height:320px;}
+
+
+/* Balanced two-column Avro/Bijoy workspace and a single output surface. */
+#panel-avro .grid.sm\:grid-cols-2 { align-items: start; }
+#panel-avro .grid.sm\:grid-cols-2 > div { min-width: 0; }
+#panel-avro #avro-unicode { width: 100%; height: 340px; min-height: 340px; max-height: 520px; resize: vertical; }
+.bijoy-output-card { overflow: hidden; border: 1px solid rgba(148,163,184,.25); border-radius: .9rem; background: rgba(2,6,23,.28); }
+.bijoy-output-toolbar { min-height: 52px; display:flex; align-items:center; justify-content:space-between; gap:.75rem; padding:.45rem .65rem; border-bottom:1px solid rgba(148,163,184,.18); }
+.bijoy-output-hint { color:#94a3b8; font-size:.68rem; }
+.bijoy-output-body { height:340px; min-height:340px; }
+#avro-code-panel, #avro-preview-panel { height:100%; }
+#avro-code-panel .input { width:100%; height:100%; min-height:0; max-height:none; resize:vertical; border:0; border-radius:0; box-shadow:none; background:transparent; }
+#avro-preview-panel { display:flex; flex-direction:column; overflow:hidden; }
+#avro-preview-panel.hidden { display:none !important; }
+.bijoy-font-empty.hidden { display:none !important; }
+#avro-preview-panel .bijoy-preview-head { flex:0 0 auto; }
+#avro-preview-panel .bijoy-preview { flex:1 1 auto; min-height:0; max-height:none; overflow:auto; }
+.bijoy-font-empty { flex:1 1 auto; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.5rem; padding:1.5rem; text-align:center; color:#94a3b8; font-size:.8rem; }
+.bijoy-font-empty strong { color:inherit; font-size:.9rem; }
+.bijoy-preview:not(.is-font-ready) { display:none; }
+@media (max-width: 639px) {
+  #panel-avro .grid.sm\:grid-cols-2 { gap:1.1rem; }
+  #panel-avro #avro-unicode, .bijoy-output-body { height:300px; min-height:300px; }
+  .bijoy-output-hint { display:none; }
+  .bijoy-output-toolbar { justify-content:flex-start; }
+}

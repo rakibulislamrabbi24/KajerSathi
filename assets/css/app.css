@@ -74,3 +74,45 @@
   .bijoy-output-hint { display:none; }
   .bijoy-output-toolbar { justify-content:flex-start; }
 }
+
+
+/* KajerSathi 1.0.5 — single live-preview panel and matched columns */
+#panel-avro .grid.sm\:grid-cols-2 { align-items: stretch; }
+#panel-avro .grid.sm\:grid-cols-2 > div { min-width: 0; display:flex; flex-direction:column; }
+#panel-avro #avro-unicode {
+  box-sizing:border-box; width:100%; height:340px; min-height:340px; max-height:340px;
+  resize:none; flex:0 0 340px;
+}
+#panel-avro .bijoy-live-card {
+  box-sizing:border-box; height:340px; min-height:340px; max-height:340px;
+  display:flex; flex-direction:column;
+}
+#panel-avro .bijoy-live-card .bijoy-preview-head {
+  box-sizing:border-box; min-height:48px; flex:0 0 48px;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:.75rem; padding:.5rem .8rem;
+  border-bottom:1px solid rgba(148,163,184,.18);
+}
+#panel-avro .bijoy-live-card .bijoy-preview {
+  box-sizing:border-box; width:100%; height:292px; min-height:0; max-height:none;
+  flex:1 1 auto; overflow:auto; padding:1rem;
+  white-space:pre-wrap; overflow-wrap:anywhere; word-break:normal;
+  font-family:'SutonnyMJ',serif; font-size:1.12rem; line-height:1.85;
+  outline:none; cursor:text;
+}
+#panel-avro .bijoy-live-card .bijoy-preview:focus {
+  box-shadow:inset 0 0 0 2px rgba(99,102,241,.55);
+}
+#panel-avro .bijoy-live-card .bijoy-preview:empty:before {
+  content:'ইউনিকোড লেখা থেকে বিজয় আউটপুট এখানে দেখা যাবে';
+  color:#94a3b8; opacity:.7;
+}
+#panel-avro .bijoy-live-card + .flex { margin-top:auto; }
+#avro-bijoy.sr-only { position:absolute!important; width:1px!important; height:1px!important;
+  padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important; border:0!important; }
+@media (max-width:639px) {
+  #panel-avro #avro-unicode { height:300px; min-height:300px; max-height:300px; flex-basis:300px; }
+  #panel-avro .bijoy-live-card { height:300px; min-height:300px; max-height:300px; }
+  #panel-avro .bijoy-live-card .bijoy-preview { height:252px; }
+}

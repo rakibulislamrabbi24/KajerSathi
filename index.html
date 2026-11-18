@@ -903,38 +903,18 @@
               <label for="avro-bijoy" class="label !mb-0" data-i18n="avro.bijoy_label">বিজয় ANSI (SutonnyMJ)</label>
               <span id="avro-bij-stats" class="font-mono text-[11px] text-slate-400"></span>
             </div>
-            <div class="bijoy-output-card">
-              <div class="bijoy-output-toolbar">
-                <div class="bijoy-view-switch" role="tablist" aria-label="বিজয় আউটপুট ভিউ">
-                  <button type="button" id="avro-view-code" class="bijoy-view-tab is-active" role="tab" aria-selected="true" aria-controls="avro-code-panel">ANSI কোড</button>
-                  <button type="button" id="avro-view-preview" class="bijoy-view-tab" role="tab" aria-selected="false" aria-controls="avro-preview-panel">লাইভ প্রিভিউ</button>
+            <div class="bijoy-output-card bijoy-live-card">
+              <div class="bijoy-preview-head">
+                <div>
+                  <h3 id="avro-preview-heading">বিজয় ANSI — লাইভ প্রিভিউ</h3>
+                  <p id="avro-font-status" role="status" aria-live="polite">Bundled SutonnyMJ ফন্ট লোড হচ্ছে…</p>
                 </div>
-                <span class="bijoy-output-hint">একই প্যানেলে কোড ও প্রিভিউ</span>
+                <span class="bijoy-output-hint">SutonnyMJ রেন্ডারিং</span>
               </div>
-              <div class="bijoy-output-body">
-                <div id="avro-code-panel" role="tabpanel" aria-labelledby="avro-view-code">
-                  <textarea id="avro-bijoy" rows="9" class="input font-mono"
-                    spellcheck="false" autocapitalize="off" autocorrect="off"
-                    placeholder="এখানে বিজয় (SutonnyMJ) ANSI লেখা পেস্ট করুন…"
-                    data-i18n-attr="placeholder:avro.bijoy_placeholder"></textarea>
-                </div>
-                <section id="avro-preview-panel" class="hidden" role="tabpanel" aria-labelledby="avro-view-preview">
-                  <div class="bijoy-preview-head">
-                    <div>
-                      <h3 id="avro-preview-heading">বিজয় ANSI — লাইভ প্রিভিউ</h3>
-                      <p id="avro-font-status" role="status" aria-live="polite">SutonnyMJ ফন্ট যাচাই হচ্ছে…</p>
-                    </div>
-                    <label class="btn btn-soft !px-3 !py-1.5 !text-xs" for="avro-font-file">ফন্ট লোড করুন
-                      <input id="avro-font-file" type="file" accept=".ttf,.otf,.woff,.woff2,font/ttf,font/otf,font/woff,font/woff2" hidden>
-                    </label>
-                  </div>
-                  <div id="avro-font-empty" class="bijoy-font-empty">
-                    <strong>লাইভ প্রিভিউ দেখতে SutonnyMJ ফন্ট প্রয়োজন</strong>
-                    <span>ফন্ট ফাইল একবার নির্বাচন করুন। এটি শুধু আপনার ব্রাউজারেই সংরক্ষিত থাকবে।</span>
-                  </div>
-                  <div id="avro-bijoy-preview" class="bijoy-preview" lang="bn" aria-live="polite"></div>
-                </section>
-              </div>
+              <div id="avro-bijoy-preview" class="bijoy-preview is-font-ready"
+                   contenteditable="true" role="textbox" aria-multiline="true"
+                   aria-label="বিজয় ANSI লাইভ প্রিভিউ; এখানে ANSI লেখা পেস্ট বা সম্পাদনা করুন"
+                   lang="bn" spellcheck="false"></div>
             </div>
             <div class="flex flex-wrap gap-2 pt-1">
               <button type="button" id="avro-copy-bij" class="btn btn-primary flex-1" disabled>
@@ -3013,7 +2993,7 @@
     const AvroConverter = (() => {
       // Ordered longest-first so 3-consonant conjuncts match before 2-consonant ones
       const CONJUNCTS = [
-        ['ক্ষ্ণ', 'ÿ'], ['ক্ষ্ম', '²'], ['ঙ্ক্ষ', 'O¶'], ['চ্ছ্ব', '”Q¡'], ['চ্ছ্র', '”Qª'],
+        ['ক্ষ্ম', '²'], ['ঙ্ক্ষ', 'O¶'], ['চ্ছ্ব', '”Q¡'], ['চ্ছ্র', '”Qª'],
         ['জ্জ্ব', '¾¡'], ['জ্জ্র', '¾ª'], ['ত্ত্ব', 'Ë¡'], ['ত্ম্য', 'Z¥¨'], ['দ্ধ্ব', '×¡'],
         ['দ্ব্য', 'Ø¨'], ['ন্ত্ব', 'šÍ¡'], ['ন্দ্ব', '›Ø'], ['ন্ধ্র', 'Üª'], ['ন্ত্র', 'š¿'],
         ['ম্প্র', '¤úª'], ['ম্ভ্র', '¤¢ª'], ['স্ক্র', '¯‹ª'], ['স্ট্র', '÷ª'], ['স্ত্র', '¯¿'],
@@ -3023,8 +3003,8 @@
         ['শ্রু', 'kÖæ'], ['শ্রূ', 'kÖƒ'], ['ক্রু', 'µæ'], ['গ্রু', 'MÖæ'], ['প্রু', 'cÖæ'],
         ['গু', '¸'], ['রু', 'iy'], ['রূ', 'iƒ'], ['শু', 'ï'], ['হু', 'û'], ['হৃ', 'ü'],
         // 2-consonant conjuncts
-        ['ক্ক', '°'], ['ক্ট', '±'], ['ক্ত', '³'], ['ক্ব', 'K¡'], ['ক্ম', '²'], ['ক্র', 'µ'],
-        ['ক্ল', '¬'], ['ক্ষ', '¶'], ['ক্স', '·'], ['খ্র', 'Lª'], ['গ্দ', 'M˜'], ['গ্ধ', '×'],
+        ['ক্ক', '°'], ['ক্ট', '±'], ['ক্ত', '³'], ['ক্ব', 'K¡'], ['ক্ম', 'K¥'], ['ক্র', 'µ'],
+        ['ক্ল', '¬'], ['ক্ষ', '¶'], ['ক্স', '·'], ['খ্র', 'Lª'], ['গ্দ', 'M˜'], ['গ্ধ', '»'],
         ['গ্ন', 'Mœ'], ['গ্ব', 'M¡'], ['গ্ম', 'M¥'], ['গ্র', 'MÖ'], ['গ্ল', 'Mø'], ['ঘ্ন', 'Nœ'],
         ['ঘ্র', 'Nª'], ['ঙ্ক', '¼'], ['ঙ্খ', 'O•L'], ['ঙ্গ', '½'], ['ঙ্ঘ', 'O•N'], ['ঙ্ম', 'O¥'],
         ['চ্চ', '”P'], ['চ্ছ', '”Q'], ['চ্ঞ', '”T'], ['জ্জ', '¾'], ['জ্ঝ', 'À'], ['জ্ঞ', 'Á'],
@@ -3044,10 +3024,10 @@
         ['ল্প', 'í'], ['ল্ফ', 'î'], ['ল্ব', 'j¡'], ['ল্ম', 'j¥'], ['ল্ল', 'jø'], ['শ্চ', 'ð'],
         ['শ্ছ', 'kQ'], ['শ্ন', 'kœ'], ['শ্ব', 'k¡'], ['শ্ম', 'k¥'], ['শ্র', 'kÖ'], ['শ্ল', 'kø'],
         ['ষ্ক', 'ñ'], ['ষ্ট', 'ó'], ['ষ্ঠ', 'ô'], ['ষ্ণ', 'ò'], ['ষ্প', 'õ'], ['ষ্ফ', 'ö'],
-        ['ষ্ব', 'l¡'], ['ষ্ম', '÷'], ['স্ক', '¯‹'], ['স্ট', '÷'], ['স্ত', '¯Í'], ['স্থ', '¯’'],
+        ['ষ্ব', 'l¡'], ['ষ্ম', '®§'], ['স্ক', '¯‹'], ['স্ট', '÷'], ['স্ত', '¯Í'], ['স্থ', '¯’'],
         ['স্ন', '¯œ'], ['স্প', '¯ú'], ['স্ফ', 'ù'], ['স্ব', '¯^'], ['স্ম', '¯¥'], ['স্র', '¯ª'],
         ['স্ল', '¯ø'], ['হ্ণ', 'nè'], ['হ্ন', 'ý'], ['হ্ব', 'nŸ'], ['হ্ম', 'þ'], ['হ্র', 'nª'],
-        ['হ্ল', 'n¬'], ['ড়্গ', 'ÿ'],
+        ['হ্ল', 'n¬'], 
         // Folla & Hoshonto
         ['্য', '¨'], ['্র', 'ª'], ['্ব', '¡'], ['্ম', '¥'], ['্ল', 'ø'], ['্ন', 'œ']
       ];
@@ -3089,7 +3069,7 @@
         const preKarRe = /((?:[ক-হড়ঢ়য়]্)*[ক-হড়ঢ়য়](?:[্য্র্ব্ম্ল্ন])?)([িেৈ])/g;
         s = s.replace(preKarRe, '$2$1');
 
-        for (const [uni, bij] of CONJUNCTS) {
+        for (const [uni, bij] of [...CONJUNCTS].sort((a, b) => b[0].length - a[0].length)) {
           if (s.includes(uni)) s = s.split(uni).join(bij);
         }
 
@@ -3107,7 +3087,7 @@
           .replace(/ˆ/g, '†')
           .replace(/„/g, '…')
           .replace(/‚/g, '~')
-          .replace(/z/g, 'y');
+          ;
 
         let decoded = '';
         let i = 0;
@@ -3159,24 +3139,7 @@
         const previewEl = $('#avro-bijoy-preview');
         const fontStatusEl = $('#avro-font-status');
         const fontFileEl = $('#avro-font-file');
-        const codePanel = $('#avro-code-panel');
-        const previewPanel = $('#avro-preview-panel');
-        const codeTab = $('#avro-view-code');
-        const previewTab = $('#avro-view-preview');
-        const fontEmptyEl = $('#avro-font-empty');
         let sutonnyReady = false;
-
-        function showBijoyView(view) {
-          const isPreview = view === 'preview';
-          codePanel.classList.toggle('hidden', isPreview);
-          previewPanel.classList.toggle('hidden', !isPreview);
-          codeTab.classList.toggle('is-active', !isPreview);
-          previewTab.classList.toggle('is-active', isPreview);
-          codeTab.setAttribute('aria-selected', String(!isPreview));
-          previewTab.setAttribute('aria-selected', String(isPreview));
-        }
-        codeTab.addEventListener('click', () => showBijoyView('code'));
-        previewTab.addEventListener('click', () => showBijoyView('preview'));
 
         function syncMeta() {
           const hasUni = uniEl.value.length > 0;
@@ -3186,9 +3149,8 @@
           btnCopyUni.disabled = !hasUni;
           btnCopyBij.disabled = !hasBij;
           btnClear.disabled = !(hasUni || hasBij);
-          previewEl.textContent = bijEl.value;
+          if (document.activeElement !== previewEl) previewEl.textContent = bijEl.value;
           previewEl.classList.toggle('is-font-ready', sutonnyReady);
-          fontEmptyEl.classList.toggle('hidden', sutonnyReady);
         }
 
         uniEl.addEventListener('input', () => {
@@ -3197,6 +3159,11 @@
         });
 
         bijEl.addEventListener('input', () => {
+          uniEl.value = bijoyToUnicode(bijEl.value);
+          syncMeta();
+        });
+        previewEl.addEventListener('input', () => {
+          bijEl.value = previewEl.innerText.replace(/\\r\\n?/g, '\\n');
           uniEl.value = bijoyToUnicode(bijEl.value);
           syncMeta();
         });
@@ -3242,81 +3209,22 @@
           } catch { toast('toast.copy_failed', 'error'); }
         });
 
-        // Browser-local fonts are best-effort; persist a user-selected font in IndexedDB
-        // so it remains available after refresh without uploading it to a server.
-        const FONT_DB = 'kajersathi-local-fonts';
-        function openFontDb() {
-          return new Promise((resolve, reject) => {
-            if (!('indexedDB' in window)) return reject(new Error('IndexedDB unavailable'));
-            const req = indexedDB.open(FONT_DB, 1);
-            req.onupgradeneeded = () => req.result.createObjectStore('fonts');
-            req.onsuccess = () => resolve(req.result);
-            req.onerror = () => reject(req.error);
-          });
-        }
-        async function saveFont(buffer) {
-          const db = await openFontDb();
-          await new Promise((resolve, reject) => {
-            const tx = db.transaction('fonts', 'readwrite');
-            tx.objectStore('fonts').put(buffer, 'sutonny-mj');
-            tx.oncomplete = resolve; tx.onerror = () => reject(tx.error);
-          });
-          db.close();
-        }
-        async function readSavedFont() {
-          const db = await openFontDb();
-          const value = await new Promise((resolve, reject) => {
-            const req = db.transaction('fonts', 'readonly').objectStore('fonts').get('sutonny-mj');
-            req.onsuccess = () => resolve(req.result); req.onerror = () => reject(req.error);
-          });
-          db.close(); return value;
-        }
-        async function activateFont(buffer, label, persist = false) {
-          const face = new FontFace('SutonnyMJ', buffer);
-          await face.load();
-          document.fonts.add(face);
-          await document.fonts.load('18px "SutonnyMJ"');
-          sutonnyReady = true;
-          previewEl.style.fontFamily = '"SutonnyMJ", serif';
-          fontStatusEl.textContent = `${label} সক্রিয় — লাইভ প্রিভিউ প্রস্তুত।`;
-          fontStatusEl.dataset.state = 'ready';
-          if (persist) { try { await saveFont(buffer); } catch (_) { fontStatusEl.textContent = `${label} লোড হয়েছে; তবে এই ব্রাউজারে সংরক্ষণ করা যায়নি।`; } }
-          syncMeta();
-        }
+        // SutonnyMJ is bundled in assets/fonts and declared with @font-face in app.css.
         (async () => {
           try {
-            const saved = await readSavedFont();
-            if (saved) { await activateFont(saved, 'সংরক্ষিত SutonnyMJ ফন্ট'); return; }
-          } catch (_) { /* storage may be unavailable; allow manual font loading */ }
-          try {
             await document.fonts.load('18px "SutonnyMJ"');
-            const ok = document.fonts.check('18px "SutonnyMJ"');
-            if (ok) {
-              sutonnyReady = true;
-              previewEl.style.fontFamily = '"SutonnyMJ", serif';
-              fontStatusEl.textContent = 'স্থানীয় SutonnyMJ ফন্ট সক্রিয়।';
-              fontStatusEl.dataset.state = 'ready';
-            } else throw new Error('Font not found');
-          } catch {
+            sutonnyReady = document.fonts.check('18px "SutonnyMJ"');
+            if (!sutonnyReady) throw new Error('Bundled SutonnyMJ font did not load');
+            previewEl.style.fontFamily = '"SutonnyMJ", serif';
+            fontStatusEl.textContent = 'Bundled SutonnyMJ ফন্ট সক্রিয় — লাইভ প্রিভিউ প্রস্তুত।';
+            fontStatusEl.dataset.state = 'ready';
+          } catch (err) {
             sutonnyReady = false;
-            fontStatusEl.textContent = 'SutonnyMJ ফন্ট লোড করা নেই। ফন্ট ফাইল নির্বাচন করুন।';
-            fontStatusEl.dataset.state = 'missing';
+            fontStatusEl.textContent = 'SutonnyMJ ফন্ট লোড হয়নি। assets/fonts ফাইলের পথ পরীক্ষা করুন।';
+            fontStatusEl.dataset.state = 'error';
           }
           syncMeta();
         })();
-
-        fontFileEl.addEventListener('change', async () => {
-          const file = fontFileEl.files && fontFileEl.files[0];
-          if (!file) return;
-          try {
-            await activateFont(await file.arrayBuffer(), file.name, true);
-          } catch (err) {
-            sutonnyReady = false;
-            fontStatusEl.textContent = 'ফন্ট লোড করা যায়নি। বৈধ SutonnyMJ TTF/OTF/WOFF ফাইল নির্বাচন করুন।';
-            fontStatusEl.dataset.state = 'error';
-            syncMeta();
-          }
-        });
 
         I18N.onChange(syncMeta);
         syncMeta();

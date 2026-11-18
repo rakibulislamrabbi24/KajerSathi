@@ -5,7 +5,7 @@
 
 const CACHE_PREFIX = 'kajersathi-';
 const LEGACY_PREFIXES = ['aether-'];                // caches from the old brand name are removed on activate
-const CACHE_VERSION = 'kajersathi-release-1-0-layout-20261117';
+const CACHE_VERSION = 'kajersathi-release-1-0-4-bundled-sutonny-20261118';
 
 // Every file the app needs. Paths are relative to this file, so it works under /repo-name/ on GitHub Pages.
 const PRECACHE = [
@@ -15,6 +15,10 @@ const PRECACHE = [
   './assets/css/app.css',
   './assets/fonts/inter-latin-wght-normal.woff2',
   './assets/fonts/noto-sans-bengali-wght.woff2',
+  './assets/fonts/SUTONNYMJ-REGULAR.TTF',
+  './assets/fonts/SUTONNYMJ-ITALIC.TTF',
+  './assets/fonts/SUTONNYMJ-BOLD.TTF',
+  './assets/fonts/SUTONNYMJ-BOLDITALIC.TTF',
   './assets/i18n/bn.js',
   './assets/i18n/en.js',
   './assets/vendor/lucide.min.js',

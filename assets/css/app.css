@@ -116,3 +116,59 @@
   #panel-avro .bijoy-live-card { height:300px; min-height:300px; max-height:300px; }
   #panel-avro .bijoy-live-card .bijoy-preview { height:252px; }
 }
+
+
+/* KajerSathi 1.0.6 — matched converter panel dimensions (reference screenshot) */
+#panel-avro .grid.sm\:grid-cols-2 {
+  align-items: start;
+}
+#panel-avro .grid.sm\:grid-cols-2 > div {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+#panel-avro #avro-unicode {
+  box-sizing: border-box;
+  width: 100%;
+  height: 310px;
+  min-height: 310px;
+  max-height: 310px;
+  flex: 0 0 310px;
+  resize: none;
+}
+#panel-avro .bijoy-live-card {
+  box-sizing: border-box;
+  width: 100%;
+  height: 310px;
+  min-height: 310px;
+  max-height: 310px;
+  display: flex;
+  flex-direction: column;
+}
+#panel-avro .bijoy-live-card .bijoy-preview-head {
+  flex: 0 0 48px;
+  min-height: 48px;
+}
+#panel-avro .bijoy-live-card .bijoy-preview {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+  max-height: none;
+  overflow: auto;
+}
+#panel-avro .grid.sm\:grid-cols-2 > div > .flex.flex-wrap.gap-2.pt-1 {
+  margin-top: 8px;
+}
+@media (max-width: 639px) {
+  #panel-avro #avro-unicode {
+    height: 300px;
+    min-height: 300px;
+    max-height: 300px;
+    flex-basis: 300px;
+  }
+  #panel-avro .bijoy-live-card {
+    height: 300px;
+    min-height: 300px;
+    max-height: 300px;
+  }
+}

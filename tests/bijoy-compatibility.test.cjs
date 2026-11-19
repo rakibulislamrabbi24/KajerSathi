@@ -32,7 +32,7 @@ failures.paragraphs = paragraphFailures.length;
 test('ANSI output never contains Bengali Unicode code points', () => {
   for (const words of Object.values(corpus.groups)) {
     const input = words.join(' ');
-    assert.equal(/[\\u0980-\\u09FF]/.test(engine.unicodeToBijoy(input)), false);
+    assert.equal(/[\u0980-\u09FF]/.test(engine.unicodeToBijoy(input)), false);
   }
 });
 

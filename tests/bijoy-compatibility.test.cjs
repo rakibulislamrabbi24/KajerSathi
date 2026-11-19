@@ -29,6 +29,15 @@ const paragraphFailures = corpus.paragraphs.filter((source) =>
 );
 failures.paragraphs = paragraphFailures.length;
 
+test('Release 1.0.11 exact ANSI reference fixtures remain stable', () => {
+  for (const fixture of corpus.referenceCases || []) {
+    const ansi = engine.unicodeToBijoy(fixture.unicode);
+    assert.equal(ansi, fixture.ansi, 'ANSI mapping mismatch for: ' + fixture.unicode);
+    assert.equal(engine.bijoyToUnicode(ansi), fixture.unicode,
+      'Unicode round-trip mismatch for: ' + fixture.unicode);
+  }
+});
+
 test('ANSI output never contains Bengali Unicode code points', () => {
   for (const words of Object.values(corpus.groups)) {
     const input = words.join(' ');

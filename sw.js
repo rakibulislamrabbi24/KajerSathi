@@ -5,12 +5,13 @@
 
 const CACHE_PREFIX = 'kajersathi-';
 const LEGACY_PREFIXES = ['aether-'];                // caches from the old brand name are removed on activate
-const CACHE_VERSION = 'kajersathi-1-0-10-bijoy-roundtrip-tests-1';
+const CACHE_VERSION = 'kajersathi-1-0-13-pdf-tools-1';
 
 // Every file the app needs. Paths are relative to this file, so it works under /repo-name/ on GitHub Pages.
 const PRECACHE = [
   './',
   './index.html',
+  './pdf-tools.html',
   './manifest.json',
   './assets/css/app.css',
   './assets/fonts/inter-latin-wght-normal.woff2',
@@ -59,7 +60,9 @@ self.addEventListener('fetch', event => {
 
   // Single-page app: every navigation is answered with the cached shell, falling back to the network.
   if (req.mode === 'navigate') {
-    event.respondWith((async () => (await caches.match('./index.html')) || fetch(req))());
+    const path = url.pathname.split('/').pop();
+    const page = path === 'pdf-tools.html' ? './pdf-tools.html' : './index.html';
+    event.respondWith((async () => (await caches.match(page)) || fetch(req))());
     return;
   }
 

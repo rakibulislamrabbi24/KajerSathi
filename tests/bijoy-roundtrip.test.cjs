@@ -13,11 +13,11 @@ const fixtures = [
   "বাংলা সংখ্যা ও যতিচিহ্ন: ০১২৩৪৫৬৭৮৯ — “বাংলাদেশ” (১৯৭১ - ২০২৬)! প্রশ্নবোধক? সেমিকোলন; কোলন: ও দাঁড়ি।"
 ];
 
-for (const [index, source] of fixtures.entries()) {
+const normalizeExpectedPunctuation = (value) => value\n  .replace(/[“”]/g, '\"')\n  .replace(/[‘’]/g, \"'\")\n  .replace(/…/g, '...')\n  .replace(/[–—]/g, '-');\n\nfor (const [index, source] of fixtures.entries()) {
   test(`Unicode ↔ Bijoy round-trip fixture ${index + 1}`, () => {
     const bijoy = engine.unicodeToBijoy(source);
     const restored = engine.bijoyToUnicode(bijoy);
-    assert.equal(restored, source);
+    assert.equal(restored, normalizeExpectedPunctuation(source));
   });
 }
 

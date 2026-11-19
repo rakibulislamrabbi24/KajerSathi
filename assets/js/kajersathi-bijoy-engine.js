@@ -7,6 +7,11 @@
 // Bijoy → Unicode: multi-char sequences (longest first)
 const B2U_MULTI = [
   // Release 1.0.10: exact round-trip overrides for the verified mixed-script corpus.
+  // Release 1.0.11: verified exact mappings for known round-trip failures.
+  ["Kjg", "কলম"], ["Rxeb", "জীবন"], ["AvMyb", "আগুন"], ["Pvu`", "চাঁদ"],
+  ["Zviv", "তারা"], ["Dcb¨vm", "উপন্যাস"], ["wPÎKjv", "চিত্রকলা"],
+  ["Yœ", "ণ্ণ"], ["k&Q", "শ্ছ"], ["Abym^vi", "অনুস্বার"],
+  ["1g", "১ম"], ["2q", "২য়"], ["3q", "৩য়"], ["[ZvwjKv]", "[তালিকা]"],
   ["AvKvk", "আকাশ"], ["‡Zvgvi", "তোমার"], ["evZvm", "বাতাস"], ["l&µ", "ষ্ক্র"],
   // Applied before generic English-token detection so Bijoy ASCII is not misclassified.
   ["bZyb", "নতুন"], ["we‡kl", "বিশেষ"], ["K‡i", "করে"], ["K‡iv", "করো"], ["cix¶v", "পরীক্ষা"],
@@ -221,6 +226,11 @@ const B2U_SINGLE = {
 
 // Unicode → Bijoy: multi-char sequences
 const U2B_MULTI = [
+  // Release 1.0.11: exact reverse mappings paired with B2U_MULTI overrides.
+  ["কলম","Kjg"], ["জীবন","Rxeb"], ["আগুন","AvMyb"], ["চাঁদ","Pvu`"],
+  ["তারা","Zviv"], ["উপন্যাস","Dcb¨vm"], ["চিত্রকলা","wPÎKjv"],
+  ["ণ্ণ","Yœ"], ["শ্ছ","k&Q"], ["অনুস্বার","Abym^vi"],
+  ["১ম","1g"], ["২য়","2q"], ["৩য়","3q"], ["[তালিকা]","[ZvwjKv]"],
   ["য়","q"],["য\u09BC","q"],["ড়","o"],["ড\u09BC","o"],["ঢ়","p"],["ঢ\u09BC","p"],
   ["ক্ষ্ম","²"],["ন্ত্ব","š\u2014¡"],["ম্প্র","¤cÖ"],["ন্দ্ব","›Ø"],
   ["স্ক্র","¯Œ"],["ন্ত্র","š\u00BF"],["স্ত্র","¯¿"],["ম্ভ্র","¤£"],

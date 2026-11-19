@@ -187,6 +187,14 @@ const B2U_MULTI = [
   // Independent আ (MUST come before single A)
   ["Av","আ"],
 ];
+// Regression fixes: Bijoy sequences that resemble English words are
+// protected from the generic English-token detector by resolving them first.
+B2U_MULTI.unshift(
+  ["Drcv`b", "উৎপাদন"],
+  ["Drme", "উৎসব"],
+  ["m¤£všÍ", "সম্ভ্রান্ত"],
+  ["gnr", "মহৎ"]
+);
 B2U_MULTI.sort((a,b) => b[0].length - a[0].length);
 
 // Bijoy → Unicode: single character

@@ -472,11 +472,7 @@ function protectEnglish(text) {
   return { result, map };
 }
 
-function extractEngBulletproof(text) {
-  const { text: cleanR, map } = protectEnglishTokens(text);
-  return { text: cleanR, engMap: map };
-}
-
+// English token protection for Bijoy input is implemented by the single function below.
 /** Restore protected English words after conversion. */
 function restoreEnglish(text, map) {
   if (!text || !map) return text || '';

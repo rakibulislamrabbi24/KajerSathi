@@ -13,8 +13,14 @@ const fixtures = [
   "বাংলা সংখ্যা ও যতিচিহ্ন: ০১২৩৪৫৬৭৮৯ — “বাংলাদেশ” (১৯৭১ - ২০২৬)! প্রশ্নবোধক? সেমিকোলন; কোলন: ও দাঁড়ি।"
 ];
 
-const normalizeExpectedPunctuation = (value) => value\n  .replace(/[“”]/g, '\"')\n  .replace(/[‘’]/g, \"'\")\n  .replace(/…/g, '...')\n  .replace(/[–—]/g, '-');\n\nfor (const [index, source] of fixtures.entries()) {
-  test(`Unicode ↔ Bijoy round-trip fixture ${index + 1}`, () => {
+const normalizeExpectedPunctuation = (value) => value
+  .replace(/[“”]/g, '"')
+  .replace(/[‘’]/g, "'")
+  .replace(/…/g, '...')
+  .replace(/[–—]/g, '-');
+
+for (const [index, source] of fixtures.entries()) {
+  test('Unicode ↔ Bijoy round-trip fixture ' + (index + 1), () => {
     const bijoy = engine.unicodeToBijoy(source);
     const restored = engine.bijoyToUnicode(bijoy);
     assert.equal(restored, normalizeExpectedPunctuation(source));
@@ -24,5 +30,5 @@ const normalizeExpectedPunctuation = (value) => value\n  .replace(/[“”]/g, '
 test('Bijoy output contains no Bengali Unicode code points', () => {
   const source = fixtures.join('\n');
   const bijoy = engine.unicodeToBijoy(source);
-  assert.equal(/[\\u0980-\\u09FF]/.test(bijoy), false);
+  assert.equal(/[\u0980-\u09FF]/.test(bijoy), false);
 });

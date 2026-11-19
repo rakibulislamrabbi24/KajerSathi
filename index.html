@@ -2669,14 +2669,10 @@
           const bmp = await createImageBitmap(blob);
           if (bgResultUrl) URL.revokeObjectURL(bgResultUrl);
           bgResultUrl = URL.createObjectURL(blob);
-          const img = $('#img-result');
-          img.src = bgResultUrl; img.dataset.src = bgResultUrl;
-          img.classList.remove('hidden'); $('#img-canvas').classList.add('hidden');
-          $('#img-stage-inner').style.width = Math.min(560, bmp.width) + 'px';
-          $('#img-stage-inner').style.height = Math.round(Math.min(560 / bmp.width, 1) * bmp.height) + 'px';
-          img.style.width = '100%'; img.style.height = '100%'; img.style.objectFit = 'contain';
+          if (item.out) URL.revokeObjectURL(item.out.url);
+          item.out = { blob, url: bgResultUrl, w: bmp.width, h: bmp.height, mime: 'image/png', notes: [] };
           bmp.close && bmp.close();
-          view = 'result'; syncCropUI();
+          view = 'result'; syncCropUI(); renderList(); updateSummary(); layout();
           dl.classList.remove('hidden');
           dl.onclick = () => downloadBlob(blob, (item.name.replace(/\.[^.]+$/, '') || 'image') + '-no-background.png');
           status.textContent = 'সম্পন্ন — স্বচ্ছ PNG তৈরি হয়েছে।';

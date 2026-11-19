@@ -1,6 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const corpus = require('./bijoy-compatibility-corpus.json');
+global.window = global.window || {};
 const engine = require('../assets/js/kajersathi-bijoy-engine.js');
 
 const normalize = (value) => value

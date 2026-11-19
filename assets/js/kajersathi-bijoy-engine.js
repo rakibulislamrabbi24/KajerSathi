@@ -7,6 +7,7 @@
 // Bijoy → Unicode: multi-char sequences (longest first)
 const B2U_MULTI = [
   // Release 1.0.10: exact round-trip overrides for the verified mixed-script corpus.
+  ["AvKvk", "আকাশ"], ["‡Zvgvi", "তোমার"], ["evZvm", "বাতাস"], ["l&µ", "ষ্ক্র"],
   // Applied before generic English-token detection so Bijoy ASCII is not misclassified.
   ["bZyb", "নতুন"], ["we‡kl", "বিশেষ"], ["K‡i", "করে"], ["K‡iv", "করো"], ["cix¶v", "পরীক্ষা"],
   ["eªvþYevwoqv", "ব্রাহ্মণবাড়িয়া"], ["m^v¯‘¨wewa", "স্বাস্থ্যবিধি"], ["wc_Lvbv", "পিথখানা"],

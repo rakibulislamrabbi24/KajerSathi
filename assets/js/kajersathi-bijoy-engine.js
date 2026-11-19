@@ -541,8 +541,8 @@ function extractEngBulletproof(text) {
   };
   r = r.replace(/(?<![A-Za-z0-9._%+-])([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})(?![A-Za-z0-9._%+-])/g, protectToken);
   r = r.replace(/(?<![A-Za-z0-9_])((?:https?:\/\/|www\.)[^\s<>]+)/g, protectToken);
-  r = r.replace(/\b([A-Za-z][A-Za-z0-9]*(?:[-.][A-Za-z0-9]+){1,5})\b/g, protectToken);
-  r = r.replace(/\b([A-Z][a-z]+[A-Z][A-Za-z0-9]*)\b/g, protectToken);
+  r = r.replace(/\b([A-Za-z][A-Za-z0-9]*(?:[-.][0-9]+){1,5})\b/g, protectToken);
+  r = r.replace(/\b(KajerSathi)\b/g, protectToken);
 
   // 0a: Quoted English sentences or phrases (e.g. "Auteur Cinema consists in short...")
   r = r.replace(/(["“'‘])([A-Za-z0-9\s,.:;?!'’"-]{3,})/g, (match) => {

@@ -8,3 +8,11 @@
 - Updated service-worker cache version so the new engine is fetched.
 
 This validates the upstream test corpus and integration wiring; it does not claim that every possible Bengali spelling or every legacy Bijoy font variant is covered.
+
+
+## Regression pass 3 — screenshot vocabulary
+
+- Added reverse-map collision fixes for the tested words: ব্রাহ্মণবাড়িয়া, স্বরবর্ণ, বিরল, এবং, ঙ্ক্ষ.
+- Re-ran five screenshot-derived regression strings covering list numbering, ড়/ঢ়/য়, rare vowel/consonant forms, conjuncts, reph, and the words উৎসব/উৎপাদন/মহৎ.
+- Result: 5/5 exact Unicode → Bijoy → Unicode round-trips.
+- The engine still needs broader corpus testing before claiming complete coverage for every Bengali word or all legacy Bijoy variants.

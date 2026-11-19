@@ -916,6 +916,8 @@
                    aria-label="বিজয় ANSI লাইভ প্রিভিউ; এখানে ANSI লেখা পেস্ট বা সম্পাদনা করুন"
                    lang="bn" spellcheck="false"></div>
             </div>
+            <!-- Internal ANSI buffer required by the converter; kept visually hidden. -->
+            <textarea id="avro-bijoy" class="sr-only" aria-hidden="true" tabindex="-1" spellcheck="false"></textarea>
             <div class="flex flex-wrap gap-2 pt-1">
               <button type="button" id="avro-copy-bij" class="btn btn-primary flex-1" disabled>
                 <i data-lucide="copy" class="h-4 w-4"></i>
@@ -3138,7 +3140,6 @@
         const btnClear = $('#avro-clear');
         const previewEl = $('#avro-bijoy-preview');
         const fontStatusEl = $('#avro-font-status');
-        const fontFileEl = $('#avro-font-file');
         let sutonnyReady = false;
 
         function syncMeta() {
@@ -3374,18 +3375,27 @@
      * Boot
      * ===================================================================== */
     document.addEventListener('DOMContentLoaded', () => {
-      I18N.init();
-      Theme.init();
-      renderRoadmap();
-      Generator.init();
-      Scanner.init();
-      Password.init();
-      AvroConverter.init();
-      ImageTool.init();
-      JobPhoto.init();
-      Tabs.init();
-      PWA.init();
-      refreshIcons();
+      const safeInit = (name, fn) => {
+        try { fn(); }
+        catch (err) {
+          console.error(`[KajerSathi] ${name} initialization failed:`, err);
+          document.documentElement.dataset.initError = name;
+        }
+      };
+
+      // Initialize navigation early so a tool-specific error cannot lock the whole app.
+      safeInit('Tabs', () => Tabs.init());
+      safeInit('I18N', () => I18N.init());
+      safeInit('Theme', () => Theme.init());
+      safeInit('Roadmap', () => renderRoadmap());
+      safeInit('Generator', () => Generator.init());
+      safeInit('Scanner', () => Scanner.init());
+      safeInit('Password', () => Password.init());
+      safeInit('AvroConverter', () => AvroConverter.init());
+      safeInit('ImageTool', () => ImageTool.init());
+      safeInit('JobPhoto', () => JobPhoto.init());
+      safeInit('PWA', () => PWA.init());
+      safeInit('Icons', () => refreshIcons());
     });
   })();
   </script>

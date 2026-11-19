@@ -17,4 +17,4 @@ jobs:
         with:
           node-version: 20
       - name: Run Unicode ↔ Bijoy regression tests
-        run: node --test tests/bijoy-roundtrip.test.cjs
+        run: node --test tests/bijoy-roundtrip.test.cjs tests/bijoy-compatibility.test.cjs tests/bijoy-upstream-reference.test.cjs

@@ -678,6 +678,15 @@
             <button type="button" id="img-rot-r" class="btn btn-soft !px-3" aria-label="ডানে ঘোরান" title="ডানে ঘোরান" data-i18n-attr="title:common.rotate_right;aria-label:common.rotate_right"><i data-lucide="rotate-cw" class="h-4 w-4"></i></button>
             <label class="opt flex-1"><span data-i18n="image.crop">ক্রপ</span><input id="img-crop-on" type="checkbox" class="h-4 w-4 rounded border-slate-300 accent-indigo-500" /></label>
           </div>
+          <div class="rounded-xl border border-indigo-200/70 bg-indigo-500/5 p-3 dark:border-indigo-400/20">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="min-w-0"><p class="text-sm font-semibold">ব্যাকগ্রাউন্ড রিমুভার</p><p class="text-xs text-slate-500 dark:text-slate-400">ছবির পেছনের অংশ সরিয়ে স্বচ্ছ PNG তৈরি করুন</p></div>
+              <button type="button" id="img-bg-remove" class="btn btn-primary !py-2"><i data-lucide="wand-sparkles" class="h-4 w-4"></i> ব্যাকগ্রাউন্ড রিমুভ</button>
+            </div>
+            <div id="img-bg-status" class="mt-2 hidden text-xs text-slate-500 dark:text-slate-400" role="status" aria-live="polite"></div>
+            <button type="button" id="img-bg-download" class="btn btn-soft mt-2 hidden !py-2">স্বচ্ছ PNG ডাউনলোড</button>
+          </div>
+
           <div id="img-aspect-wrap" class="hidden space-y-2">
             <div id="img-aspects" class="flex flex-wrap gap-1.5"><button type="button" class="chip" data-aspect="free" aria-pressed="false" data-i18n="image.free">ফ্রি</button><button type="button" class="chip" data-aspect="original" aria-pressed="false" data-i18n="image.original">অরিজিনাল</button><button type="button" class="chip" data-aspect="1:1" aria-pressed="false">1:1</button><button type="button" class="chip" data-aspect="4:3" aria-pressed="false">4:3</button><button type="button" class="chip" data-aspect="3:2" aria-pressed="false">3:2</button><button type="button" class="chip" data-aspect="16:9" aria-pressed="false">16:9</button><button type="button" class="chip" data-aspect="4:5" aria-pressed="false">4:5</button><button type="button" class="chip" data-aspect="35x45" aria-pressed="false" title="পাসপোর্ট ছবির অনুপাত (7:9)" data-i18n="image.35_45_mm" data-i18n-attr="title:image.passport_photo_ratio_7_9">35×45 মিমি</button></div>
             <div class="flex items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400">
@@ -2639,6 +2648,46 @@
       }
       const save = () => store.set(KEY, s);
 
+      let bgModulePromise = null, bgBusy = false, bgResultUrl = null;
+      async function removeBackground() {
+        const item = items[sel];
+        if (!item) { toast('আগে একটি ছবি যোগ করুন', 'info'); return; }
+        if (bgBusy) return;
+        const btn = $('#img-bg-remove'), status = $('#img-bg-status'), dl = $('#img-bg-download');
+        bgBusy = true; btn.disabled = true; btn.classList.add('opacity-60');
+        status.classList.remove('hidden'); status.textContent = 'AI মডেল লোড হচ্ছে… প্রথমবার কিছুটা সময় লাগতে পারে।';
+        dl.classList.add('hidden');
+        try {
+          if (!bgModulePromise) bgModulePromise = import('https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.5/+esm');
+          const mod = await bgModulePromise;
+          const itemId = item.id;
+          const blob = await mod.removeBackground(item.file, {
+            output: { format: 'image/png', quality: 1 },
+            progress: (_key, current, total) => { if (total > 0) status.textContent = `ব্যাকগ্রাউন্ড সরানো হচ্ছে… ${Math.round(current / total * 100)}%`; }
+          });
+          if (!items.some(x => x.id === itemId)) return;
+          const bmp = await createImageBitmap(blob);
+          if (bgResultUrl) URL.revokeObjectURL(bgResultUrl);
+          bgResultUrl = URL.createObjectURL(blob);
+          const img = $('#img-result');
+          img.src = bgResultUrl; img.dataset.src = bgResultUrl;
+          img.classList.remove('hidden'); $('#img-canvas').classList.add('hidden');
+          $('#img-stage-inner').style.width = Math.min(560, bmp.width) + 'px';
+          $('#img-stage-inner').style.height = Math.round(Math.min(560 / bmp.width, 1) * bmp.height) + 'px';
+          img.style.width = '100%'; img.style.height = '100%'; img.style.objectFit = 'contain';
+          bmp.close && bmp.close();
+          view = 'result'; syncCropUI();
+          dl.classList.remove('hidden');
+          dl.onclick = () => downloadBlob(blob, (item.name.replace(/\.[^.]+$/, '') || 'image') + '-no-background.png');
+          status.textContent = 'সম্পন্ন — স্বচ্ছ PNG তৈরি হয়েছে।';
+          toast('ব্যাকগ্রাউন্ড সফলভাবে রিমুভ হয়েছে', 'success');
+        } catch (err) {
+          console.error('Background removal failed:', err);
+          status.textContent = 'কাজটি সম্পন্ন হয়নি। ইন্টারনেট সংযোগ ও ব্রাউজারের মেমোরি পরীক্ষা করে আবার চেষ্টা করুন।';
+          toast('Background removal failed', 'error');
+        } finally { bgBusy = false; btn.disabled = false; btn.classList.remove('opacity-60'); }
+      }
+
       function init() {
         loadSettings(); writeForm(); syncCropUI();
         I18N.onChange(() => { renderList(); updateSummary(); syncCropUI(); paintCrop(); });
@@ -2654,6 +2703,8 @@
           const files = [...(e.clipboardData?.files || [])].filter(f => f.type.startsWith('image/'));
           if (files.length) { e.preventDefault(); addFiles(files); }
         });
+
+        $('#img-bg-remove').addEventListener('click', removeBackground);
 
         // options
         $('#img-form').addEventListener('input', e => {

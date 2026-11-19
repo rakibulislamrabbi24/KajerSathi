@@ -533,6 +533,17 @@ function extractEngBulletproof(text) {
   let r = text;
   const engMap = [];
 
+  // Release 1.0.11: preserve unambiguous mixed-script tokens before Bijoy heuristics.
+  const protectToken = (match) => {
+    const idx = engMap.length;
+    engMap.push(match);
+    return '\uE000' + idx + '\uE000';
+  };
+  r = r.replace(/(?<![A-Za-z0-9._%+-])([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})(?![A-Za-z0-9._%+-])/g, protectToken);
+  r = r.replace(/(?<![A-Za-z0-9_])((?:https?:\/\/|www\.)[^\s<>]+)/g, protectToken);
+  r = r.replace(/\b([A-Za-z][A-Za-z0-9]*(?:[-.][A-Za-z0-9]+){1,5})\b/g, protectToken);
+  r = r.replace(/\b([A-Z][a-z]+[A-Z][A-Za-z0-9]*)\b/g, protectToken);
+
   // 0a: Quoted English sentences or phrases (e.g. "Auteur Cinema consists in short...")
   r = r.replace(/(["“'‘])([A-Za-z0-9\s,.:;?!'’"-]{3,})/g, (match) => {
     const idx = engMap.length;

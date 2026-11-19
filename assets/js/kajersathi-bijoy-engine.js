@@ -190,6 +190,11 @@ const B2U_MULTI = [
 // Regression fixes: Bijoy sequences that resemble English words are
 // protected from the generic English-token detector by resolving them first.
 B2U_MULTI.unshift(
+  ["eªvþYevwoqv", "ব্রাহ্মণবাড়িয়া"],
+  ["m^ieY©", "স্বরবর্ণ"],
+  ["O&¶", "ঙ্ক্ষ"],
+  ["weij", "বিরল"],
+  ["Ges", "এবং"],
   ["Drcv`b", "উৎপাদন"],
   ["Drme", "উৎসব"],
   ["m¤£všÍ", "সম্ভ্রান্ত"],

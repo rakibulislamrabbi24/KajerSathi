@@ -2493,6 +2493,7 @@
 
       async function selectItem(i) {
         sel = i;
+        $('#img-bg-download').classList.add('hidden'); $('#img-bg-status').classList.add('hidden');
         if (stageBmp) { stageBmp.close(); stageBmp = null; }
         const item = items[i];
         if (!item) { renderAll(); return; }
@@ -2665,7 +2666,7 @@
             output: { format: 'image/png', quality: 1 },
             progress: (_key, current, total) => { if (total > 0) status.textContent = `ব্যাকগ্রাউন্ড সরানো হচ্ছে… ${Math.round(current / total * 100)}%`; }
           });
-          if (!items.some(x => x.id === itemId)) return;
+          if (!items.some(x => x.id === itemId) || !items[sel] || items[sel].id !== itemId) return;
           const bmp = await createImageBitmap(blob);
           if (bgResultUrl) URL.revokeObjectURL(bgResultUrl);
           bgResultUrl = URL.createObjectURL(blob);

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "description": "Curated Unicode/Bijoy compatibility corpus. Known failures are tracked as a non-increasing baseline until corrected.",
+  "description": "Curated Unicode/Bijoy compatibility corpus with exact Release 1.0.11 regression fixtures.",
   "normalization": {
     "quotes": "curly quotes normalize to straight quotes",
     "ellipsis": "ellipsis normalizes to three dots",
@@ -351,13 +351,95 @@
     "নতুন Version-এ বাংলা লেখা দিয়ে Conversion পরীক্ষা করো। বিশেষ করে ব্রাহ্মণবাড়িয়া, স্বাস্থ্যবিধি, ক্ষ, জ্ঞ, ক্ষ্ম, ঙ্ক্ষ, ভবিষ্যৎ, বিদ্যুৎ, উৎপাদন।"
   ],
   "baselineFailures": {
-    "common": 7,
-    "conjuncts": 2,
-    "reph": 1,
+    "common": 0,
+    "conjuncts": 0,
+    "reph": 0,
     "vowels": 0,
-    "numerals": 3,
-    "punctuation": 1,
-    "mixed": 4,
+    "numerals": 0,
+    "punctuation": 0,
+    "mixed": 0,
     "paragraphs": 0
-  }
+  },
+  "referenceCases": [
+    {
+      "unicode": "খণ্ড-ত (৫), হস্ত (?), ড/ঢ/ড় এবং বিরল স্বরবর্ণ:",
+      "ansi": "LÊ-Z (5), n¯Í (?), W/X/o Ges weij m^ieY©:"
+    },
+    {
+      "unicode": "ণ্ণ",
+      "ansi": "Yœ"
+    },
+    {
+      "unicode": "শ্ছ",
+      "ansi": "k&Q"
+    },
+    {
+      "unicode": "কলম",
+      "ansi": "Kjg"
+    },
+    {
+      "unicode": "জীবন",
+      "ansi": "Rxeb"
+    },
+    {
+      "unicode": "আগুন",
+      "ansi": "AvMyb"
+    },
+    {
+      "unicode": "চাঁদ",
+      "ansi": "Pvu`"
+    },
+    {
+      "unicode": "তারা",
+      "ansi": "Zviv"
+    },
+    {
+      "unicode": "উপন্যাস",
+      "ansi": "Dcb¨vm"
+    },
+    {
+      "unicode": "চিত্রকলা",
+      "ansi": "wPÎKjv"
+    },
+    {
+      "unicode": "অনুস্বার",
+      "ansi": "Abym^vi"
+    },
+    {
+      "unicode": "১ম",
+      "ansi": "1g"
+    },
+    {
+      "unicode": "২য়",
+      "ansi": "2q"
+    },
+    {
+      "unicode": "৩য়",
+      "ansi": "3q"
+    },
+    {
+      "unicode": "[তালিকা]",
+      "ansi": "[ZvwjKv]"
+    },
+    {
+      "unicode": "KajerSathi",
+      "ansi": "KajerSathi"
+    },
+    {
+      "unicode": "Release-1.0.11",
+      "ansi": "Release-1.0.11"
+    },
+    {
+      "unicode": "test@example.com",
+      "ansi": "test@example.com"
+    },
+    {
+      "unicode": "https://example.com/path?x=1",
+      "ansi": "https://example.com/path?x=1"
+    },
+    {
+      "unicode": "Version-এ",
+      "ansi": "Version-G"
+    }
+  ]
 }

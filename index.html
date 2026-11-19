@@ -904,14 +904,7 @@
               <span id="avro-bij-stats" class="font-mono text-[11px] text-slate-400"></span>
             </div>
             <div class="bijoy-output-card bijoy-live-card">
-              <div class="bijoy-preview-head">
-                <div>
-                  <h3 id="avro-preview-heading">বিজয় ANSI — লাইভ প্রিভিউ</h3>
-                  <p id="avro-font-status" role="status" aria-live="polite">Bundled SutonnyMJ ফন্ট লোড হচ্ছে…</p>
-                </div>
-                <span class="bijoy-output-hint">SutonnyMJ রেন্ডারিং</span>
-              </div>
-              <div id="avro-bijoy-preview" class="bijoy-preview is-font-ready"
+                <div id="avro-bijoy-preview" class="bijoy-preview is-font-ready"
                    contenteditable="true" role="textbox" aria-multiline="true"
                    aria-label="বিজয় ANSI লাইভ প্রিভিউ; এখানে ANSI লেখা পেস্ট বা সম্পাদনা করুন"
                    lang="bn" spellcheck="false"></div>
@@ -3139,7 +3132,6 @@
         const btnCopyBij = $('#avro-copy-bij');
         const btnClear = $('#avro-clear');
         const previewEl = $('#avro-bijoy-preview');
-        const fontStatusEl = $('#avro-font-status');
         let sutonnyReady = false;
 
         function syncMeta() {
@@ -3217,12 +3209,8 @@
             sutonnyReady = document.fonts.check('18px "SutonnyMJ"');
             if (!sutonnyReady) throw new Error('Bundled SutonnyMJ font did not load');
             previewEl.style.fontFamily = '"SutonnyMJ", serif';
-            fontStatusEl.textContent = 'Bundled SutonnyMJ ফন্ট সক্রিয় — লাইভ প্রিভিউ প্রস্তুত।';
-            fontStatusEl.dataset.state = 'ready';
           } catch (err) {
             sutonnyReady = false;
-            fontStatusEl.textContent = 'SutonnyMJ ফন্ট লোড হয়নি। assets/fonts ফাইলের পথ পরীক্ষা করুন।';
-            fontStatusEl.dataset.state = 'error';
           }
           syncMeta();
         })();

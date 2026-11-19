@@ -172,3 +172,11 @@
     max-height: 300px;
   }
 }
+
+
+/* Release 1.0.8 — clean visitor-facing Bijoy preview */
+#panel-avro .bijoy-live-card .bijoy-preview {
+  height:340px; min-height:0; max-height:none; flex:1 1 auto;
+  border:0; border-radius:inherit;
+}
+#panel-avro .bijoy-live-card { overflow:hidden; }

@@ -1,0 +1,1131 @@
+{
+  "schemaVersion": 1,
+  "sourceRepository": "abir-ahamed-glitch/10-Bijoy-to-Unicode",
+  "sourceFile": "tests.html",
+  "sourceCommit": "main at audit retrieval",
+  "description": "Independent reference fixtures copied from upstream's published 187-case test suite. These assert exact expected outputs, not round-trip symmetry.",
+  "fixtures": [
+    {
+      "direction": "b2u",
+      "name": "অ (A)",
+      "input": "A",
+      "expected": "অ"
+    },
+    {
+      "direction": "b2u",
+      "name": "আ (Av)",
+      "input": "Av",
+      "expected": "আ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ই (B)",
+      "input": "B",
+      "expected": "ই"
+    },
+    {
+      "direction": "b2u",
+      "name": "ঈ (C)",
+      "input": "C",
+      "expected": "ঈ"
+    },
+    {
+      "direction": "b2u",
+      "name": "উ (D)",
+      "input": "D",
+      "expected": "উ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ঊ (E)",
+      "input": "E",
+      "expected": "ঊ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ঋ (F)",
+      "input": "F",
+      "expected": "ঋ"
+    },
+    {
+      "direction": "b2u",
+      "name": "এ (G)",
+      "input": "G",
+      "expected": "এ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ঐ (H)",
+      "input": "H",
+      "expected": "ঐ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ও (I)",
+      "input": "I",
+      "expected": "ও"
+    },
+    {
+      "direction": "b2u",
+      "name": "ঔ (J)",
+      "input": "J",
+      "expected": "ঔ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ক (K)",
+      "input": "K",
+      "expected": "ক"
+    },
+    {
+      "direction": "b2u",
+      "name": "খ (L)",
+      "input": "L",
+      "expected": "খ"
+    },
+    {
+      "direction": "b2u",
+      "name": "গ (M)",
+      "input": "M",
+      "expected": "গ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ঘ (N)",
+      "input": "N",
+      "expected": "ঘ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ঙ (O)",
+      "input": "O",
+      "expected": "ঙ"
+    },
+    {
+      "direction": "b2u",
+      "name": "চ (P)",
+      "input": "P",
+      "expected": "চ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ছ (Q)",
+      "input": "Q",
+      "expected": "ছ"
+    },
+    {
+      "direction": "b2u",
+      "name": "জ (R)",
+      "input": "R",
+      "expected": "জ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ঝ (S)",
+      "input": "S",
+      "expected": "ঝ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ঞ (T)",
+      "input": "T",
+      "expected": "ঞ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ট (U)",
+      "input": "U",
+      "expected": "ট"
+    },
+    {
+      "direction": "b2u",
+      "name": "ঠ (V)",
+      "input": "V",
+      "expected": "ঠ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ড (W)",
+      "input": "W",
+      "expected": "ড"
+    },
+    {
+      "direction": "b2u",
+      "name": "ঢ (X)",
+      "input": "X",
+      "expected": "ঢ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ণ (Y)",
+      "input": "Y",
+      "expected": "ণ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ত (Z)",
+      "input": "Z",
+      "expected": "ত"
+    },
+    {
+      "direction": "b2u",
+      "name": "থ (_)",
+      "input": "_",
+      "expected": "থ"
+    },
+    {
+      "direction": "b2u",
+      "name": "দ (`)",
+      "input": "`",
+      "expected": "দ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ধ (a)",
+      "input": "a",
+      "expected": "ধ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ন (b)",
+      "input": "b",
+      "expected": "ন"
+    },
+    {
+      "direction": "b2u",
+      "name": "প (c)",
+      "input": "c",
+      "expected": "প"
+    },
+    {
+      "direction": "b2u",
+      "name": "ফ (d)",
+      "input": "d",
+      "expected": "ফ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ব (e)",
+      "input": "e",
+      "expected": "ব"
+    },
+    {
+      "direction": "b2u",
+      "name": "ভ (f)",
+      "input": "f",
+      "expected": "ভ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ম (g)",
+      "input": "g",
+      "expected": "ম"
+    },
+    {
+      "direction": "b2u",
+      "name": "য (h)",
+      "input": "h",
+      "expected": "য"
+    },
+    {
+      "direction": "b2u",
+      "name": "র (i)",
+      "input": "i",
+      "expected": "র"
+    },
+    {
+      "direction": "b2u",
+      "name": "ল (j)",
+      "input": "j",
+      "expected": "ল"
+    },
+    {
+      "direction": "b2u",
+      "name": "শ (k)",
+      "input": "k",
+      "expected": "শ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ষ (l)",
+      "input": "l",
+      "expected": "ষ"
+    },
+    {
+      "direction": "b2u",
+      "name": "স (m)",
+      "input": "m",
+      "expected": "স"
+    },
+    {
+      "direction": "b2u",
+      "name": "হ (n)",
+      "input": "n",
+      "expected": "হ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ড় (o)",
+      "input": "o",
+      "expected": "ড়"
+    },
+    {
+      "direction": "b2u",
+      "name": "ঢ় (p)",
+      "input": "p",
+      "expected": "ঢ়"
+    },
+    {
+      "direction": "b2u",
+      "name": "য় (q)",
+      "input": "q",
+      "expected": "য়"
+    },
+    {
+      "direction": "b2u",
+      "name": "ৎ (r)",
+      "input": "r",
+      "expected": "ৎ"
+    },
+    {
+      "direction": "b2u",
+      "name": "০ (0)",
+      "input": "0",
+      "expected": "০"
+    },
+    {
+      "direction": "b2u",
+      "name": "১ (1)",
+      "input": "1",
+      "expected": "১"
+    },
+    {
+      "direction": "b2u",
+      "name": "৫ (5)",
+      "input": "5",
+      "expected": "৫"
+    },
+    {
+      "direction": "b2u",
+      "name": "৯ (9)",
+      "input": "9",
+      "expected": "৯"
+    },
+    {
+      "direction": "b2u",
+      "name": "১৯৭১",
+      "input": "1971",
+      "expected": "১৯৭১"
+    },
+    {
+      "direction": "b2u",
+      "name": "া (v)",
+      "input": "Kv",
+      "expected": "কা"
+    },
+    {
+      "direction": "b2u",
+      "name": "ি (w)",
+      "input": "wK",
+      "expected": "কি"
+    },
+    {
+      "direction": "b2u",
+      "name": "ী (x)",
+      "input": "Kx",
+      "expected": "কী"
+    },
+    {
+      "direction": "b2u",
+      "name": "ু (y)",
+      "input": "Ky",
+      "expected": "কু"
+    },
+    {
+      "direction": "b2u",
+      "name": "ে (†)",
+      "input": "†K",
+      "expected": "কে"
+    },
+    {
+      "direction": "b2u",
+      "name": "ৈ (‰)",
+      "input": "‰K",
+      "expected": "কৈ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ক্ষ",
+      "input": "¶",
+      "expected": "ক্ষ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ক্র",
+      "input": "µ",
+      "expected": "ক্র"
+    },
+    {
+      "direction": "b2u",
+      "name": "ক্ত",
+      "input": "³",
+      "expected": "ক্ত"
+    },
+    {
+      "direction": "b2u",
+      "name": "ক্ল",
+      "input": "K¬",
+      "expected": "ক্ল"
+    },
+    {
+      "direction": "b2u",
+      "name": "ক্ব",
+      "input": "K¡",
+      "expected": "ক্ব"
+    },
+    {
+      "direction": "b2u",
+      "name": "ক্ক",
+      "input": "°",
+      "expected": "ক্ক"
+    },
+    {
+      "direction": "b2u",
+      "name": "গ্ন",
+      "input": "Mœ",
+      "expected": "গ্ন"
+    },
+    {
+      "direction": "b2u",
+      "name": "গ্ম",
+      "input": "M¥",
+      "expected": "গ্ম"
+    },
+    {
+      "direction": "b2u",
+      "name": "গ্ল",
+      "input": "Mø",
+      "expected": "গ্ল"
+    },
+    {
+      "direction": "b2u",
+      "name": "গ্ধ",
+      "input": "»",
+      "expected": "গ্ধ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ঙ্ক",
+      "input": "¼",
+      "expected": "ঙ্ক"
+    },
+    {
+      "direction": "b2u",
+      "name": "ঙ্গ",
+      "input": "½",
+      "expected": "ঙ্গ"
+    },
+    {
+      "direction": "b2u",
+      "name": "চ্চ",
+      "input": "“P",
+      "expected": "চ্চ"
+    },
+    {
+      "direction": "b2u",
+      "name": "চ্ছ",
+      "input": "“Q",
+      "expected": "চ্ছ"
+    },
+    {
+      "direction": "b2u",
+      "name": "চ্ঞ",
+      "input": "“T",
+      "expected": "চ্ঞ"
+    },
+    {
+      "direction": "b2u",
+      "name": "জ্জ",
+      "input": "¾",
+      "expected": "জ্জ"
+    },
+    {
+      "direction": "b2u",
+      "name": "জ্ঞ",
+      "input": "Á",
+      "expected": "জ্ঞ"
+    },
+    {
+      "direction": "b2u",
+      "name": "জ্ব",
+      "input": "R¡",
+      "expected": "জ্ব"
+    },
+    {
+      "direction": "b2u",
+      "name": "ঞ্চ",
+      "input": "Â",
+      "expected": "ঞ্চ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ট্ট",
+      "input": "Æ",
+      "expected": "ট্ট"
+    },
+    {
+      "direction": "b2u",
+      "name": "ণ্ট",
+      "input": "È",
+      "expected": "ণ্ট"
+    },
+    {
+      "direction": "b2u",
+      "name": "ণ্ঠ",
+      "input": "É",
+      "expected": "ণ্ঠ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ণ্ড",
+      "input": "Ê",
+      "expected": "ণ্ড"
+    },
+    {
+      "direction": "b2u",
+      "name": "ত্ত",
+      "input": "Ë",
+      "expected": "ত্ত"
+    },
+    {
+      "direction": "b2u",
+      "name": "ত্থ",
+      "input": "Ì",
+      "expected": "ত্থ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ত্ম",
+      "input": "Z¥",
+      "expected": "ত্ম"
+    },
+    {
+      "direction": "b2u",
+      "name": "ত্ব",
+      "input": "Z¡",
+      "expected": "ত্ব"
+    },
+    {
+      "direction": "b2u",
+      "name": "ত্র",
+      "input": "Î",
+      "expected": "ত্র"
+    },
+    {
+      "direction": "b2u",
+      "name": "দ্ধ",
+      "input": "×",
+      "expected": "দ্ধ"
+    },
+    {
+      "direction": "b2u",
+      "name": "দ্ব",
+      "input": "Ø",
+      "expected": "দ্ব"
+    },
+    {
+      "direction": "b2u",
+      "name": "দ্ম",
+      "input": "Ù",
+      "expected": "দ্ম"
+    },
+    {
+      "direction": "b2u",
+      "name": "ধ্ব",
+      "input": "aŸ",
+      "expected": "ধ্ব"
+    },
+    {
+      "direction": "b2u",
+      "name": "ধ্ম",
+      "input": "a¥",
+      "expected": "ধ্ম"
+    },
+    {
+      "direction": "b2u",
+      "name": "ন্ট",
+      "input": "›U",
+      "expected": "ন্ট"
+    },
+    {
+      "direction": "b2u",
+      "name": "ণ্ঠ (Ú)",
+      "input": "Ú",
+      "expected": "ণ্ঠ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ণ্ড (Û)",
+      "input": "Û",
+      "expected": "ণ্ড"
+    },
+    {
+      "direction": "b2u",
+      "name": "ন্ত",
+      "input": "šÍ",
+      "expected": "ন্ত"
+    },
+    {
+      "direction": "b2u",
+      "name": "ন্থ",
+      "input": "š‘",
+      "expected": "ন্থ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ন্দ",
+      "input": "›`",
+      "expected": "ন্দ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ন্ধ",
+      "input": "Ü",
+      "expected": "ন্ধ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ন্ন",
+      "input": "bœ",
+      "expected": "ন্ন"
+    },
+    {
+      "direction": "b2u",
+      "name": "ন্ব",
+      "input": "š\\",
+      "expected": "šস্ব"
+    },
+    {
+      "direction": "b2u",
+      "name": "ন্ম",
+      "input": "b¥",
+      "expected": "ন্ম"
+    },
+    {
+      "direction": "b2u",
+      "name": "প্ট",
+      "input": "Þ",
+      "expected": "প্ট"
+    },
+    {
+      "direction": "b2u",
+      "name": "প্ত",
+      "input": "ß",
+      "expected": "প্ত"
+    },
+    {
+      "direction": "b2u",
+      "name": "প্ন",
+      "input": "cœ",
+      "expected": "প্ন"
+    },
+    {
+      "direction": "b2u",
+      "name": "প্প",
+      "input": "à",
+      "expected": "প্প"
+    },
+    {
+      "direction": "b2u",
+      "name": "প্ল",
+      "input": "cø",
+      "expected": "প্ল"
+    },
+    {
+      "direction": "b2u",
+      "name": "ফ্ল",
+      "input": "d¬",
+      "expected": "ফ্ল"
+    },
+    {
+      "direction": "b2u",
+      "name": "ব্জ",
+      "input": "â",
+      "expected": "ব্জ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ব্দ",
+      "input": "ã",
+      "expected": "ব্দ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ব্ধ",
+      "input": "ä",
+      "expected": "ব্ধ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ব্ব",
+      "input": "eŸ",
+      "expected": "ব্ব"
+    },
+    {
+      "direction": "b2u",
+      "name": "ব্ল",
+      "input": "eø",
+      "expected": "ব্ল"
+    },
+    {
+      "direction": "b2u",
+      "name": "ভ্র",
+      "input": "å",
+      "expected": "ভ্র"
+    },
+    {
+      "direction": "b2u",
+      "name": "ম্ন",
+      "input": "gœ",
+      "expected": "ম্ন"
+    },
+    {
+      "direction": "b2u",
+      "name": "ম্প",
+      "input": "¤ú",
+      "expected": "ম্প"
+    },
+    {
+      "direction": "b2u",
+      "name": "ম্ফ",
+      "input": "ç",
+      "expected": "ম্ফ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ম্ব",
+      "input": "¤b",
+      "expected": "ম্ব"
+    },
+    {
+      "direction": "b2u",
+      "name": "ম্ভ",
+      "input": "¤¢",
+      "expected": "ম্ভ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ম্ম",
+      "input": "¤§",
+      "expected": "ম্ম"
+    },
+    {
+      "direction": "b2u",
+      "name": "ম্ল",
+      "input": "¤ø",
+      "expected": "ম্ল"
+    },
+    {
+      "direction": "b2u",
+      "name": "ল্ক",
+      "input": "é",
+      "expected": "ল্ক"
+    },
+    {
+      "direction": "b2u",
+      "name": "ল্গ",
+      "input": "ê",
+      "expected": "ল্গ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ল্ট",
+      "input": "ë",
+      "expected": "ল্ট"
+    },
+    {
+      "direction": "b2u",
+      "name": "ল্ড",
+      "input": "ì",
+      "expected": "ল্ড"
+    },
+    {
+      "direction": "b2u",
+      "name": "ল্প",
+      "input": "í",
+      "expected": "ল্প"
+    },
+    {
+      "direction": "b2u",
+      "name": "ল্ফ",
+      "input": "î",
+      "expected": "ল্ফ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ল্ব",
+      "input": "j¦",
+      "expected": "ল্ব"
+    },
+    {
+      "direction": "b2u",
+      "name": "ল্ম",
+      "input": "j¥",
+      "expected": "ল্ম"
+    },
+    {
+      "direction": "b2u",
+      "name": "ল্ল",
+      "input": "jø",
+      "expected": "ল্ল"
+    },
+    {
+      "direction": "b2u",
+      "name": "শু",
+      "input": "ï",
+      "expected": "শু"
+    },
+    {
+      "direction": "b2u",
+      "name": "শ্চ",
+      "input": "ð",
+      "expected": "শ্চ"
+    },
+    {
+      "direction": "b2u",
+      "name": "শ্ন",
+      "input": "kœ",
+      "expected": "শ্ন"
+    },
+    {
+      "direction": "b2u",
+      "name": "শ্ব",
+      "input": "k¦",
+      "expected": "শ্ব"
+    },
+    {
+      "direction": "b2u",
+      "name": "শ্ম",
+      "input": "k¥",
+      "expected": "শ্ম"
+    },
+    {
+      "direction": "b2u",
+      "name": "শ্ল",
+      "input": "kø",
+      "expected": "শ্ল"
+    },
+    {
+      "direction": "b2u",
+      "name": "ষ্ক",
+      "input": "®‹",
+      "expected": "ষ্ক"
+    },
+    {
+      "direction": "b2u",
+      "name": "ষ্ক্র",
+      "input": "®Œ",
+      "expected": "ষ্ক্র"
+    },
+    {
+      "direction": "b2u",
+      "name": "ষ্ট",
+      "input": "ó",
+      "expected": "ষ্ট"
+    },
+    {
+      "direction": "b2u",
+      "name": "ষ্ঠ",
+      "input": "ô",
+      "expected": "ষ্ঠ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ষ্ণ",
+      "input": "ò",
+      "expected": "ষ্ণ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ষ্প",
+      "input": "®ú",
+      "expected": "ষ্প"
+    },
+    {
+      "direction": "b2u",
+      "name": "ষ্ফ",
+      "input": "õ",
+      "expected": "ষ্ফ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ষ্ম",
+      "input": "®§",
+      "expected": "ষ্ম"
+    },
+    {
+      "direction": "b2u",
+      "name": "স্ক",
+      "input": "¯‹",
+      "expected": "স্ক"
+    },
+    {
+      "direction": "b2u",
+      "name": "স্ট",
+      "input": "÷",
+      "expected": "স্ট"
+    },
+    {
+      "direction": "b2u",
+      "name": "স্ত",
+      "input": "¯Í",
+      "expected": "স্ত"
+    },
+    {
+      "direction": "b2u",
+      "name": "স্থ",
+      "input": "¯‘",
+      "expected": "স্থ"
+    },
+    {
+      "direction": "b2u",
+      "name": "স্ন",
+      "input": "mœ",
+      "expected": "স্ন"
+    },
+    {
+      "direction": "b2u",
+      "name": "স্প",
+      "input": "¯ú",
+      "expected": "স্প"
+    },
+    {
+      "direction": "b2u",
+      "name": "স্ফ",
+      "input": "ù",
+      "expected": "স্ফ"
+    },
+    {
+      "direction": "b2u",
+      "name": "স্ব",
+      "input": "m^",
+      "expected": "স্ব"
+    },
+    {
+      "direction": "b2u",
+      "name": "স্ম",
+      "input": "¯§",
+      "expected": "স্ম"
+    },
+    {
+      "direction": "b2u",
+      "name": "স্ল",
+      "input": "¯ø",
+      "expected": "স্ল"
+    },
+    {
+      "direction": "b2u",
+      "name": "হ্ণ",
+      "input": "nè",
+      "expected": "হ্ণ"
+    },
+    {
+      "direction": "b2u",
+      "name": "হ্ব",
+      "input": "nŸ",
+      "expected": "হ্ব"
+    },
+    {
+      "direction": "b2u",
+      "name": "হ্ন",
+      "input": "ý",
+      "expected": "হ্ন"
+    },
+    {
+      "direction": "b2u",
+      "name": "হ্ম",
+      "input": "þ",
+      "expected": "হ্ম"
+    },
+    {
+      "direction": "b2u",
+      "name": "হ্ল",
+      "input": "n¬",
+      "expected": "হ্ল"
+    },
+    {
+      "direction": "b2u",
+      "name": "বাংলাদেশ",
+      "input": "evsjv‡`k",
+      "expected": "বাংলাদেশ"
+    },
+    {
+      "direction": "b2u",
+      "name": "আমার সোনার বাংলা",
+      "input": "Avgvi †mvbvi evsjv",
+      "expected": "আমার সোনার বাংলা"
+    },
+    {
+      "direction": "b2u",
+      "name": "কমেডি",
+      "input": "K‡gWx",
+      "expected": "কমেডি"
+    },
+    {
+      "direction": "b2u",
+      "name": "আন্দোলনে",
+      "input": "Av‡›`vj‡b",
+      "expected": "আন্দোলনে"
+    },
+    {
+      "direction": "b2u",
+      "name": "আন্দোলনের",
+      "input": "Av‡›`vj‡bi",
+      "expected": "আন্দোলনের"
+    },
+    {
+      "direction": "b2u",
+      "name": "প্রিয়",
+      "input": "wcÖq",
+      "expected": "প্রিয়"
+    },
+    {
+      "direction": "b2u",
+      "name": "বামপন্থী",
+      "input": "evgcš'x",
+      "expected": "বামপন্থী"
+    },
+    {
+      "direction": "b2u",
+      "name": "গ্রেফতার",
+      "input": "†MÖdZvi",
+      "expected": "গ্রেফতার"
+    },
+    {
+      "direction": "b2u",
+      "name": "আর্মি",
+      "input": "Avwg©",
+      "expected": "আর্মি"
+    },
+    {
+      "direction": "b2u",
+      "name": "বিদ্রোহ",
+      "input": "we‡`ªvn",
+      "expected": "বিদ্রোহ"
+    },
+    {
+      "direction": "b2u",
+      "name": "প্রতি",
+      "input": "‡cªwZ",
+      "expected": "প্রতি"
+    },
+    {
+      "direction": "b2u",
+      "name": "ং (s)",
+      "input": "Ks",
+      "expected": "কং"
+    },
+    {
+      "direction": "b2u",
+      "name": "ঃ (t)",
+      "input": "Kt",
+      "expected": "কঃ"
+    },
+    {
+      "direction": "b2u",
+      "name": "ঁ (u)",
+      "input": "Ku",
+      "expected": "কঁ"
+    },
+    {
+      "direction": "b2u",
+      "name": "। (|)",
+      "input": "|",
+      "expected": "।"
+    },
+    {
+      "direction": "b2u",
+      "name": "\\ → স্ব",
+      "input": "\\",
+      "expected": "স্ব"
+    },
+    {
+      "direction": "u2b",
+      "name": "অ → A",
+      "input": "অ",
+      "expected": "A"
+    },
+    {
+      "direction": "u2b",
+      "name": "আ → Av",
+      "input": "আ",
+      "expected": "Av"
+    },
+    {
+      "direction": "u2b",
+      "name": "ক → K",
+      "input": "ক",
+      "expected": "K"
+    },
+    {
+      "direction": "u2b",
+      "name": "ক্ষ → ¶",
+      "input": "ক্ষ",
+      "expected": "¶"
+    },
+    {
+      "direction": "u2b",
+      "name": "ক্র → µ",
+      "input": "ক্র",
+      "expected": "µ"
+    },
+    {
+      "direction": "u2b",
+      "name": "ন্ত → šÍ",
+      "input": "ন্ত",
+      "expected": "šÍ"
+    },
+    {
+      "direction": "u2b",
+      "name": "স্ব → m^",
+      "input": "স্ব",
+      "expected": "m^"
+    },
+    {
+      "direction": "u2b",
+      "name": "বাংলাদেশ",
+      "input": "বাংলাদেশ",
+      "expected": "evsjv‡`k"
+    },
+    {
+      "direction": "u2b",
+      "name": "০১২৩",
+      "input": "০১২৩",
+      "expected": "0123"
+    },
+    {
+      "direction": "u2b",
+      "name": "। → |",
+      "input": "।",
+      "expected": "|"
+    },
+    {
+      "direction": "u2b",
+      "name": "ং → s",
+      "input": "ং",
+      "expected": "s"
+    },
+    {
+      "direction": "u2b",
+      "name": "া → v",
+      "input": "া",
+      "expected": "v"
+    },
+    {
+      "direction": "b2u",
+      "name": "b2u→u2b evsjv‡`k",
+      "input": "evsjv‡`k",
+      "expected": "বাংলাদেশ"
+    }
+  ]
+}

@@ -2793,21 +2793,91 @@
         }
       }
 
+      async function refineForegroundEdges(sourceBlob, foregroundBlob, status) {
+        let sourceBmp = null, foregroundBmp = null;
+        try {
+          sourceBmp = await createImageBitmap(sourceBlob);
+          foregroundBmp = await createImageBitmap(foregroundBlob);
+          const width = foregroundBmp.width, height = foregroundBmp.height;
+          if (sourceBmp.width !== width || sourceBmp.height !== height || width * height > 4000000) return foregroundBlob;
+
+          const sourceCanvas = document.createElement('canvas');
+          const resultCanvas = document.createElement('canvas');
+          sourceCanvas.width = resultCanvas.width = width;
+          sourceCanvas.height = resultCanvas.height = height;
+          const sourceCtx = sourceCanvas.getContext('2d', { willReadFrequently: true });
+          const resultCtx = resultCanvas.getContext('2d', { willReadFrequently: true });
+          if (!sourceCtx || !resultCtx) return foregroundBlob;
+          sourceCtx.drawImage(sourceBmp, 0, 0);
+          resultCtx.drawImage(foregroundBmp, 0, 0);
+          const original = sourceCtx.getImageData(0, 0, width, height);
+          const result = resultCtx.getImageData(0, 0, width, height);
+          const src = original.data, out = result.data;
+
+          // Remove colour spill from semi-transparent edge pixels without changing the alpha mask.
+          for (let y = 2; y < height - 2; y++) {
+            for (let x = 2; x < width - 2; x++) {
+              const index = (y * width + x) * 4;
+              const alpha = out[index + 3];
+              if (alpha < 24 || alpha > 244) continue;
+              let red = 0, green = 0, blue = 0, samples = 0;
+              for (let oy = -2; oy <= 2; oy++) {
+                for (let ox = -2; ox <= 2; ox++) {
+                  if (!ox && !oy) continue;
+                  const neighbour = ((y + oy) * width + (x + ox)) * 4;
+                  if (out[neighbour + 3] <= 8) {
+                    red += src[neighbour]; green += src[neighbour + 1]; blue += src[neighbour + 2];
+                    samples++;
+                  }
+                }
+              }
+              if (samples < 2) continue;
+              const a = Math.max(alpha / 255, 0.24), inverse = 1 - a;
+              const bgR = red / samples, bgG = green / samples, bgB = blue / samples;
+              const strength = Math.min(0.82, inverse * 0.9);
+              const clean = (value, background) => {
+                const unblended = Math.max(0, Math.min(255, (value - background * inverse) / a));
+                return Math.round(value * (1 - strength) + unblended * strength);
+              };
+              out[index] = clean(src[index], bgR);
+              out[index + 1] = clean(src[index + 1], bgG);
+              out[index + 2] = clean(src[index + 2], bgB);
+            }
+          }
+          resultCtx.putImageData(result, 0, 0);
+          const cleaned = await new Promise(resolve => resultCanvas.toBlob(resolve, 'image/png'));
+          return cleaned || foregroundBlob;
+        } catch (err) {
+          console.warn('Foreground edge refinement skipped:', err);
+          return foregroundBlob;
+        } finally {
+          if (sourceBmp && sourceBmp.close) sourceBmp.close();
+          if (foregroundBmp && foregroundBmp.close) foregroundBmp.close();
+        }
+      }
+
       async function removeBackground() {
         const item = items[sel];
-        if (!item) { toast('আগে একটি ছবি যোগ করুন', 'info'); return; }
+        if (!item) { toast('image.add_image_first', 'info'); return; }
         if (bgBusy) return;
         const btn = $('#img-bg-remove'), status = $('#img-bg-status'), dl = $('#img-bg-download');
+        const itemId = item.id;
+        const sourceBlob = item.out && item.out.blob ? item.out.blob : item.file;
         bgBusy = true; btn.disabled = true; btn.classList.add('opacity-60');
         status.classList.remove('hidden'); status.textContent = t('image.bg_loading');
         dl.classList.add('hidden');
         try {
           if (!bgModulePromise) bgModulePromise = import('https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.5/+esm');
           const mod = await bgModulePromise;
-          const itemId = item.id;
+          let device = 'cpu';
+          if (navigator.gpu && typeof navigator.gpu.requestAdapter === 'function') {
+            try { if (await navigator.gpu.requestAdapter()) device = 'gpu'; } catch { /* use CPU */ }
+          }
           const config = {
-            model: 'isnet',
-            device: navigator.gpu ? 'gpu' : 'cpu',
+            model: 'isnet_fp16',
+            device,
+            proxyToWorker: true,
+            rescale: true,
             output: { format: 'image/png', quality: 1 },
             progress: (key, current, total) => {
               if (key && key.indexOf('compute:') === 0) {
@@ -2821,22 +2891,27 @@
             }
           };
           let blob;
-          try { blob = await mod.removeBackground(item.file, config); }
+          try { blob = await mod.removeBackground(sourceBlob, config); }
           catch (gpuError) {
             if (config.device !== 'gpu') throw gpuError;
             status.textContent = t('image.bg_gpu_fallback');
-            blob = await mod.removeBackground(item.file, { ...config, device: 'cpu' });
+            blob = await mod.removeBackground(sourceBlob, { ...config, device: 'cpu' });
           }
           if (!items.some(x => x.id === itemId) || !items[sel] || items[sel].id !== itemId) return;
+          status.textContent = t('image.bg_cleaning_edges');
+          blob = await refineForegroundEdges(sourceBlob, blob, status);
           const bmp = await createImageBitmap(blob);
-          if (bgResultUrl) URL.revokeObjectURL(bgResultUrl);
+          if (item.out && item.out.url) {
+            URL.revokeObjectURL(item.out.url);
+            if (bgResultUrl === item.out.url) bgResultUrl = null;
+            if (aiEnhanceUrl === item.out.url) aiEnhanceUrl = null;
+          }
           bgResultUrl = URL.createObjectURL(blob);
-          if (item.out) URL.revokeObjectURL(item.out.url);
           item.out = { blob, url: bgResultUrl, w: bmp.width, h: bmp.height, mime: 'image/png', notes: [] };
           bmp.close && bmp.close();
           view = 'result'; syncCropUI(); renderList(); updateSummary(); syncBackgroundControls(); layout();
           dl.classList.remove('hidden');
-          dl.onclick = () => downloadBlob(blob, (item.name.replace(/\.[^.]+$/, '') || 'image') + '-no-background.png');
+          dl.onclick = () => downloadBlob(blob, (item.name.replace(/\\.[^.]+$/, '') || 'image') + '-no-background.png');
           $('#img-bg-options').classList.remove('hidden');
           status.textContent = t('image.bg_complete');
           toast('image.bg_success', 'success');
@@ -2856,11 +2931,17 @@
         $('#img-bg-image-wrap').classList.toggle('hidden', bgMode !== 'image');
         $('#img-bg-color').value = bgColor;
         $('#img-bg-image-name').textContent = bgImageName || t('image.no_background_image_selected');
+        $$('[data-bg-color]').forEach(swatch => {
+          const selected = swatch.dataset.bgColor.toLowerCase() === bgColor.toLowerCase();
+          swatch.setAttribute('aria-pressed', String(selected));
+          swatch.style.outline = selected ? '3px solid #818cf8' : 'none';
+          swatch.style.outlineOffset = '2px';
+          swatch.style.transform = selected ? 'scale(1.06)' : 'scale(1)';
+        });
         const inner = $('#img-stage-inner');
         if (view === 'result' && items[sel] && items[sel].out) {
           inner.style.backgroundColor = bgMode === 'solid' ? bgColor : '';
-          // Clear the inline image in transparent mode so the CSS checkerboard can show through.
-          inner.style.backgroundImage = bgMode === 'image' && bgImageUrl ? `url("${bgImageUrl}")` : (bgMode === 'solid' ? 'none' : '');
+          inner.style.backgroundImage = bgMode === 'image' && bgImageUrl ? `url("${bgImageUrl}")` : 'none';
           inner.style.backgroundSize = $('#img-bg-fit').value || 'cover';
           inner.style.backgroundPosition = 'center';
           inner.style.backgroundRepeat = 'no-repeat';
@@ -2880,26 +2961,36 @@
 
       async function exportWithBackground() {
         const item = items[sel];
-        if (!item || !item.out) return;
-        if (bgMode === 'image' && !bgImageBitmap) { toast('আগে একটি ব্যাকগ্রাউন্ড ছবি নির্বাচন করুন', 'info'); return; }
-        const bmp = await createImageBitmap(item.out.blob);
+        if (!item || !item.out) { toast('image.remove_background_first', 'info'); return; }
+        if (bgMode === 'image' && !bgImageBitmap) { toast('image.choose_background_first', 'info'); return; }
+        const btn = $('#img-bg-export');
+        if (btn.disabled) return;
+        btn.disabled = true; btn.classList.add('opacity-60');
+        let bmp = null;
         try {
+          bmp = await createImageBitmap(item.out.blob);
           const cv = document.createElement('canvas');
           cv.width = bmp.width; cv.height = bmp.height;
           const ctx = cv.getContext('2d');
+          if (!ctx) throw new Error('Canvas is unavailable');
           if (bgMode === 'solid') { ctx.fillStyle = bgColor; ctx.fillRect(0, 0, cv.width, cv.height); }
           else if (bgMode === 'image') drawBackgroundImage(ctx, cv.width, cv.height);
           ctx.drawImage(bmp, 0, 0);
           const blob = await new Promise(resolve => cv.toBlob(resolve, 'image/png'));
           if (!blob) throw new Error('PNG export failed');
-          downloadBlob(blob, (item.name.replace(/\.[^.]+$/, '') || 'image') + (bgMode === 'transparent' ? '-transparent.png' : '-with-background.png'));
+          const suffix = bgMode === 'transparent' ? '-transparent.png' : '-with-background.png';
+          downloadBlob(blob, (item.name.replace(/\\.[^.]+$/, '') || 'image') + suffix);
+          toast('image.background_export_success', 'success');
         } catch (err) {
           console.error('Background composition failed:', err);
-          toast('ব্যাকগ্রাউন্ডসহ ছবি তৈরি করা যায়নি', 'error');
-        } finally { bmp.close && bmp.close(); }
+          toast('image.background_export_failed', 'error');
+        } finally {
+          if (bmp && bmp.close) bmp.close();
+          btn.disabled = false; btn.classList.remove('opacity-60');
+        }
       }
 
-      function init() {
+            function init() {
         loadSettings(); writeForm(); syncCropUI();
         I18N.onChange(() => { renderList(); updateSummary(); syncCropUI(); paintCrop(); });
 
@@ -2919,6 +3010,7 @@
         $('#img-ai-enhance').addEventListener('click', enhanceImageAI);
         $('#img-bg-mode').addEventListener('change', e => { bgMode = e.target.value; syncBackgroundControls(); });
         $('#img-bg-color').addEventListener('input', e => {
+          bgMode = 'solid';
           bgColor = e.target.value;
           $('[data-bg-color]').forEach(p => {
             const selected = p.dataset.bgColor.toLowerCase() === bgColor.toLowerCase();
@@ -2930,6 +3022,7 @@
           syncBackgroundControls();
         });
         $('[data-bg-color]').forEach(b => b.addEventListener('click', () => {
+          bgMode = 'solid';
           bgColor = b.dataset.bgColor;
           $('#img-bg-color').value = bgColor;
           $('[data-bg-color]').forEach(p => {
@@ -2951,8 +3044,8 @@
             if (bgImageUrl) URL.revokeObjectURL(bgImageUrl);
             bgImageBitmap = bitmap; bgImageUrl = URL.createObjectURL(file); bgImageName = file.name;
             bgMode = 'image'; syncBackgroundControls();
-            toast('নতুন ব্যাকগ্রাউন্ড যোগ হয়েছে', 'success');
-          } catch { toast('ব্যাকগ্রাউন্ড ছবিটি খোলা যায়নি', 'error'); }
+            toast('image.background_image_added', 'success');
+          } catch { toast('image.background_image_failed', 'error'); }
         });
         $('#img-bg-export').addEventListener('click', exportWithBackground);
 

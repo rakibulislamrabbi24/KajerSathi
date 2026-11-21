@@ -698,10 +698,10 @@
                   <label class="relative grid h-9 w-9 cursor-pointer place-items-center overflow-hidden rounded-lg border-2 border-indigo-400 shadow-sm" title="নিজের পছন্দমতো যেকোনো রং নির্বাচন">
                     <input id="img-bg-color" type="color" value="#ffffff" aria-label="কাস্টম ব্যাকগ্রাউন্ড রং" class="absolute inset-0 h-full w-full cursor-pointer border-0 p-0" />
                   </label>
-                  <button type="button" data-bg-color="#ffffff" aria-label="সাদা" title="সাদা" aria-pressed="true" class="h-9 w-9 rounded-lg border-2 border-slate-300 bg-white shadow-sm ring-offset-2 transition hover:scale-105"></button>
-                  <button type="button" data-bg-color="#e0f2fe" aria-label="আকাশি" title="আকাশি" aria-pressed="false" class="h-9 w-9 rounded-lg border-2 border-sky-200 bg-sky-200 shadow-sm ring-offset-2 transition hover:scale-105"></button>
-                  <button type="button" data-bg-color="#dcfce7" aria-label="হালকা সবুজ" title="হালকা সবুজ" aria-pressed="false" class="h-9 w-9 rounded-lg border-2 border-emerald-200 bg-emerald-200 shadow-sm ring-offset-2 transition hover:scale-105"></button>
-                  <button type="button" data-bg-color="#111827" aria-label="কালো" title="কালো" aria-pressed="false" class="h-9 w-9 rounded-lg border-2 border-slate-700 bg-slate-900 shadow-sm ring-offset-2 transition hover:scale-105"></button>
+                  <button type="button" data-bg-color="#ffffff" aria-label="সাদা" title="সাদা" aria-pressed="true" style="display:inline-block;flex:0 0 36px;width:36px;height:36px;min-width:36px;min-height:36px;padding:0;appearance:none;background-color:#ffffff;border:2px solid #cbd5e1;border-radius:9px;box-shadow:0 1px 3px #0002;cursor:pointer"></button>
+                  <button type="button" data-bg-color="#e0f2fe" aria-label="আকাশি" title="আকাশি" aria-pressed="false" style="display:inline-block;flex:0 0 36px;width:36px;height:36px;min-width:36px;min-height:36px;padding:0;appearance:none;background-color:#e0f2fe;border:2px solid #bae6fd;border-radius:9px;box-shadow:0 1px 3px #0002;cursor:pointer"></button>
+                  <button type="button" data-bg-color="#dcfce7" aria-label="হালকা সবুজ" title="হালকা সবুজ" aria-pressed="false" style="display:inline-block;flex:0 0 36px;width:36px;height:36px;min-width:36px;min-height:36px;padding:0;appearance:none;background-color:#dcfce7;border:2px solid #a7f3d0;border-radius:9px;box-shadow:0 1px 3px #0002;cursor:pointer"></button>
+                  <button type="button" data-bg-color="#111827" aria-label="কালো" title="কালো" aria-pressed="false" style="display:inline-block;flex:0 0 36px;width:36px;height:36px;min-width:36px;min-height:36px;padding:0;appearance:none;background-color:#111827;border:2px solid #475569;border-radius:9px;box-shadow:0 1px 3px #0002;cursor:pointer"></button>
                 </div>
               </div>
               <div id="img-bg-image-wrap" class="hidden space-y-2">
@@ -2922,8 +2922,9 @@
           $('[data-bg-color]').forEach(p => {
             const selected = p.dataset.bgColor.toLowerCase() === bgColor.toLowerCase();
             p.setAttribute('aria-pressed', String(selected));
-            p.classList.toggle('ring-2', selected);
-            p.classList.toggle('ring-indigo-500', selected);
+            p.style.outline = selected ? '3px solid #818cf8' : 'none';
+            p.style.outlineOffset = '2px';
+            p.style.transform = selected ? 'scale(1.06)' : 'scale(1)';
           });
           syncBackgroundControls();
         });
@@ -2933,8 +2934,9 @@
           $('[data-bg-color]').forEach(p => {
             const selected = p === b;
             p.setAttribute('aria-pressed', String(selected));
-            p.classList.toggle('ring-2', selected);
-            p.classList.toggle('ring-indigo-500', selected);
+            p.style.outline = selected ? '3px solid #818cf8' : 'none';
+            p.style.outlineOffset = '2px';
+            p.style.transform = selected ? 'scale(1.06)' : 'scale(1)';
           });
           syncBackgroundControls();
         }));

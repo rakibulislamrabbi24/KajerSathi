@@ -489,4 +489,5 @@
   "image.background_export_failed": "Could not create the PNG with the selected background. Please try again.",
   "image.background_image_added": "New background image added.",
   "image.background_image_failed": "Could not open that background image. Try another file.",
+  "image.processing_busy": "Another AI task is running. Please try again when it finishes.",
 };

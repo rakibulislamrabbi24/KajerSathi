@@ -483,4 +483,10 @@
   "image.bg_complete": "Done — transparent PNG created. You can add a new background below.",
   "image.bg_success": "Background removed successfully.",
   "image.bg_failed": "Could not complete the task. Check your internet connection and browser memory, then try again.",
+  "image.remove_background_first": "Remove the background first.",
+  "image.choose_background_first": "Choose a background image first.",
+  "image.background_export_success": "PNG with the selected background is ready; download started.",
+  "image.background_export_failed": "Could not create the PNG with the selected background. Please try again.",
+  "image.background_image_added": "New background image added.",
+  "image.background_image_failed": "Could not open that background image. Try another file.",
 };

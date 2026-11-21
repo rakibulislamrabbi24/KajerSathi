@@ -438,7 +438,7 @@
   "toast.zip_failed": "ZIP ফাইল বানানো যায়নি।",
   "upcoming.filter_tools": "টুল ফিল্টার",
   "upcoming.more_small_fast_private_tools_all_ru": "ছোট, দ্রুত ও গোপনীয় আরও টুল। সবই আপনার ব্রাউজারে চলে, অ্যাকাউন্ট বা আপলোড লাগে না।",
-  "upcoming.the_kajersathi_roadmap": "KajerSathi-র রোডম্যাপ"
+  "upcoming.the_kajersathi_roadmap": "KajerSathi-র রোডম্যাপ",
   "image.bg_remover_title": "ব্যাকগ্রাউন্ড রিমুভার",
   "image.bg_remover_description": "ছবির পেছনের অংশ সরিয়ে স্বচ্ছ PNG তৈরি করুন",
   "image.remove_background": "ব্যাকগ্রাউন্ড রিমুভ",

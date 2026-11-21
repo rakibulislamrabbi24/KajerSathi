@@ -438,7 +438,7 @@
   "toast.zip_failed": "Could not create the ZIP file.",
   "upcoming.filter_tools": "Filter tools",
   "upcoming.more_small_fast_private_tools_all_ru": "More small, fast, private tools — all running locally in your browser, no accounts and no uploads.",
-  "upcoming.the_kajersathi_roadmap": "The KajerSathi roadmap"
+  "upcoming.the_kajersathi_roadmap": "The KajerSathi roadmap",
   "image.bg_remover_title": "Background Remover",
   "image.bg_remover_description": "Remove the background and create a transparent PNG.",
   "image.remove_background": "Remove Background",

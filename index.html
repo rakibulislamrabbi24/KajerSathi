@@ -2858,8 +2858,9 @@
         $('#img-bg-image-name').textContent = bgImageName || 'এখনো কোনো ব্যাকগ্রাউন্ড ছবি নির্বাচন করা হয়নি';
         const inner = $('#img-stage-inner');
         if (view === 'result' && items[sel] && items[sel].out) {
-          inner.style.backgroundColor = bgMode === 'solid' ? bgColor : 'transparent';
-          inner.style.backgroundImage = bgMode === 'image' && bgImageUrl ? `url("${bgImageUrl}")` : 'none';
+          inner.style.backgroundColor = bgMode === 'solid' ? bgColor : '';
+          // Clear the inline image in transparent mode so the CSS checkerboard can show through.
+          inner.style.backgroundImage = bgMode === 'image' && bgImageUrl ? `url("${bgImageUrl}")` : (bgMode === 'solid' ? 'none' : '');
           inner.style.backgroundSize = $('#img-bg-fit').value || 'cover';
           inner.style.backgroundPosition = 'center';
           inner.style.backgroundRepeat = 'no-repeat';

@@ -2797,7 +2797,7 @@
         }
       }
 
-      async function refineForegroundEdges(sourceBlob, foregroundBlob, status) {
+      async function refineForegroundEdges(sourceBlob, foregroundBlob) {
         let sourceBmp = null, foregroundBmp = null;
         try {
           sourceBmp = await createImageBitmap(sourceBlob);
@@ -2838,7 +2838,7 @@
               if (samples < 2) continue;
               const a = Math.max(alpha / 255, 0.24), inverse = 1 - a;
               const bgR = red / samples, bgG = green / samples, bgB = blue / samples;
-              const strength = Math.min(0.82, inverse * 0.9);
+              const strength = Math.min(0.88, inverse * 1.6);
               const clean = (value, background) => {
                 const unblended = Math.max(0, Math.min(255, (value - background * inverse) / a));
                 return Math.round(value * (1 - strength) + unblended * strength);
@@ -2903,7 +2903,7 @@
           }
           if (!items.some(x => x.id === itemId) || !items[sel] || items[sel].id !== itemId) return;
           status.textContent = t('image.bg_cleaning_edges');
-          blob = await refineForegroundEdges(sourceBlob, blob, status);
+          blob = await refineForegroundEdges(sourceBlob, blob);
           const bmp = await createImageBitmap(blob);
           if (item.out && item.out.url) {
             URL.revokeObjectURL(item.out.url);

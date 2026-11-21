@@ -719,6 +719,21 @@
             </div>
           </div>
 
+          <div class="rounded-xl border border-indigo-300/70 bg-indigo-50/60 p-3 dark:border-indigo-400/30 dark:bg-indigo-500/5">
+            <div class="mb-2 flex items-start gap-2">
+              <i data-lucide="sparkles" class="mt-0.5 h-5 w-5 text-indigo-500"></i>
+              <div class="min-w-0 flex-1">
+                <h3 class="text-sm font-bold">AI Photo Enhancer</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400">AI দিয়ে ছবির রেজোলিউশন 2× বাড়ান এবং সূক্ষ্ম ডিটেইল উন্নত করুন।</p>
+              </div>
+              <span class="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-700 dark:bg-indigo-400/15 dark:text-indigo-200">AI 2×</span>
+            </div>
+            <button type="button" id="img-ai-enhance" class="btn btn-primary w-full !py-2"><i data-lucide="wand-sparkles" class="h-4 w-4"></i> AI দিয়ে ছবি Enhance করুন</button>
+            <div id="img-ai-status" class="mt-2 hidden text-xs text-slate-500 dark:text-slate-400" role="status" aria-live="polite"></div>
+            <button type="button" id="img-ai-download" class="btn btn-soft mt-2 hidden w-full !py-2"><i data-lucide="download" class="h-4 w-4"></i> Enhanced PNG ডাউনলোড</button>
+            <p class="mt-2 text-[11px] text-slate-500 dark:text-slate-400">প্রথমবার AI মডেল ডাউনলোডে ইন্টারনেট লাগবে। ছবি আপনার ব্রাউজারেই প্রসেস হবে।</p>
+          </div>
+
           <div id="img-aspect-wrap" class="hidden space-y-2">
             <div id="img-aspects" class="flex flex-wrap gap-1.5"><button type="button" class="chip" data-aspect="free" aria-pressed="false" data-i18n="image.free">ফ্রি</button><button type="button" class="chip" data-aspect="original" aria-pressed="false" data-i18n="image.original">অরিজিনাল</button><button type="button" class="chip" data-aspect="1:1" aria-pressed="false">1:1</button><button type="button" class="chip" data-aspect="4:3" aria-pressed="false">4:3</button><button type="button" class="chip" data-aspect="3:2" aria-pressed="false">3:2</button><button type="button" class="chip" data-aspect="16:9" aria-pressed="false">16:9</button><button type="button" class="chip" data-aspect="4:5" aria-pressed="false">4:5</button><button type="button" class="chip" data-aspect="35x45" aria-pressed="false" title="পাসপোর্ট ছবির অনুপাত (7:9)" data-i18n="image.35_45_mm" data-i18n-attr="title:image.passport_photo_ratio_7_9">35×45 মিমি</button></div>
             <div class="flex items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400">
@@ -2683,7 +2698,88 @@
       const save = () => store.set(KEY, s);
 
       let bgModulePromise = null, bgBusy = false, bgResultUrl = null;
+      let aiUpscalerPromise = null, aiEnhanceBusy = false, aiEnhanceUrl = null;
       let bgMode = 'transparent', bgColor = '#ffffff', bgImageBitmap = null, bgImageUrl = null, bgImageName = '';
+      async function loadAIUpscaler() {
+        if (window.Upscaler && window.tf && window.DefaultUpscalerJSModel) return;
+        if (!aiUpscalerPromise) {
+          aiUpscalerPromise = (async () => {
+            await ImgUtil.loadScript('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js');
+            await ImgUtil.loadScript('https://cdn.jsdelivr.net/npm/@upscalerjs/default-model@1.0.0/dist/umd/index.min.js');
+            await ImgUtil.loadScript('https://cdn.jsdelivr.net/npm/upscaler@1.0.0/dist/browser/umd/upscaler.min.js');
+            if (!window.tf || !window.Upscaler || !window.DefaultUpscalerJSModel) throw new Error('AI enhancer library failed to initialize');
+            await window.tf.ready();
+          })().catch(err => { aiUpscalerPromise = null; throw err; });
+        }
+        await aiUpscalerPromise;
+      }
+
+      async function enhanceImageAI() {
+        const item = items[sel];
+        if (!item) { toast('আগে একটি ছবি যোগ করুন', 'info'); return; }
+        if (aiEnhanceBusy) return;
+        const btn = $('#img-ai-enhance'), status = $('#img-ai-status'), dl = $('#img-ai-download');
+        aiEnhanceBusy = true; btn.disabled = true; btn.classList.add('opacity-60');
+        status.classList.remove('hidden'); status.textContent = 'AI Photo Enhancer প্রস্তুত হচ্ছে…';
+        dl.classList.add('hidden');
+        const itemId = item.id;
+        let sourceBmp = null, outputBmp = null;
+        try {
+          await loadAIUpscaler();
+          if (!items.some(x => x.id === itemId) || !items[sel] || items[sel].id !== itemId) return;
+          const sourceBlob = item.out && item.out.blob ? item.out.blob : item.file;
+          sourceBmp = await createImageBitmap(sourceBlob);
+          if (sourceBmp.width * sourceBmp.height > 1500000) {
+            throw new Error('ছবিটি অনেক বড়। AI Enhance করার আগে Resize থেকে ছবির মাপ কমিয়ে নিন (সর্বোচ্চ 1.5 MP)।');
+          }
+          const inputCanvas = document.createElement('canvas');
+          inputCanvas.width = sourceBmp.width; inputCanvas.height = sourceBmp.height;
+          const inputCtx = inputCanvas.getContext('2d', { willReadFrequently: true });
+          inputCtx.drawImage(sourceBmp, 0, 0);
+          const alphaMask = inputCtx.getImageData(0, 0, inputCanvas.width, inputCanvas.height);
+          status.textContent = 'AI মডেল দিয়ে ছবির ডিটেইল ও রেজোলিউশন উন্নত করা হচ্ছে…';
+          const upscaler = new window.Upscaler({ model: window.DefaultUpscalerJSModel });
+          const enhancedSrc = await upscaler.upscale(inputCanvas, { output: 'src', patchSize: 64, padding: 5 });
+          const response = await fetch(enhancedSrc);
+          if (!response.ok) throw new Error('AI result could not be read');
+          let enhancedBlob = await response.blob();
+          outputBmp = await createImageBitmap(enhancedBlob);
+          const outputCanvas = document.createElement('canvas');
+          outputCanvas.width = outputBmp.width; outputCanvas.height = outputBmp.height;
+          const outputCtx = outputCanvas.getContext('2d');
+          outputCtx.drawImage(outputBmp, 0, 0);
+          // Restore the source alpha channel so transparent cut-outs remain transparent.
+          const maskCanvas = document.createElement('canvas');
+          maskCanvas.width = alphaMask.width; maskCanvas.height = alphaMask.height;
+          maskCanvas.getContext('2d').putImageData(alphaMask, 0, 0);
+          outputCtx.globalCompositeOperation = 'destination-in';
+          outputCtx.imageSmoothingEnabled = true; outputCtx.imageSmoothingQuality = 'high';
+          outputCtx.drawImage(maskCanvas, 0, 0, outputCanvas.width, outputCanvas.height);
+          enhancedBlob = await new Promise(resolve => outputCanvas.toBlob(resolve, 'image/png'));
+          if (!enhancedBlob) throw new Error('Enhanced PNG export failed');
+          if (!items.some(x => x.id === itemId) || !items[sel] || items[sel].id !== itemId) return;
+          const url = URL.createObjectURL(enhancedBlob);
+          if (item.out && item.out.url && item.out.url !== bgResultUrl) URL.revokeObjectURL(item.out.url);
+          item.out = { blob: enhancedBlob, url, w: outputCanvas.width, h: outputCanvas.height, mime: 'image/png', notes: ['AI 2× Super Resolution'] };
+          view = 'result'; syncCropUI(); renderList(); updateSummary(); layout();
+          if (aiEnhanceUrl) URL.revokeObjectURL(aiEnhanceUrl);
+          aiEnhanceUrl = url;
+          dl.classList.remove('hidden');
+          dl.onclick = () => downloadBlob(enhancedBlob, (item.name.replace(/\\.[^.]+$/, '') || 'image') + '-ai-enhanced-2x.png');
+          status.textContent = `সম্পন্ন — ${outputCanvas.width} × ${outputCanvas.height} px AI Enhanced ছবি তৈরি হয়েছে।`;
+          toast('AI Photo Enhancement সম্পন্ন হয়েছে', 'success');
+          if (upscaler.dispose) upscaler.dispose();
+        } catch (err) {
+          console.error('AI Photo Enhancement failed:', err);
+          status.textContent = err && err.message && (err.message.includes('অনেক বড়') || err.message.includes('Resize')) ? err.message : 'AI Enhance করা যায়নি। ইন্টারনেট, ব্রাউজার মেমোরি ও WebGL সমর্থন পরীক্ষা করে আবার চেষ্টা করুন।';
+          toast('AI Photo Enhancement ব্যর্থ হয়েছে', 'error');
+        } finally {
+          if (sourceBmp && sourceBmp.close) sourceBmp.close();
+          if (outputBmp && outputBmp.close) outputBmp.close();
+          aiEnhanceBusy = false; btn.disabled = false; btn.classList.remove('opacity-60');
+        }
+      }
+
       async function removeBackground() {
         const item = items[sel];
         if (!item) { toast('আগে একটি ছবি যোগ করুন', 'info'); return; }
@@ -2806,6 +2902,7 @@
         });
 
         $('#img-bg-remove').addEventListener('click', removeBackground);
+        $('#img-ai-enhance').addEventListener('click', enhanceImageAI);
         $('#img-bg-mode').addEventListener('change', e => { bgMode = e.target.value; syncBackgroundControls(); });
         $('#img-bg-color').addEventListener('input', e => {
           bgColor = e.target.value;

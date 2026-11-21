@@ -680,42 +680,42 @@
           </div>
           <div class="rounded-xl border border-indigo-200/70 bg-indigo-500/5 p-3 dark:border-indigo-400/20">
             <div class="flex flex-wrap items-center justify-between gap-2">
-              <div class="min-w-0"><p class="text-sm font-semibold">ব্যাকগ্রাউন্ড রিমুভার</p><p class="text-xs text-slate-500 dark:text-slate-400">ছবির পেছনের অংশ সরিয়ে স্বচ্ছ PNG তৈরি করুন</p></div>
-              <button type="button" id="img-bg-remove" class="btn btn-primary !py-2"><i data-lucide="wand-sparkles" class="h-4 w-4"></i> ব্যাকগ্রাউন্ড রিমুভ</button>
+              <div class="min-w-0"><p class="text-sm font-semibold" data-i18n="image.bg_remover_title">ব্যাকগ্রাউন্ড রিমুভার</p><p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="image.bg_remover_description">ছবির পেছনের অংশ সরিয়ে স্বচ্ছ PNG তৈরি করুন</p></div>
+              <button type="button" id="img-bg-remove" class="btn btn-primary !py-2"><i data-lucide="wand-sparkles" class="h-4 w-4"></i> <span data-i18n="image.remove_background">ব্যাকগ্রাউন্ড রিমুভ</span></button>
             </div>
             <div id="img-bg-status" class="mt-2 hidden text-xs text-slate-500 dark:text-slate-400" role="status" aria-live="polite"></div>
-            <button type="button" id="img-bg-download" class="btn btn-soft mt-2 hidden !py-2">স্বচ্ছ PNG ডাউনলোড</button>
+            <button type="button" id="img-bg-download" class="btn btn-soft mt-2 hidden !py-2" data-i18n="image.download_transparent_png">স্বচ্ছ PNG ডাউনলোড</button>
             <div id="img-bg-options" class="mt-3 hidden space-y-2 border-t border-indigo-200/50 pt-3 dark:border-white/10">
-              <label class="label" for="img-bg-mode">নতুন ব্যাকগ্রাউন্ড যোগ করুন</label>
+              <label class="label" for="img-bg-mode" data-i18n="image.add_new_background">নতুন ব্যাকগ্রাউন্ড যোগ করুন</label>
               <select id="img-bg-mode" class="input">
-                <option value="transparent">স্বচ্ছ রাখুন</option>
-                <option value="solid">এক রঙের ব্যাকগ্রাউন্ড</option>
-                <option value="image">নিজের ছবি ব্যাকগ্রাউন্ড হিসেবে দিন</option>
+                <option value="transparent" data-i18n="image.keep_transparent">স্বচ্ছ রাখুন</option>
+                <option value="solid" data-i18n="image.solid_color_background">এক রঙের ব্যাকগ্রাউন্ড</option>
+                <option value="image" data-i18n="image.use_custom_background_image">নিজের ছবি ব্যাকগ্রাউন্ড হিসেবে দিন</option>
               </select>
               <div id="img-bg-color-wrap" class="hidden space-y-2">
-                <label class="text-xs text-slate-500 dark:text-slate-400" for="img-bg-color">ব্যাকগ্রাউন্ডের রং নির্বাচন করুন</label>
+                <label class="text-xs text-slate-500 dark:text-slate-400" for="img-bg-color" data-i18n="image.choose_background_color">ব্যাকগ্রাউন্ডের রং নির্বাচন করুন</label>
                 <div class="flex flex-wrap items-center gap-2">
-                  <label class="relative inline-flex h-9 w-9 shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 border-indigo-400 shadow-sm" title="নিজের পছন্দমতো যেকোনো রং নির্বাচন" style="width:36px;height:36px;min-width:36px;min-height:36px;flex:0 0 36px;background:conic-gradient(#ff3b30,#ffcc00,#34c759,#00c7be,#007aff,#af52de,#ff3b30)">
-                    <input id="img-bg-color" type="color" value="#ffffff" aria-label="কাস্টম ব্যাকগ্রাউন্ড রং" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:0;padding:0;appearance:none" />
+                  <label class="relative inline-flex h-9 w-9 shrink-0 cursor-pointer overflow-hidden rounded-lg border-2 border-indigo-400 shadow-sm" title="নিজের পছন্দমতো যেকোনো রং নির্বাচন" data-i18n-attr="title:image.custom_color_picker" style="width:36px;height:36px;min-width:36px;min-height:36px;flex:0 0 36px;background:conic-gradient(#ff3b30,#ffcc00,#34c759,#00c7be,#007aff,#af52de,#ff3b30)">
+                    <input id="img-bg-color" type="color" value="#ffffff" aria-label="কাস্টম ব্যাকগ্রাউন্ড রং" data-i18n-attr="aria-label:image.custom_background_color" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:0;padding:0;appearance:none" />
                   </label>
-                  <button type="button" data-bg-color="#ffffff" aria-label="সাদা" title="সাদা" aria-pressed="true" style="display:inline-block;flex:0 0 36px;width:36px;height:36px;min-width:36px;min-height:36px;padding:0;appearance:none;background-color:#ffffff;border:2px solid #cbd5e1;border-radius:9px;box-shadow:0 1px 3px #0002;cursor:pointer"></button>
-                  <button type="button" data-bg-color="#e0f2fe" aria-label="আকাশি" title="আকাশি" aria-pressed="false" style="display:inline-block;flex:0 0 36px;width:36px;height:36px;min-width:36px;min-height:36px;padding:0;appearance:none;background-color:#e0f2fe;border:2px solid #bae6fd;border-radius:9px;box-shadow:0 1px 3px #0002;cursor:pointer"></button>
-                  <button type="button" data-bg-color="#dcfce7" aria-label="হালকা সবুজ" title="হালকা সবুজ" aria-pressed="false" style="display:inline-block;flex:0 0 36px;width:36px;height:36px;min-width:36px;min-height:36px;padding:0;appearance:none;background-color:#dcfce7;border:2px solid #a7f3d0;border-radius:9px;box-shadow:0 1px 3px #0002;cursor:pointer"></button>
-                  <button type="button" data-bg-color="#111827" aria-label="কালো" title="কালো" aria-pressed="false" style="display:inline-block;flex:0 0 36px;width:36px;height:36px;min-width:36px;min-height:36px;padding:0;appearance:none;background-color:#111827;border:2px solid #475569;border-radius:9px;box-shadow:0 1px 3px #0002;cursor:pointer"></button>
+                  <button type="button" data-bg-color="#ffffff" aria-label="সাদা" title="সাদা" data-i18n-attr="aria-label:image.white;title:image.white" aria-pressed="true" style="display:inline-block;flex:0 0 36px;width:36px;height:36px;min-width:36px;min-height:36px;padding:0;appearance:none;background-color:#ffffff;border:2px solid #cbd5e1;border-radius:9px;box-shadow:0 1px 3px #0002;cursor:pointer"></button>
+                  <button type="button" data-bg-color="#e0f2fe" aria-label="আকাশি" title="আকাশি" data-i18n-attr="aria-label:image.sky_blue;title:image.sky_blue" aria-pressed="false" style="display:inline-block;flex:0 0 36px;width:36px;height:36px;min-width:36px;min-height:36px;padding:0;appearance:none;background-color:#e0f2fe;border:2px solid #bae6fd;border-radius:9px;box-shadow:0 1px 3px #0002;cursor:pointer"></button>
+                  <button type="button" data-bg-color="#dcfce7" aria-label="হালকা সবুজ" title="হালকা সবুজ" data-i18n-attr="aria-label:image.light_green;title:image.light_green" aria-pressed="false" style="display:inline-block;flex:0 0 36px;width:36px;height:36px;min-width:36px;min-height:36px;padding:0;appearance:none;background-color:#dcfce7;border:2px solid #a7f3d0;border-radius:9px;box-shadow:0 1px 3px #0002;cursor:pointer"></button>
+                  <button type="button" data-bg-color="#111827" aria-label="কালো" title="কালো" data-i18n-attr="aria-label:image.black;title:image.black" aria-pressed="false" style="display:inline-block;flex:0 0 36px;width:36px;height:36px;min-width:36px;min-height:36px;padding:0;appearance:none;background-color:#111827;border:2px solid #475569;border-radius:9px;box-shadow:0 1px 3px #0002;cursor:pointer"></button>
                 </div>
               </div>
               <div id="img-bg-image-wrap" class="hidden space-y-2">
                 <label class="btn btn-soft w-full cursor-pointer justify-center">
-                  <i data-lucide="image-plus" class="h-4 w-4"></i> ব্যাকগ্রাউন্ড ছবি বেছে নিন
+                  <i data-lucide="image-plus" class="h-4 w-4"></i> <span data-i18n="image.choose_background_image">ব্যাকগ্রাউন্ড ছবি বেছে নিন</span>
                   <input id="img-bg-image" type="file" accept="image/*" class="sr-only" />
                 </label>
-                <select id="img-bg-fit" class="input" aria-label="ব্যাকগ্রাউন্ড ছবির মাপ">
-                  <option value="cover">পুরো ক্যানভাস ভরাট করুন</option>
-                  <option value="contain">সম্পূর্ণ ছবি দেখান</option>
+                <select id="img-bg-fit" class="input" aria-label="ব্যাকগ্রাউন্ড ছবির মাপ" data-i18n-attr="aria-label:image.background_image_fit">
+                  <option value="cover" data-i18n="image.cover_canvas">পুরো ক্যানভাস ভরাট করুন</option>
+                  <option value="contain" data-i18n="image.contain_image">সম্পূর্ণ ছবি দেখান</option>
                 </select>
-                <p id="img-bg-image-name" class="text-xs text-slate-500 dark:text-slate-400">এখনো কোনো ব্যাকগ্রাউন্ড ছবি নির্বাচন করা হয়নি</p>
+                <p id="img-bg-image-name" class="text-xs text-slate-500 dark:text-slate-400" data-i18n="image.no_background_image_selected">এখনো কোনো ব্যাকগ্রাউন্ড ছবি নির্বাচন করা হয়নি</p>
               </div>
-              <button type="button" id="img-bg-export" class="btn btn-primary w-full !py-2"><i data-lucide="download" class="h-4 w-4"></i> নতুন ব্যাকগ্রাউন্ডসহ ডাউনলোড</button>
+              <button type="button" id="img-bg-export" class="btn btn-primary w-full !py-2"><i data-lucide="download" class="h-4 w-4"></i> <span data-i18n="image.download_with_new_background">নতুন ব্যাকগ্রাউন্ডসহ ডাউনলোড</span></button>
             </div>
           </div>
 
@@ -724,14 +724,14 @@
               <i data-lucide="sparkles" class="mt-0.5 h-5 w-5 text-indigo-500"></i>
               <div class="min-w-0 flex-1">
                 <h3 class="text-sm font-bold">AI Photo Enhancer</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400">AI দিয়ে ছবির রেজোলিউশন 2× বাড়ান এবং সূক্ষ্ম ডিটেইল উন্নত করুন।</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="image.ai_enhancer_description">AI দিয়ে ছবির রেজোলিউশন 2× বাড়ান এবং সূক্ষ্ম ডিটেইল উন্নত করুন।</p>
               </div>
               <span class="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-700 dark:bg-indigo-400/15 dark:text-indigo-200">AI 2×</span>
             </div>
-            <button type="button" id="img-ai-enhance" class="btn btn-primary w-full !py-2"><i data-lucide="wand-sparkles" class="h-4 w-4"></i> AI দিয়ে ছবি Enhance করুন</button>
+            <button type="button" id="img-ai-enhance" class="btn btn-primary w-full !py-2"><i data-lucide="wand-sparkles" class="h-4 w-4"></i> <span data-i18n="image.ai_enhance_button">AI দিয়ে ছবি Enhance করুন</span></button>
             <div id="img-ai-status" class="mt-2 hidden text-xs text-slate-500 dark:text-slate-400" role="status" aria-live="polite"></div>
-            <button type="button" id="img-ai-download" class="btn btn-soft mt-2 hidden w-full !py-2"><i data-lucide="download" class="h-4 w-4"></i> Enhanced PNG ডাউনলোড</button>
-            <p class="mt-2 text-[11px] text-slate-500 dark:text-slate-400">প্রথমবার AI মডেল ডাউনলোডে ইন্টারনেট লাগবে। ছবি আপনার ব্রাউজারেই প্রসেস হবে।</p>
+            <button type="button" id="img-ai-download" class="btn btn-soft mt-2 hidden w-full !py-2"><i data-lucide="download" class="h-4 w-4"></i> <span data-i18n="image.download_enhanced_png">Enhanced PNG ডাউনলোড</span></button>
+            <p class="mt-2 text-[11px] text-slate-500 dark:text-slate-400" data-i18n="image.ai_privacy_note">প্রথমবার AI মডেল ডাউনলোডে ইন্টারনেট লাগবে। ছবি আপনার ব্রাউজারেই প্রসেস হবে।</p>
           </div>
 
           <div id="img-aspect-wrap" class="hidden space-y-2">

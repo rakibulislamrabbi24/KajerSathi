@@ -685,6 +685,36 @@
             </div>
             <div id="img-bg-status" class="mt-2 hidden text-xs text-slate-500 dark:text-slate-400" role="status" aria-live="polite"></div>
             <button type="button" id="img-bg-download" class="btn btn-soft mt-2 hidden !py-2">স্বচ্ছ PNG ডাউনলোড</button>
+            <div id="img-bg-options" class="mt-3 hidden space-y-2 border-t border-indigo-200/50 pt-3 dark:border-white/10">
+              <label class="label" for="img-bg-mode">নতুন ব্যাকগ্রাউন্ড যোগ করুন</label>
+              <select id="img-bg-mode" class="input">
+                <option value="transparent">স্বচ্ছ রাখুন</option>
+                <option value="solid">এক রঙের ব্যাকগ্রাউন্ড</option>
+                <option value="image">নিজের ছবি ব্যাকগ্রাউন্ড হিসেবে দিন</option>
+              </select>
+              <div id="img-bg-color-wrap" class="hidden flex items-center gap-3">
+                <label class="text-xs text-slate-500 dark:text-slate-400" for="img-bg-color">রঙ নির্বাচন</label>
+                <input id="img-bg-color" type="color" value="#ffffff" class="h-10 w-14 cursor-pointer rounded-lg border border-slate-300 dark:border-white/10" />
+                <div class="flex flex-wrap gap-1.5">
+                  <button type="button" data-bg-color="#ffffff" class="chip">সাদা</button>
+                  <button type="button" data-bg-color="#e0f2fe" class="chip">আকাশি</button>
+                  <button type="button" data-bg-color="#dcfce7" class="chip">হালকা সবুজ</button>
+                  <button type="button" data-bg-color="#111827" class="chip">কালো</button>
+                </div>
+              </div>
+              <div id="img-bg-image-wrap" class="hidden space-y-2">
+                <label class="btn btn-soft w-full cursor-pointer justify-center">
+                  <i data-lucide="image-plus" class="h-4 w-4"></i> ব্যাকগ্রাউন্ড ছবি বেছে নিন
+                  <input id="img-bg-image" type="file" accept="image/*" class="sr-only" />
+                </label>
+                <select id="img-bg-fit" class="input" aria-label="ব্যাকগ্রাউন্ড ছবির মাপ">
+                  <option value="cover">পুরো ক্যানভাস ভরাট করুন</option>
+                  <option value="contain">সম্পূর্ণ ছবি দেখান</option>
+                </select>
+                <p id="img-bg-image-name" class="text-xs text-slate-500 dark:text-slate-400">এখনো কোনো ব্যাকগ্রাউন্ড ছবি নির্বাচন করা হয়নি</p>
+              </div>
+              <button type="button" id="img-bg-export" class="btn btn-primary w-full !py-2"><i data-lucide="download" class="h-4 w-4"></i> নতুন ব্যাকগ্রাউন্ডসহ ডাউনলোড</button>
+            </div>
           </div>
 
           <div id="img-aspect-wrap" class="hidden space-y-2">
@@ -2650,6 +2680,7 @@
       const save = () => store.set(KEY, s);
 
       let bgModulePromise = null, bgBusy = false, bgResultUrl = null;
+      let bgMode = 'transparent', bgColor = '#ffffff', bgImageBitmap = null, bgImageUrl = null, bgImageName = '';
       async function removeBackground() {
         const item = items[sel];
         if (!item) { toast('আগে একটি ছবি যোগ করুন', 'info'); return; }
@@ -2662,10 +2693,28 @@
           if (!bgModulePromise) bgModulePromise = import('https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.5/+esm');
           const mod = await bgModulePromise;
           const itemId = item.id;
-          const blob = await mod.removeBackground(item.file, {
+          const config = {
+            model: 'isnet',
+            device: navigator.gpu ? 'gpu' : 'cpu',
             output: { format: 'image/png', quality: 1 },
-            progress: (_key, current, total) => { if (total > 0) status.textContent = `ব্যাকগ্রাউন্ড সরানো হচ্ছে… ${Math.round(current / total * 100)}%`; }
-          });
+            progress: (key, current, total) => {
+              if (key && key.indexOf('compute:') === 0) {
+                const stageName = key.indexOf('inference') >= 0 ? 'ছবির বিষয়বস্তু ও চুলের প্রান্ত বিশ্লেষণ হচ্ছে…'
+                  : key.indexOf('encode') >= 0 ? 'উচ্চমানের PNG তৈরি হচ্ছে…'
+                  : 'ছবির প্রান্ত পরিষ্কার করা হচ্ছে…';
+                status.textContent = total > 0 ? `${stageName} ${Math.round(current / total * 100)}%` : stageName;
+              } else if (total > 0) {
+                status.textContent = `AI মডেল ডাউনলোড হচ্ছে… ${Math.round(current / total * 100)}%`;
+              } else status.textContent = 'AI মডেল প্রস্তুত হচ্ছে…';
+            }
+          };
+          let blob;
+          try { blob = await mod.removeBackground(item.file, config); }
+          catch (gpuError) {
+            if (config.device !== 'gpu') throw gpuError;
+            status.textContent = 'GPU সমর্থন পাওয়া যায়নি, CPU মোডে আবার চেষ্টা হচ্ছে…';
+            blob = await mod.removeBackground(item.file, { ...config, device: 'cpu' });
+          }
           if (!items.some(x => x.id === itemId) || !items[sel] || items[sel].id !== itemId) return;
           const bmp = await createImageBitmap(blob);
           if (bgResultUrl) URL.revokeObjectURL(bgResultUrl);
@@ -2673,16 +2722,68 @@
           if (item.out) URL.revokeObjectURL(item.out.url);
           item.out = { blob, url: bgResultUrl, w: bmp.width, h: bmp.height, mime: 'image/png', notes: [] };
           bmp.close && bmp.close();
-          view = 'result'; syncCropUI(); renderList(); updateSummary(); layout();
+          view = 'result'; syncCropUI(); renderList(); updateSummary(); syncBackgroundControls(); layout();
           dl.classList.remove('hidden');
           dl.onclick = () => downloadBlob(blob, (item.name.replace(/\.[^.]+$/, '') || 'image') + '-no-background.png');
-          status.textContent = 'সম্পন্ন — স্বচ্ছ PNG তৈরি হয়েছে।';
+          $('#img-bg-options').classList.remove('hidden');
+          status.textContent = 'সম্পন্ন — স্বচ্ছ PNG তৈরি হয়েছে। চাইলে নিচে নতুন ব্যাকগ্রাউন্ড যোগ করুন।';
           toast('ব্যাকগ্রাউন্ড সফলভাবে রিমুভ হয়েছে', 'success');
         } catch (err) {
           console.error('Background removal failed:', err);
           status.textContent = 'কাজটি সম্পন্ন হয়নি। ইন্টারনেট সংযোগ ও ব্রাউজারের মেমোরি পরীক্ষা করে আবার চেষ্টা করুন।';
           toast('Background removal failed', 'error');
         } finally { bgBusy = false; btn.disabled = false; btn.classList.remove('opacity-60'); }
+      }
+
+      function syncBackgroundControls() {
+        const options = $('#img-bg-options');
+        const mode = $('#img-bg-mode');
+        if (!options || !mode) return;
+        mode.value = bgMode;
+        $('#img-bg-color-wrap').classList.toggle('hidden', bgMode !== 'solid');
+        $('#img-bg-image-wrap').classList.toggle('hidden', bgMode !== 'image');
+        $('#img-bg-color').value = bgColor;
+        $('#img-bg-image-name').textContent = bgImageName || 'এখনো কোনো ব্যাকগ্রাউন্ড ছবি নির্বাচন করা হয়নি';
+        const inner = $('#img-stage-inner');
+        if (view === 'result' && items[sel] && items[sel].out) {
+          inner.style.backgroundColor = bgMode === 'solid' ? bgColor : 'transparent';
+          inner.style.backgroundImage = bgMode === 'image' && bgImageUrl ? `url("${bgImageUrl}")` : 'none';
+          inner.style.backgroundSize = $('#img-bg-fit').value || 'cover';
+          inner.style.backgroundPosition = 'center';
+          inner.style.backgroundRepeat = 'no-repeat';
+          inner.classList.toggle('checker', bgMode === 'transparent' || (bgMode === 'image' && !bgImageUrl));
+        }
+      }
+
+      function drawBackgroundImage(ctx, width, height) {
+        if (!bgImageBitmap) return;
+        const fit = $('#img-bg-fit').value || 'cover';
+        const scale = fit === 'contain'
+          ? Math.min(width / bgImageBitmap.width, height / bgImageBitmap.height)
+          : Math.max(width / bgImageBitmap.width, height / bgImageBitmap.height);
+        const w = bgImageBitmap.width * scale, h = bgImageBitmap.height * scale;
+        ctx.drawImage(bgImageBitmap, (width - w) / 2, (height - h) / 2, w, h);
+      }
+
+      async function exportWithBackground() {
+        const item = items[sel];
+        if (!item || !item.out) return;
+        if (bgMode === 'image' && !bgImageBitmap) { toast('আগে একটি ব্যাকগ্রাউন্ড ছবি নির্বাচন করুন', 'info'); return; }
+        const bmp = await createImageBitmap(item.out.blob);
+        try {
+          const cv = document.createElement('canvas');
+          cv.width = bmp.width; cv.height = bmp.height;
+          const ctx = cv.getContext('2d');
+          if (bgMode === 'solid') { ctx.fillStyle = bgColor; ctx.fillRect(0, 0, cv.width, cv.height); }
+          else if (bgMode === 'image') drawBackgroundImage(ctx, cv.width, cv.height);
+          ctx.drawImage(bmp, 0, 0);
+          const blob = await new Promise(resolve => cv.toBlob(resolve, 'image/png'));
+          if (!blob) throw new Error('PNG export failed');
+          downloadBlob(blob, (item.name.replace(/\.[^.]+$/, '') || 'image') + (bgMode === 'transparent' ? '-transparent.png' : '-with-background.png'));
+        } catch (err) {
+          console.error('Background composition failed:', err);
+          toast('ব্যাকগ্রাউন্ডসহ ছবি তৈরি করা যায়নি', 'error');
+        } finally { bmp.close && bmp.close(); }
       }
 
       function init() {
@@ -2702,6 +2803,23 @@
         });
 
         $('#img-bg-remove').addEventListener('click', removeBackground);
+        $('#img-bg-mode').addEventListener('change', e => { bgMode = e.target.value; syncBackgroundControls(); });
+        $('#img-bg-color').addEventListener('input', e => { bgColor = e.target.value; syncBackgroundControls(); });
+        $('[data-bg-color]').forEach(b => b.addEventListener('click', () => { bgColor = b.dataset.bgColor; syncBackgroundControls(); }));
+        $('#img-bg-fit').addEventListener('change', syncBackgroundControls);
+        $('#img-bg-image').addEventListener('change', async e => {
+          const file = e.target.files && e.target.files[0]; e.target.value = '';
+          if (!file) return;
+          try {
+            const bitmap = await createImageBitmap(file);
+            if (bgImageBitmap) bgImageBitmap.close && bgImageBitmap.close();
+            if (bgImageUrl) URL.revokeObjectURL(bgImageUrl);
+            bgImageBitmap = bitmap; bgImageUrl = URL.createObjectURL(file); bgImageName = file.name;
+            bgMode = 'image'; syncBackgroundControls();
+            toast('নতুন ব্যাকগ্রাউন্ড যোগ হয়েছে', 'success');
+          } catch { toast('ব্যাকগ্রাউন্ড ছবিটি খোলা যায়নি', 'error'); }
+        });
+        $('#img-bg-export').addEventListener('click', exportWithBackground);
 
         // options
         $('#img-form').addEventListener('input', e => {

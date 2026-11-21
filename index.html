@@ -2739,7 +2739,20 @@
           const alphaMask = inputCtx.getImageData(0, 0, inputCanvas.width, inputCanvas.height);
           status.textContent = 'AI মডেল দিয়ে ছবির ডিটেইল ও রেজোলিউশন উন্নত করা হচ্ছে…';
           upscaler = new window.Upscaler({ model: window.DefaultUpscalerJSModel });
-          const enhancedSrc = await upscaler.upscale(inputCanvas, { output: 'src', patchSize: 64, padding: 5 });
+          const enhancedSrc = await upscaler.upscale(inputCanvas, {
+            output: 'base64',
+            patchSize: 64,
+            padding: 5,
+            awaitNextFrame: true,
+            progress: progress => {
+              const percent = typeof progress === 'number'
+                ? Math.max(0, Math.min(100, Math.round(progress * 100)))
+                : null;
+              status.textContent = percent === null
+                ? 'AI দিয়ে ছবির ডিটেইল উন্নত করা হচ্ছে…'
+                : `AI Photo Enhancement চলছে… ${percent}%`;
+            }
+          });
           const response = await fetch(enhancedSrc);
           if (!response.ok) throw new Error('AI result could not be read');
           let enhancedBlob = await response.blob();
@@ -2765,7 +2778,7 @@
           if (aiEnhanceUrl) URL.revokeObjectURL(aiEnhanceUrl);
           aiEnhanceUrl = url;
           dl.classList.remove('hidden');
-          dl.onclick = () => downloadBlob(enhancedBlob, (item.name.replace(/\\.[^.]+$/, '') || 'image') + '-ai-enhanced-2x.png');
+          dl.onclick = () => downloadBlob(enhancedBlob, (item.name.replace(/\.[^.]+$/, '') || 'image') + '-ai-enhanced-2x.png');
           status.textContent = `সম্পন্ন — ${outputCanvas.width} × ${outputCanvas.height} px AI Enhanced ছবি তৈরি হয়েছে।`;
           toast('AI Photo Enhancement সম্পন্ন হয়েছে', 'success');
         } catch (err) {

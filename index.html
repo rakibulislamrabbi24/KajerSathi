@@ -2716,11 +2716,11 @@
 
       async function enhanceImageAI() {
         const item = items[sel];
-        if (!item) { toast('আগে একটি ছবি যোগ করুন', 'info'); return; }
+        if (!item) { toast('image.add_image_first', 'info'); return; }
         if (aiEnhanceBusy) return;
         const btn = $('#img-ai-enhance'), status = $('#img-ai-status'), dl = $('#img-ai-download');
         aiEnhanceBusy = true; btn.disabled = true; btn.classList.add('opacity-60');
-        status.classList.remove('hidden'); status.textContent = 'AI Photo Enhancer প্রস্তুত হচ্ছে…';
+        status.classList.remove('hidden'); status.textContent = t('image.ai_preparing');
         dl.classList.add('hidden');
         const itemId = item.id;
         let sourceBmp = null, outputBmp = null, upscaler = null;
@@ -2730,14 +2730,14 @@
           const sourceBlob = item.out && item.out.blob ? item.out.blob : item.file;
           sourceBmp = await createImageBitmap(sourceBlob);
           if (sourceBmp.width * sourceBmp.height > 1500000) {
-            throw new Error('ছবিটি অনেক বড়। AI Enhance করার আগে Resize থেকে ছবির মাপ কমিয়ে নিন (সর্বোচ্চ 1.5 MP)।');
+            throw new Error(t('image.ai_image_too_large'));
           }
           const inputCanvas = document.createElement('canvas');
           inputCanvas.width = sourceBmp.width; inputCanvas.height = sourceBmp.height;
           const inputCtx = inputCanvas.getContext('2d', { willReadFrequently: true });
           inputCtx.drawImage(sourceBmp, 0, 0);
           const alphaMask = inputCtx.getImageData(0, 0, inputCanvas.width, inputCanvas.height);
-          status.textContent = 'AI মডেল দিয়ে ছবির ডিটেইল ও রেজোলিউশন উন্নত করা হচ্ছে…';
+          status.textContent = t('image.ai_processing');
           upscaler = new window.Upscaler({ model: window.DefaultUpscalerJSModel });
           const enhancedSrc = await upscaler.upscale(inputCanvas, {
             output: 'base64',
@@ -2749,8 +2749,8 @@
                 ? Math.max(0, Math.min(100, Math.round(progress * 100)))
                 : null;
               status.textContent = percent === null
-                ? 'AI দিয়ে ছবির ডিটেইল উন্নত করা হচ্ছে…'
-                : `AI Photo Enhancement চলছে… ${percent}%`;
+                ? t('image.ai_improving_details')
+                : t('image.ai_progress', { percent });
             }
           });
           const response = await fetch(enhancedSrc);
@@ -2779,12 +2779,12 @@
           aiEnhanceUrl = url;
           dl.classList.remove('hidden');
           dl.onclick = () => downloadBlob(enhancedBlob, (item.name.replace(/\.[^.]+$/, '') || 'image') + '-ai-enhanced-2x.png');
-          status.textContent = `সম্পন্ন — ${outputCanvas.width} × ${outputCanvas.height} px AI Enhanced ছবি তৈরি হয়েছে।`;
-          toast('AI Photo Enhancement সম্পন্ন হয়েছে', 'success');
+          status.textContent = t('image.ai_complete', { width: outputCanvas.width, height: outputCanvas.height });
+          toast('image.ai_success', 'success');
         } catch (err) {
           console.error('AI Photo Enhancement failed:', err);
-          status.textContent = err && err.message && (err.message.includes('অনেক বড়') || err.message.includes('Resize')) ? err.message : 'AI Enhance করা যায়নি। ইন্টারনেট, ব্রাউজার মেমোরি ও WebGL সমর্থন পরীক্ষা করে আবার চেষ্টা করুন।';
-          toast('AI Photo Enhancement ব্যর্থ হয়েছে', 'error');
+          status.textContent = err && err.message && (err.message.includes('অনেক বড়') || err.message.includes('Resize')) ? err.message : t('image.ai_failed');
+          toast('image.ai_failed', 'error');
         } finally {
           if (upscaler && upscaler.dispose) upscaler.dispose();
           if (sourceBmp && sourceBmp.close) sourceBmp.close();
@@ -2799,7 +2799,7 @@
         if (bgBusy) return;
         const btn = $('#img-bg-remove'), status = $('#img-bg-status'), dl = $('#img-bg-download');
         bgBusy = true; btn.disabled = true; btn.classList.add('opacity-60');
-        status.classList.remove('hidden'); status.textContent = 'AI মডেল লোড হচ্ছে… প্রথমবার কিছুটা সময় লাগতে পারে।';
+        status.classList.remove('hidden'); status.textContent = t('image.bg_loading');
         dl.classList.add('hidden');
         try {
           if (!bgModulePromise) bgModulePromise = import('https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.5.5/+esm');
@@ -2811,20 +2811,20 @@
             output: { format: 'image/png', quality: 1 },
             progress: (key, current, total) => {
               if (key && key.indexOf('compute:') === 0) {
-                const stageName = key.indexOf('inference') >= 0 ? 'ছবির বিষয়বস্তু ও চুলের প্রান্ত বিশ্লেষণ হচ্ছে…'
-                  : key.indexOf('encode') >= 0 ? 'উচ্চমানের PNG তৈরি হচ্ছে…'
-                  : 'ছবির প্রান্ত পরিষ্কার করা হচ্ছে…';
+                const stageName = key.indexOf('inference') >= 0 ? t('image.bg_analyzing')
+                  : key.indexOf('encode') >= 0 ? t('image.bg_encoding')
+                  : t('image.bg_cleaning_edges');
                 status.textContent = total > 0 ? `${stageName} ${Math.round(current / total * 100)}%` : stageName;
               } else if (total > 0) {
-                status.textContent = `AI মডেল ডাউনলোড হচ্ছে… ${Math.round(current / total * 100)}%`;
-              } else status.textContent = 'AI মডেল প্রস্তুত হচ্ছে…';
+                status.textContent = t('image.bg_model_download', { percent: Math.round(current / total * 100) });
+              } else status.textContent = t('image.bg_model_preparing');
             }
           };
           let blob;
           try { blob = await mod.removeBackground(item.file, config); }
           catch (gpuError) {
             if (config.device !== 'gpu') throw gpuError;
-            status.textContent = 'GPU সমর্থন পাওয়া যায়নি, CPU মোডে আবার চেষ্টা হচ্ছে…';
+            status.textContent = t('image.bg_gpu_fallback');
             blob = await mod.removeBackground(item.file, { ...config, device: 'cpu' });
           }
           if (!items.some(x => x.id === itemId) || !items[sel] || items[sel].id !== itemId) return;
@@ -2838,12 +2838,12 @@
           dl.classList.remove('hidden');
           dl.onclick = () => downloadBlob(blob, (item.name.replace(/\.[^.]+$/, '') || 'image') + '-no-background.png');
           $('#img-bg-options').classList.remove('hidden');
-          status.textContent = 'সম্পন্ন — স্বচ্ছ PNG তৈরি হয়েছে। চাইলে নিচে নতুন ব্যাকগ্রাউন্ড যোগ করুন।';
-          toast('ব্যাকগ্রাউন্ড সফলভাবে রিমুভ হয়েছে', 'success');
+          status.textContent = t('image.bg_complete');
+          toast('image.bg_success', 'success');
         } catch (err) {
           console.error('Background removal failed:', err);
-          status.textContent = 'কাজটি সম্পন্ন হয়নি। ইন্টারনেট সংযোগ ও ব্রাউজারের মেমোরি পরীক্ষা করে আবার চেষ্টা করুন।';
-          toast('Background removal failed', 'error');
+          status.textContent = t('image.bg_failed');
+          toast('image.bg_failed', 'error');
         } finally { bgBusy = false; btn.disabled = false; btn.classList.remove('opacity-60'); }
       }
 
@@ -2855,7 +2855,7 @@
         $('#img-bg-color-wrap').classList.toggle('hidden', bgMode !== 'solid');
         $('#img-bg-image-wrap').classList.toggle('hidden', bgMode !== 'image');
         $('#img-bg-color').value = bgColor;
-        $('#img-bg-image-name').textContent = bgImageName || 'এখনো কোনো ব্যাকগ্রাউন্ড ছবি নির্বাচন করা হয়নি';
+        $('#img-bg-image-name').textContent = bgImageName || t('image.no_background_image_selected');
         const inner = $('#img-stage-inner');
         if (view === 'result' && items[sel] && items[sel].out) {
           inner.style.backgroundColor = bgMode === 'solid' ? bgColor : '';

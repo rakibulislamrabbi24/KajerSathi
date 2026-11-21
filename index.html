@@ -692,14 +692,16 @@
                 <option value="solid">এক রঙের ব্যাকগ্রাউন্ড</option>
                 <option value="image">নিজের ছবি ব্যাকগ্রাউন্ড হিসেবে দিন</option>
               </select>
-              <div id="img-bg-color-wrap" class="hidden flex items-center gap-3">
-                <label class="text-xs text-slate-500 dark:text-slate-400" for="img-bg-color">রঙ নির্বাচন</label>
-                <input id="img-bg-color" type="color" value="#ffffff" class="h-10 w-14 cursor-pointer rounded-lg border border-slate-300 dark:border-white/10" />
-                <div class="flex flex-wrap gap-1.5">
-                  <button type="button" data-bg-color="#ffffff" class="chip">সাদা</button>
-                  <button type="button" data-bg-color="#e0f2fe" class="chip">আকাশি</button>
-                  <button type="button" data-bg-color="#dcfce7" class="chip">হালকা সবুজ</button>
-                  <button type="button" data-bg-color="#111827" class="chip">কালো</button>
+              <div id="img-bg-color-wrap" class="hidden space-y-2">
+                <label class="text-xs text-slate-500 dark:text-slate-400" for="img-bg-color">ব্যাকগ্রাউন্ডের রং নির্বাচন করুন</label>
+                <div class="flex flex-wrap items-center gap-2">
+                  <label class="relative grid h-9 w-9 cursor-pointer place-items-center overflow-hidden rounded-lg border-2 border-indigo-400 shadow-sm" title="নিজের পছন্দমতো যেকোনো রং নির্বাচন">
+                    <input id="img-bg-color" type="color" value="#ffffff" aria-label="কাস্টম ব্যাকগ্রাউন্ড রং" class="absolute inset-0 h-full w-full cursor-pointer border-0 p-0" />
+                  </label>
+                  <button type="button" data-bg-color="#ffffff" aria-label="সাদা" title="সাদা" aria-pressed="true" class="h-9 w-9 rounded-lg border-2 border-slate-300 bg-white shadow-sm ring-offset-2 transition hover:scale-105"></button>
+                  <button type="button" data-bg-color="#e0f2fe" aria-label="আকাশি" title="আকাশি" aria-pressed="false" class="h-9 w-9 rounded-lg border-2 border-sky-200 bg-sky-200 shadow-sm ring-offset-2 transition hover:scale-105"></button>
+                  <button type="button" data-bg-color="#dcfce7" aria-label="হালকা সবুজ" title="হালকা সবুজ" aria-pressed="false" class="h-9 w-9 rounded-lg border-2 border-emerald-200 bg-emerald-200 shadow-sm ring-offset-2 transition hover:scale-105"></button>
+                  <button type="button" data-bg-color="#111827" aria-label="কালো" title="কালো" aria-pressed="false" class="h-9 w-9 rounded-lg border-2 border-slate-700 bg-slate-900 shadow-sm ring-offset-2 transition hover:scale-105"></button>
                 </div>
               </div>
               <div id="img-bg-image-wrap" class="hidden space-y-2">
@@ -715,6 +717,21 @@
               </div>
               <button type="button" id="img-bg-export" class="btn btn-primary w-full !py-2"><i data-lucide="download" class="h-4 w-4"></i> নতুন ব্যাকগ্রাউন্ডসহ ডাউনলোড</button>
             </div>
+          </div>
+
+          <div class="rounded-xl border border-indigo-300/70 bg-indigo-50/60 p-3 dark:border-indigo-400/30 dark:bg-indigo-500/5">
+            <div class="mb-2 flex items-start gap-2">
+              <i data-lucide="sparkles" class="mt-0.5 h-5 w-5 text-indigo-500"></i>
+              <div class="min-w-0 flex-1">
+                <h3 class="text-sm font-bold">AI Photo Enhancer</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400">AI দিয়ে ছবির রেজোলিউশন 2× বাড়ান এবং সূক্ষ্ম ডিটেইল উন্নত করুন।</p>
+              </div>
+              <span class="rounded-full bg-indigo-100 px-2 py-0.5 text-[10px] font-bold text-indigo-700 dark:bg-indigo-400/15 dark:text-indigo-200">AI 2×</span>
+            </div>
+            <button type="button" id="img-ai-enhance" class="btn btn-primary w-full !py-2"><i data-lucide="wand-sparkles" class="h-4 w-4"></i> AI দিয়ে ছবি Enhance করুন</button>
+            <div id="img-ai-status" class="mt-2 hidden text-xs text-slate-500 dark:text-slate-400" role="status" aria-live="polite"></div>
+            <button type="button" id="img-ai-download" class="btn btn-soft mt-2 hidden w-full !py-2"><i data-lucide="download" class="h-4 w-4"></i> Enhanced PNG ডাউনলোড</button>
+            <p class="mt-2 text-[11px] text-slate-500 dark:text-slate-400">প্রথমবার AI মডেল ডাউনলোডে ইন্টারনেট লাগবে। ছবি আপনার ব্রাউজারেই প্রসেস হবে।</p>
           </div>
 
           <div id="img-aspect-wrap" class="hidden space-y-2">
@@ -2681,7 +2698,88 @@
       const save = () => store.set(KEY, s);
 
       let bgModulePromise = null, bgBusy = false, bgResultUrl = null;
+      let aiUpscalerPromise = null, aiEnhanceBusy = false, aiEnhanceUrl = null;
       let bgMode = 'transparent', bgColor = '#ffffff', bgImageBitmap = null, bgImageUrl = null, bgImageName = '';
+      async function loadAIUpscaler() {
+        if (window.Upscaler && window.tf && window.DefaultUpscalerJSModel) return;
+        if (!aiUpscalerPromise) {
+          aiUpscalerPromise = (async () => {
+            await ImgUtil.loadScript('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js');
+            await ImgUtil.loadScript('https://cdn.jsdelivr.net/npm/@upscalerjs/default-model@1.0.0/dist/umd/index.min.js');
+            await ImgUtil.loadScript('https://cdn.jsdelivr.net/npm/upscaler@1.0.0/dist/browser/umd/upscaler.min.js');
+            if (!window.tf || !window.Upscaler || !window.DefaultUpscalerJSModel) throw new Error('AI enhancer library failed to initialize');
+            await window.tf.ready();
+          })().catch(err => { aiUpscalerPromise = null; throw err; });
+        }
+        await aiUpscalerPromise;
+      }
+
+      async function enhanceImageAI() {
+        const item = items[sel];
+        if (!item) { toast('আগে একটি ছবি যোগ করুন', 'info'); return; }
+        if (aiEnhanceBusy) return;
+        const btn = $('#img-ai-enhance'), status = $('#img-ai-status'), dl = $('#img-ai-download');
+        aiEnhanceBusy = true; btn.disabled = true; btn.classList.add('opacity-60');
+        status.classList.remove('hidden'); status.textContent = 'AI Photo Enhancer প্রস্তুত হচ্ছে…';
+        dl.classList.add('hidden');
+        const itemId = item.id;
+        let sourceBmp = null, outputBmp = null, upscaler = null;
+        try {
+          await loadAIUpscaler();
+          if (!items.some(x => x.id === itemId) || !items[sel] || items[sel].id !== itemId) return;
+          const sourceBlob = item.out && item.out.blob ? item.out.blob : item.file;
+          sourceBmp = await createImageBitmap(sourceBlob);
+          if (sourceBmp.width * sourceBmp.height > 1500000) {
+            throw new Error('ছবিটি অনেক বড়। AI Enhance করার আগে Resize থেকে ছবির মাপ কমিয়ে নিন (সর্বোচ্চ 1.5 MP)।');
+          }
+          const inputCanvas = document.createElement('canvas');
+          inputCanvas.width = sourceBmp.width; inputCanvas.height = sourceBmp.height;
+          const inputCtx = inputCanvas.getContext('2d', { willReadFrequently: true });
+          inputCtx.drawImage(sourceBmp, 0, 0);
+          const alphaMask = inputCtx.getImageData(0, 0, inputCanvas.width, inputCanvas.height);
+          status.textContent = 'AI মডেল দিয়ে ছবির ডিটেইল ও রেজোলিউশন উন্নত করা হচ্ছে…';
+          upscaler = new window.Upscaler({ model: window.DefaultUpscalerJSModel });
+          const enhancedSrc = await upscaler.upscale(inputCanvas, { output: 'src', patchSize: 64, padding: 5 });
+          const response = await fetch(enhancedSrc);
+          if (!response.ok) throw new Error('AI result could not be read');
+          let enhancedBlob = await response.blob();
+          outputBmp = await createImageBitmap(enhancedBlob);
+          const outputCanvas = document.createElement('canvas');
+          outputCanvas.width = outputBmp.width; outputCanvas.height = outputBmp.height;
+          const outputCtx = outputCanvas.getContext('2d');
+          outputCtx.drawImage(outputBmp, 0, 0);
+          // Restore the source alpha channel so transparent cut-outs remain transparent.
+          const maskCanvas = document.createElement('canvas');
+          maskCanvas.width = alphaMask.width; maskCanvas.height = alphaMask.height;
+          maskCanvas.getContext('2d').putImageData(alphaMask, 0, 0);
+          outputCtx.globalCompositeOperation = 'destination-in';
+          outputCtx.imageSmoothingEnabled = true; outputCtx.imageSmoothingQuality = 'high';
+          outputCtx.drawImage(maskCanvas, 0, 0, outputCanvas.width, outputCanvas.height);
+          enhancedBlob = await new Promise(resolve => outputCanvas.toBlob(resolve, 'image/png'));
+          if (!enhancedBlob) throw new Error('Enhanced PNG export failed');
+          if (!items.some(x => x.id === itemId) || !items[sel] || items[sel].id !== itemId) return;
+          const url = URL.createObjectURL(enhancedBlob);
+          if (item.out && item.out.url && item.out.url !== bgResultUrl) URL.revokeObjectURL(item.out.url);
+          item.out = { blob: enhancedBlob, url, w: outputCanvas.width, h: outputCanvas.height, mime: 'image/png', notes: ['AI 2× Super Resolution'] };
+          view = 'result'; syncCropUI(); renderList(); updateSummary(); layout();
+          if (aiEnhanceUrl) URL.revokeObjectURL(aiEnhanceUrl);
+          aiEnhanceUrl = url;
+          dl.classList.remove('hidden');
+          dl.onclick = () => downloadBlob(enhancedBlob, (item.name.replace(/\\.[^.]+$/, '') || 'image') + '-ai-enhanced-2x.png');
+          status.textContent = `সম্পন্ন — ${outputCanvas.width} × ${outputCanvas.height} px AI Enhanced ছবি তৈরি হয়েছে।`;
+          toast('AI Photo Enhancement সম্পন্ন হয়েছে', 'success');
+        } catch (err) {
+          console.error('AI Photo Enhancement failed:', err);
+          status.textContent = err && err.message && (err.message.includes('অনেক বড়') || err.message.includes('Resize')) ? err.message : 'AI Enhance করা যায়নি। ইন্টারনেট, ব্রাউজার মেমোরি ও WebGL সমর্থন পরীক্ষা করে আবার চেষ্টা করুন।';
+          toast('AI Photo Enhancement ব্যর্থ হয়েছে', 'error');
+        } finally {
+          if (upscaler && upscaler.dispose) upscaler.dispose();
+          if (sourceBmp && sourceBmp.close) sourceBmp.close();
+          if (outputBmp && outputBmp.close) outputBmp.close();
+          aiEnhanceBusy = false; btn.disabled = false; btn.classList.remove('opacity-60');
+        }
+      }
+
       async function removeBackground() {
         const item = items[sel];
         if (!item) { toast('আগে একটি ছবি যোগ করুন', 'info'); return; }
@@ -2804,9 +2902,29 @@
         });
 
         $('#img-bg-remove').addEventListener('click', removeBackground);
+        $('#img-ai-enhance').addEventListener('click', enhanceImageAI);
         $('#img-bg-mode').addEventListener('change', e => { bgMode = e.target.value; syncBackgroundControls(); });
-        $('#img-bg-color').addEventListener('input', e => { bgColor = e.target.value; syncBackgroundControls(); });
-        $('[data-bg-color]').forEach(b => b.addEventListener('click', () => { bgColor = b.dataset.bgColor; syncBackgroundControls(); }));
+        $('#img-bg-color').addEventListener('input', e => {
+          bgColor = e.target.value;
+          $('[data-bg-color]').forEach(p => {
+            const selected = p.dataset.bgColor.toLowerCase() === bgColor.toLowerCase();
+            p.setAttribute('aria-pressed', String(selected));
+            p.classList.toggle('ring-2', selected);
+            p.classList.toggle('ring-indigo-500', selected);
+          });
+          syncBackgroundControls();
+        });
+        $('[data-bg-color]').forEach(b => b.addEventListener('click', () => {
+          bgColor = b.dataset.bgColor;
+          $('#img-bg-color').value = bgColor;
+          $('[data-bg-color]').forEach(p => {
+            const selected = p === b;
+            p.setAttribute('aria-pressed', String(selected));
+            p.classList.toggle('ring-2', selected);
+            p.classList.toggle('ring-indigo-500', selected);
+          });
+          syncBackgroundControls();
+        }));
         $('#img-bg-fit').addEventListener('change', syncBackgroundControls);
         $('#img-bg-image').addEventListener('change', async e => {
           const file = e.target.files && e.target.files[0]; e.target.value = '';

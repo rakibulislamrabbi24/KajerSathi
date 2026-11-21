@@ -2806,7 +2806,11 @@
         $('#img-bg-remove').addEventListener('click', removeBackground);
         $('#img-bg-mode').addEventListener('change', e => { bgMode = e.target.value; syncBackgroundControls(); });
         $('#img-bg-color').addEventListener('input', e => { bgColor = e.target.value; syncBackgroundControls(); });
-        $('[data-bg-color]').forEach(b => b.addEventListener('click', () => { bgColor = b.dataset.bgColor; syncBackgroundControls(); }));
+        $('[data-bg-color]').forEach(b => b.addEventListener('click', () => {
+          bgColor = b.dataset.bgColor;
+          $('#img-bg-color').value = bgColor;
+          syncBackgroundControls();
+        }));
         $('#img-bg-fit').addEventListener('change', syncBackgroundControls);
         $('#img-bg-image').addEventListener('change', async e => {
           const file = e.target.files && e.target.files[0]; e.target.value = '';

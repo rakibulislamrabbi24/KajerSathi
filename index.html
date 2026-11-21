@@ -2730,7 +2730,7 @@
           const sourceBlob = item.out && item.out.blob ? item.out.blob : item.file;
           sourceBmp = await createImageBitmap(sourceBlob);
           if (sourceBmp.width * sourceBmp.height > 1500000) {
-            throw new Error(t('image.ai_image_too_large'));
+            const sizeError = new Error(t('image.ai_image_too_large')); sizeError.code = 'IMAGE_TOO_LARGE'; throw sizeError;
           }
           const inputCanvas = document.createElement('canvas');
           inputCanvas.width = sourceBmp.width; inputCanvas.height = sourceBmp.height;
@@ -2783,7 +2783,7 @@
           toast('image.ai_success', 'success');
         } catch (err) {
           console.error('AI Photo Enhancement failed:', err);
-          status.textContent = err && err.message && (err.message.includes('অনেক বড়') || err.message.includes('Resize')) ? err.message : t('image.ai_failed');
+          status.textContent = err && err.code === 'IMAGE_TOO_LARGE' ? err.message : t('image.ai_failed');
           toast('image.ai_failed', 'error');
         } finally {
           if (upscaler && upscaler.dispose) upscaler.dispose();

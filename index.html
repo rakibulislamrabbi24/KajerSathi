@@ -2572,6 +2572,9 @@
             inner.style.width = Math.round(item.out.w * k) + 'px'; inner.style.height = Math.round(item.out.h * k) + 'px';
             img.style.width = inner.style.width; img.style.height = inner.style.height;
             if (img.dataset.src !== item.out.url) { img.src = item.out.url; img.dataset.src = item.out.url; }
+            // Keep the selected background behind the transparent PNG whenever the result view is laid out.
+            img.style.background = 'transparent';
+            syncBackgroundControls();
           } else { inner.style.width = Math.min(maxW, 320) + 'px'; inner.style.height = '160px'; }
           updateInfo(); return;
         }
@@ -2843,9 +2846,9 @@
                 const unblended = Math.max(0, Math.min(255, (value - background * inverse) / a));
                 return Math.round(value * (1 - strength) + unblended * strength);
               };
-              out[index] = clean(src[index], bgR);
-              out[index + 1] = clean(src[index + 1], bgG);
-              out[index + 2] = clean(src[index + 2], bgB);
+              out[index] = clean(out[index], bgR);
+              out[index + 1] = clean(out[index + 1], bgG);
+              out[index + 2] = clean(out[index + 2], bgB);
             }
           }
           resultCtx.putImageData(result, 0, 0);
@@ -2944,6 +2947,9 @@
         });
         const inner = $('#img-stage-inner');
         if (view === 'result' && items[sel] && items[sel].out) {
+          inner.style.background = bgMode === 'solid' ? bgColor
+            : bgMode === 'image' && bgImageUrl ? `url("${bgImageUrl}") center / ${$('#img-bg-fit').value || 'cover'} no-repeat`
+            : '';
           inner.style.backgroundColor = bgMode === 'solid' ? bgColor : '';
           inner.style.backgroundImage = bgMode === 'image' && bgImageUrl ? `url("${bgImageUrl}")` : 'none';
           inner.style.backgroundSize = $('#img-bg-fit').value || 'cover';

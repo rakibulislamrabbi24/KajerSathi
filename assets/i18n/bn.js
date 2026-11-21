@@ -489,4 +489,5 @@
   "image.background_export_failed": "ব্যাকগ্রাউন্ডসহ PNG তৈরি করা যায়নি। আবার চেষ্টা করুন।",
   "image.background_image_added": "নতুন ব্যাকগ্রাউন্ড যোগ হয়েছে।",
   "image.background_image_failed": "ব্যাকগ্রাউন্ড ছবিটি খোলা যায়নি। অন্য ছবি চেষ্টা করুন।",
+  "image.processing_busy": "অন্য একটি AI কাজ চলছে। শেষ হলে আবার চেষ্টা করুন।",
 };

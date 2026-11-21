@@ -2717,9 +2717,9 @@
       async function enhanceImageAI() {
         const item = items[sel];
         if (!item) { toast('image.add_image_first', 'info'); return; }
-        if (aiEnhanceBusy) return;
-        const btn = $('#img-ai-enhance'), status = $('#img-ai-status'), dl = $('#img-ai-download');
-        aiEnhanceBusy = true; btn.disabled = true; btn.classList.add('opacity-60');
+        if (bgBusy || aiEnhanceBusy) { toast('image.processing_busy', 'info'); return; }
+        const btn = $('#img-ai-enhance'), bgBtn = $('#img-bg-remove'), status = $('#img-ai-status'), dl = $('#img-ai-download');
+        aiEnhanceBusy = true; btn.disabled = true; bgBtn.disabled = true; btn.classList.add('opacity-60'); bgBtn.classList.add('opacity-60');
         status.classList.remove('hidden'); status.textContent = t('image.ai_preparing');
         dl.classList.add('hidden');
         const itemId = item.id;
@@ -2772,7 +2772,11 @@
           if (!enhancedBlob) throw new Error('Enhanced PNG export failed');
           if (!items.some(x => x.id === itemId) || !items[sel] || items[sel].id !== itemId) return;
           const url = URL.createObjectURL(enhancedBlob);
-          if (item.out && item.out.url && item.out.url !== bgResultUrl) URL.revokeObjectURL(item.out.url);
+          if (item.out && item.out.url) {
+            URL.revokeObjectURL(item.out.url);
+            if (bgResultUrl === item.out.url) bgResultUrl = null;
+            if (aiEnhanceUrl === item.out.url) aiEnhanceUrl = null;
+          }
           item.out = { blob: enhancedBlob, url, w: outputCanvas.width, h: outputCanvas.height, mime: 'image/png', notes: ['AI 2× Super Resolution'] };
           view = 'result'; syncCropUI(); renderList(); updateSummary(); layout();
           if (aiEnhanceUrl) URL.revokeObjectURL(aiEnhanceUrl);
@@ -2789,7 +2793,7 @@
           if (upscaler && upscaler.dispose) upscaler.dispose();
           if (sourceBmp && sourceBmp.close) sourceBmp.close();
           if (outputBmp && outputBmp.close) outputBmp.close();
-          aiEnhanceBusy = false; btn.disabled = false; btn.classList.remove('opacity-60');
+          aiEnhanceBusy = false; btn.disabled = false; bgBtn.disabled = false; btn.classList.remove('opacity-60'); bgBtn.classList.remove('opacity-60');
         }
       }
 
@@ -2859,11 +2863,11 @@
       async function removeBackground() {
         const item = items[sel];
         if (!item) { toast('image.add_image_first', 'info'); return; }
-        if (bgBusy) return;
-        const btn = $('#img-bg-remove'), status = $('#img-bg-status'), dl = $('#img-bg-download');
+        if (bgBusy || aiEnhanceBusy) { toast('image.processing_busy', 'info'); return; }
+        const btn = $('#img-bg-remove'), aiBtn = $('#img-ai-enhance'), status = $('#img-bg-status'), dl = $('#img-bg-download');
         const itemId = item.id;
         const sourceBlob = item.out && item.out.blob ? item.out.blob : item.file;
-        bgBusy = true; btn.disabled = true; btn.classList.add('opacity-60');
+        bgBusy = true; btn.disabled = true; aiBtn.disabled = true; btn.classList.add('opacity-60'); aiBtn.classList.add('opacity-60');
         status.classList.remove('hidden'); status.textContent = t('image.bg_loading');
         dl.classList.add('hidden');
         try {
@@ -2919,7 +2923,7 @@
           console.error('Background removal failed:', err);
           status.textContent = t('image.bg_failed');
           toast('image.bg_failed', 'error');
-        } finally { bgBusy = false; btn.disabled = false; btn.classList.remove('opacity-60'); }
+        } finally { bgBusy = false; btn.disabled = false; aiBtn.disabled = false; btn.classList.remove('opacity-60'); aiBtn.classList.remove('opacity-60'); }
       }
 
       function syncBackgroundControls() {

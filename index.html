@@ -2523,7 +2523,7 @@
 
       async function selectItem(i) {
         sel = i;
-        $('#img-bg-download').classList.add('hidden'); $('#img-bg-status').classList.add('hidden');
+        $('#img-bg-download').classList.add('hidden'); $('#img-bg-status').classList.add('hidden'); $('#img-bg-options').classList.add('hidden');
         if (stageBmp) { stageBmp.close(); stageBmp = null; }
         const item = items[i];
         if (!item) { renderAll(); return; }
@@ -2558,6 +2558,7 @@
           } else { inner.style.width = Math.min(maxW, 320) + 'px'; inner.style.height = '160px'; }
           updateInfo(); return;
         }
+        inner.style.backgroundImage = 'none'; inner.style.backgroundColor = '';
         if (!stageBmp) { updateInfo(); return; }
         const rr = rotated(item);
         const k = Math.min(maxW / rr.w, maxH / rr.h, 2);

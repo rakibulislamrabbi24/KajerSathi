@@ -692,14 +692,16 @@
                 <option value="solid">এক রঙের ব্যাকগ্রাউন্ড</option>
                 <option value="image">নিজের ছবি ব্যাকগ্রাউন্ড হিসেবে দিন</option>
               </select>
-              <div id="img-bg-color-wrap" class="hidden flex items-center gap-3">
-                <label class="text-xs text-slate-500 dark:text-slate-400" for="img-bg-color">রঙ নির্বাচন</label>
-                <input id="img-bg-color" type="color" value="#ffffff" class="h-10 w-14 cursor-pointer rounded-lg border border-slate-300 dark:border-white/10" />
-                <div class="flex flex-wrap gap-1.5">
-                  <button type="button" data-bg-color="#ffffff" class="chip">সাদা</button>
-                  <button type="button" data-bg-color="#e0f2fe" class="chip">আকাশি</button>
-                  <button type="button" data-bg-color="#dcfce7" class="chip">হালকা সবুজ</button>
-                  <button type="button" data-bg-color="#111827" class="chip">কালো</button>
+              <div id="img-bg-color-wrap" class="hidden space-y-2">
+                <label class="text-xs text-slate-500 dark:text-slate-400" for="img-bg-color">ব্যাকগ্রাউন্ডের রং নির্বাচন করুন</label>
+                <div class="flex flex-wrap items-center gap-2">
+                  <label class="relative grid h-9 w-9 cursor-pointer place-items-center overflow-hidden rounded-lg border-2 border-indigo-400 shadow-sm" title="নিজের পছন্দমতো যেকোনো রং নির্বাচন">
+                    <input id="img-bg-color" type="color" value="#ffffff" aria-label="কাস্টম ব্যাকগ্রাউন্ড রং" class="absolute inset-0 h-full w-full cursor-pointer border-0 p-0" />
+                  </label>
+                  <button type="button" data-bg-color="#ffffff" aria-label="সাদা" title="সাদা" aria-pressed="true" class="h-9 w-9 rounded-lg border-2 border-slate-300 bg-white shadow-sm ring-offset-2 transition hover:scale-105"></button>
+                  <button type="button" data-bg-color="#e0f2fe" aria-label="আকাশি" title="আকাশি" aria-pressed="false" class="h-9 w-9 rounded-lg border-2 border-sky-200 bg-sky-200 shadow-sm ring-offset-2 transition hover:scale-105"></button>
+                  <button type="button" data-bg-color="#dcfce7" aria-label="হালকা সবুজ" title="হালকা সবুজ" aria-pressed="false" class="h-9 w-9 rounded-lg border-2 border-emerald-200 bg-emerald-200 shadow-sm ring-offset-2 transition hover:scale-105"></button>
+                  <button type="button" data-bg-color="#111827" aria-label="কালো" title="কালো" aria-pressed="false" class="h-9 w-9 rounded-lg border-2 border-slate-700 bg-slate-900 shadow-sm ring-offset-2 transition hover:scale-105"></button>
                 </div>
               </div>
               <div id="img-bg-image-wrap" class="hidden space-y-2">
@@ -2805,10 +2807,25 @@
 
         $('#img-bg-remove').addEventListener('click', removeBackground);
         $('#img-bg-mode').addEventListener('change', e => { bgMode = e.target.value; syncBackgroundControls(); });
-        $('#img-bg-color').addEventListener('input', e => { bgColor = e.target.value; syncBackgroundControls(); });
+        $('#img-bg-color').addEventListener('input', e => {
+          bgColor = e.target.value;
+          $('[data-bg-color]').forEach(p => {
+            const selected = p.dataset.bgColor.toLowerCase() === bgColor.toLowerCase();
+            p.setAttribute('aria-pressed', String(selected));
+            p.classList.toggle('ring-2', selected);
+            p.classList.toggle('ring-indigo-500', selected);
+          });
+          syncBackgroundControls();
+        });
         $('[data-bg-color]').forEach(b => b.addEventListener('click', () => {
           bgColor = b.dataset.bgColor;
           $('#img-bg-color').value = bgColor;
+          $('[data-bg-color]').forEach(p => {
+            const selected = p === b;
+            p.setAttribute('aria-pressed', String(selected));
+            p.classList.toggle('ring-2', selected);
+            p.classList.toggle('ring-indigo-500', selected);
+          });
           syncBackgroundControls();
         }));
         $('#img-bg-fit').addEventListener('change', syncBackgroundControls);

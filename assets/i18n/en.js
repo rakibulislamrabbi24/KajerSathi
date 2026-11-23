@@ -347,6 +347,7 @@
   "bndate.result_heading": "Conversion result",
   "bndate.gregorian_to_bangla": "Gregorian → Bangla",
   "bndate.bangla_to_gregorian": "Bangla → Gregorian",
+  "bndate.calendar_close": "Close calendar",
   "bndate.gregorian_date": "Gregorian date",
   "bndate.bangla_date": "Bangla date",
   "bndate.day": "Day",

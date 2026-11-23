@@ -2387,14 +2387,23 @@
         $('#bndate-bangla-fields').classList.toggle('hidden', mode !== 'bangla');
         if (mode === 'bangla') {
           const current = parseISO($('#bndate-gregorian').value || dhakaToday());
-          if (current && isoDate(current) >= MIN_ISO) {
+          if (current) {
             const b = gregorianToBangla(current);
-            $('#bndate-day').value = b.day; $('#bndate-month').value = String(b.month); $('#bndate-year').value = b.year;
+            $('#bndate-day').value = b.day;
+            $('#bndate-month').value = String(b.month);
+            $('#bndate-year').value = String(b.year);
           }
           updateBanglaCalendarLabel();
         } else {
-          const converted = banglaToGregorian(Number($('#bndate-day').value), Number($('#bndate-month').value), Number($('#bndate-year').value));
-          if (converted && isoDate(converted) >= MIN_ISO) { $('#bndate-gregorian').value = isoDate(converted); updateCalendarLabel(); }
+          const converted = banglaToGregorian(
+            Number($('#bndate-day').value),
+            Number($('#bndate-month').value),
+            Number($('#bndate-year').value)
+          );
+          if (converted) {
+            $('#bndate-gregorian').value = isoDate(converted);
+            updateCalendarLabel();
+          }
         }
         update();
       }

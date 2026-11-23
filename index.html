@@ -2189,6 +2189,13 @@
         { bn: 'শীতকাল', en: 'Winter' }, { bn: 'বসন্তকাল', en: 'Spring' }
       ];
       let mode = 'gregorian', lastSummary = '';
+      // Local-noon date constructor. setFullYear avoids JavaScript's 1900 offset for years 00–99.
+      const localDate = (year, month, day) => {
+        const date = new Date(0);
+        date.setHours(12, 0, 0, 0);
+        date.setFullYear(year, month, day);
+        return date;
+      };
       const isLeap = year => year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
       // Falgun's leap day follows the Gregorian leap year in which that Falgun occurs (Bangla year + 594).
       const monthDays = year => [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, isLeap(year + 594) ? 30 : 29, 30];
@@ -2309,11 +2316,11 @@
           cells.push('<button type="button" class="'+classes+'" data-calendar-date="'+iso+'" '+(disabled?'disabled':'')+' aria-pressed="'+String(iso===selected)+'">'+date.getDate()+'</button>');
         }
         $('#bndate-calendar-days').innerHTML = cells.join('');
-        $('#bndate-calendar-prev').disabled = !Number.isFinite(new Date(year, month - 1, 0).getTime());
+        $('#bndate-calendar-prev').disabled = !Number.isFinite(localDate(year, month, 0).getTime());
       }
       function openCalendar() {
         const current = parseISO($('#bndate-gregorian').value || dhakaToday()) || parseISO(dhakaToday());
-        calendarMonth = new Date(current.getFullYear(),current.getMonth(),1);
+        calendarMonth = localDate(current.getFullYear(),current.getMonth(),1);
         renderCalendar();
         $('#bndate-calendar').classList.remove('hidden');
         $('#bndate-calendar-trigger').setAttribute('aria-expanded','true');
@@ -2387,14 +2394,14 @@
         $('#bndate-bangla-fields').classList.toggle('hidden', mode !== 'bangla');
         if (mode === 'bangla') {
           const current = parseISO($('#bndate-gregorian').value || dhakaToday());
-          if (current && isoDate(current) >= MIN_ISO) {
+          if (current) {
             const b = gregorianToBangla(current);
             $('#bndate-day').value = b.day; $('#bndate-month').value = String(b.month); $('#bndate-year').value = b.year;
           }
           updateBanglaCalendarLabel();
         } else {
           const converted = banglaToGregorian(Number($('#bndate-day').value), Number($('#bndate-month').value), Number($('#bndate-year').value));
-          if (converted && isoDate(converted) >= MIN_ISO) { $('#bndate-gregorian').value = isoDate(converted); updateCalendarLabel(); }
+          if (converted) { $('#bndate-gregorian').value = isoDate(converted); updateCalendarLabel(); }
         }
         update();
       }

@@ -2059,7 +2059,8 @@
       const MIN_ISO = '2019-04-14';
       let mode = 'gregorian', lastSummary = '';
       const isLeap = year => year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
-      // Falgun's leap day follows the Gregorian leap year in which that Falgun occurs (Bangla year + 594).\n      const monthDays = year => [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, isLeap(year + 594) ? 30 : 29, 30];
+      // Falgun's leap day follows the Gregorian leap year in which that Falgun occurs (Bangla year + 594).
+      const monthDays = year => [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, isLeap(year + 594) ? 30 : 29, 30];
       const utcDate = (y, m, d) => new Date(Date.UTC(y, m - 1, d, 12));
       const isoDate = date => [date.getUTCFullYear(), String(date.getUTCMonth() + 1).padStart(2, '0'), String(date.getUTCDate()).padStart(2, '0')].join('-');
       const parseISO = value => {
@@ -2175,7 +2176,11 @@
         renderMonthOptions();
         $('[data-date-mode]').forEach(button => button.addEventListener('click', () => setMode(button.dataset.dateMode)));
         $('#bndate-gregorian').addEventListener('change', update);
-        ['bndate-day', 'bndate-month', 'bndate-year'].forEach(id => {\n          const input = $('#' + id);\n          input.addEventListener('input', update);\n          input.addEventListener('change', update);\n        });
+        ['bndate-day', 'bndate-month', 'bndate-year'].forEach(id => {
+          const input = $('#' + id);
+          input.addEventListener('input', update);
+          input.addEventListener('change', update);
+        });
         $('#bndate-today').addEventListener('click', () => {
           $('#bndate-gregorian').value = dhakaToday();
           const b = gregorianToBangla(parseISO($('#bndate-gregorian').value));

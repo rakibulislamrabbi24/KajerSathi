@@ -2175,6 +2175,7 @@
         $('#bndate-year').value = gregorianToBangla(parseISO(today)).year;
         renderMonthOptions();
         $('[data-date-mode]').forEach(button => button.addEventListener('click', () => setMode(button.dataset.dateMode)));
+        $('#bndate-gregorian').addEventListener('input', update);
         $('#bndate-gregorian').addEventListener('change', update);
         ['bndate-day', 'bndate-month', 'bndate-year'].forEach(id => {
           const input = $('#' + id);

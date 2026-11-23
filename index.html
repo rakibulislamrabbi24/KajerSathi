@@ -136,6 +136,28 @@
       .bndate-entry-card,.bndate-result-card { padding:.85rem; }
       .bndate-field { padding:.65rem; }
     }
+    .bndate-calendar-wrap { position:relative; }
+    .bndate-calendar-trigger { display:flex; width:100%; align-items:center; justify-content:space-between; gap:.75rem; text-align:left; cursor:pointer; }
+    .bndate-calendar-trigger svg { flex:none; color:#818cf8; }
+    .bndate-calendar { position:absolute; z-index:60; top:calc(100% + .55rem); left:0; width:min(100%,22rem); min-width:min(18rem,calc(100vw - 3rem)); padding:.9rem; border:1px solid rgba(129,140,248,.35); border-radius:1rem; background:#fff; color:#0f172a; box-shadow:0 18px 48px rgba(2,6,23,.28); }
+    .dark .bndate-calendar { background:#111a30; color:#e2e8f0; border-color:rgba(129,140,248,.3); box-shadow:0 20px 55px rgba(0,0,0,.5); }
+    .bndate-calendar-head { display:grid; grid-template-columns:2.4rem 1fr 2.4rem; align-items:center; gap:.5rem; margin-bottom:.75rem; text-align:center; }
+    .bndate-calendar-head strong { font-size:.95rem; font-weight:800; }
+    .bndate-calendar-nav { display:grid; place-items:center; width:2.4rem; height:2.4rem; border-radius:.7rem; background:rgba(99,102,241,.1); font-size:1.4rem; line-height:1; }
+    .bndate-calendar-nav:hover,.bndate-calendar-day:hover { background:rgba(99,102,241,.17); }
+    .bndate-calendar-grid { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:.25rem; }
+    .bndate-calendar-weekdays { margin-bottom:.35rem; }
+    .bndate-calendar-weekdays span { padding:.35rem 0; text-align:center; font-size:.72rem; font-weight:750; color:#64748b; }
+    .dark .bndate-calendar-weekdays span { color:#94a3b8; }
+    .bndate-calendar-day { min-width:0; aspect-ratio:1; border-radius:.65rem; font-size:.84rem; font-weight:650; }
+    .bndate-calendar-day.is-selected { color:white; background:linear-gradient(135deg,#6366f1,#8b5cf6); box-shadow:0 4px 12px rgba(99,102,241,.25); }
+    .bndate-calendar-day.is-today:not(.is-selected) { outline:1px solid #818cf8; color:#6366f1; }
+    .dark .bndate-calendar-day.is-today:not(.is-selected) { color:#c4b5fd; }
+    .bndate-calendar-day.is-outside { opacity:.35; }
+    .bndate-calendar-day:disabled { opacity:.2; cursor:not-allowed; }
+    .bndate-calendar-foot { display:flex; justify-content:space-between; align-items:center; margin-top:.7rem; padding-top:.65rem; border-top:1px solid rgba(148,163,184,.2); }
+    .bndate-calendar-text { padding:.4rem .55rem; border-radius:.55rem; color:#6366f1; font-size:.8rem; font-weight:750; }
+    .bndate-calendar-text:hover { background:rgba(99,102,241,.1); }
     html:not(.dark) #bndate-gregorian { color-scheme: light; }
     .dark #bndate-gregorian { color-scheme: dark; }
     /* Camera feed rendered by html5-qrcode */
@@ -665,7 +687,25 @@
               <p id="bndate-gregorian-hint" class="bndate-entry-hint" data-i18n="bndate.gregorian_hint">ক্যালেন্ডার থেকে ইংরেজি তারিখ নির্বাচন করুন।</p>
             </div>
           </div>
-          <input id="bndate-gregorian" type="date" min="2019-04-14" class="input bndate-date-control" aria-describedby="bndate-gregorian-hint" />
+          <div class="bndate-calendar-wrap">
+            <input id="bndate-gregorian" type="hidden" min="2019-04-14" />
+            <button id="bndate-calendar-trigger" type="button" class="input bndate-date-control bndate-calendar-trigger" aria-haspopup="dialog" aria-expanded="false" aria-controls="bndate-calendar" aria-describedby="bndate-gregorian-hint">
+              <span id="bndate-calendar-value"></span><i data-lucide="calendar-days" class="h-5 w-5"></i>
+            </button>
+            <div id="bndate-calendar" class="bndate-calendar hidden" role="dialog" aria-label="Date picker">
+              <div class="bndate-calendar-head">
+                <button id="bndate-calendar-prev" type="button" class="bndate-calendar-nav" aria-label="Previous month">‹</button>
+                <strong id="bndate-calendar-month"></strong>
+                <button id="bndate-calendar-next" type="button" class="bndate-calendar-nav" aria-label="Next month">›</button>
+              </div>
+              <div id="bndate-calendar-weekdays" class="bndate-calendar-grid bndate-calendar-weekdays"></div>
+              <div id="bndate-calendar-days" class="bndate-calendar-grid"></div>
+              <div class="bndate-calendar-foot">
+                <button id="bndate-calendar-close" type="button" class="bndate-calendar-text" data-i18n="bndate.calendar_close">বন্ধ করুন</button>
+                <button id="bndate-calendar-today" type="button" class="bndate-calendar-text" data-i18n="bndate.today">আজ</button>
+              </div>
+            </div>
+          </div>
         </div>
         <div id="bndate-bangla-fields" class="hidden bndate-entry-card space-y-4">
           <div class="bndate-entry-heading">
@@ -2220,6 +2260,54 @@
           showError(mode === 'gregorian' ? 'bndate.invalid_gregorian' : 'bndate.invalid_bangla');
         }
       }
+      let calendarMonth = new Date();
+      function calendarISO(date) {
+        return [date.getFullYear(), String(date.getMonth()+1).padStart(2,'0'), String(date.getDate()).padStart(2,'0')].join('-');
+      }
+      function updateCalendarLabel() {
+        const date = parseISO($('#bndate-gregorian').value);
+        $('#bndate-calendar-value').textContent = date
+          ? new Intl.DateTimeFormat(I18N.locale(), { day:'numeric', month:'long', year:'numeric' }).format(date)
+          : t('bndate.gregorian_date');
+      }
+      function renderCalendar() {
+        const year = calendarMonth.getFullYear(), month = calendarMonth.getMonth();
+        $('#bndate-calendar-month').textContent = new Intl.DateTimeFormat(I18N.locale(), { month:'long', year:'numeric' }).format(new Date(year,month,1));
+        const weekdays = Array.from({length:7},(_,i)=>new Intl.DateTimeFormat(I18N.locale(),{weekday:'short'}).format(new Date(2024,0,7+i)));
+        $('#bndate-calendar-weekdays').innerHTML = weekdays.map(day=>'<span>'+day+'</span>').join('');
+        const first = new Date(year,month,1), offset = first.getDay();
+        const start = new Date(year,month,1-offset);
+        const selected = $('#bndate-gregorian').value;
+        const today = dhakaToday();
+        const cells = [];
+        for(let i=0;i<42;i++){
+          const date = new Date(start.getFullYear(),start.getMonth(),start.getDate()+i);
+          const iso = calendarISO(date), outside = date.getMonth()!==month;
+          const disabled = iso < MIN_ISO;
+          const classes = ['bndate-calendar-day',outside?'is-outside':'',iso===selected?'is-selected':'',iso===today?'is-today':''].filter(Boolean).join(' ');
+          cells.push('<button type="button" class="'+classes+'" data-calendar-date="'+iso+'" '+(disabled?'disabled':'')+' aria-pressed="'+String(iso===selected)+'">'+date.getDate()+'</button>');
+        }
+        $('#bndate-calendar-days').innerHTML = cells.join('');
+        $('#bndate-calendar-prev').disabled = year===2019 && month===3;
+      }
+      function openCalendar() {
+        const current = parseISO($('#bndate-gregorian').value || dhakaToday()) || parseISO(dhakaToday());
+        calendarMonth = new Date(current.getFullYear(),current.getMonth(),1);
+        renderCalendar();
+        $('#bndate-calendar').classList.remove('hidden');
+        $('#bndate-calendar-trigger').setAttribute('aria-expanded','true');
+      }
+      function closeCalendar() {
+        $('#bndate-calendar').classList.add('hidden');
+        $('#bndate-calendar-trigger').setAttribute('aria-expanded','false');
+      }
+      function chooseCalendarDate(iso) {
+        $('#bndate-gregorian').value = iso;
+        updateCalendarLabel();
+        closeCalendar();
+        update();
+        $('#bndate-calendar-trigger').focus();
+      }
       function setMode(next) {
         mode = next;
         $$('[data-date-mode]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.dateMode === mode)));
@@ -2233,7 +2321,7 @@
           }
         } else {
           const converted = banglaToGregorian(Number($('#bndate-day').value), Number($('#bndate-month').value), Number($('#bndate-year').value));
-          if (converted && isoDate(converted) >= MIN_ISO) $('#bndate-gregorian').value = isoDate(converted);
+          if (converted && isoDate(converted) >= MIN_ISO) { $('#bndate-gregorian').value = isoDate(converted); updateCalendarLabel(); }
         }
         update();
       }
@@ -2243,8 +2331,32 @@
         $('#bndate-year').value = gregorianToBangla(parseISO(today)).year;
         renderMonthOptions();
         $$('[data-date-mode]').forEach(button => button.addEventListener('click', () => setMode(button.dataset.dateMode)));
-        $('#bndate-gregorian').addEventListener('input', update);
-        $('#bndate-gregorian').addEventListener('change', update);
+        updateCalendarLabel();
+        $('#bndate-calendar-trigger').addEventListener('click', () => {
+          if ($('#bndate-calendar').classList.contains('hidden')) openCalendar(); else closeCalendar();
+        });
+        $('#bndate-calendar-prev').addEventListener('click', () => {
+          calendarMonth = new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()-1,1); renderCalendar();
+        });
+        $('#bndate-calendar-next').addEventListener('click', () => {
+          calendarMonth = new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()+1,1); renderCalendar();
+        });
+        $('#bndate-calendar-days').addEventListener('click', event => {
+          const button = event.target.closest('[data-calendar-date]');
+          if (button && !button.disabled) chooseCalendarDate(button.dataset.calendarDate);
+        });
+        $('#bndate-calendar-today').addEventListener('click', () => chooseCalendarDate(dhakaToday()));
+        $('#bndate-calendar-close').addEventListener('click', closeCalendar);
+        document.addEventListener('pointerdown', event => {
+          if (!event.target.closest('.bndate-calendar-wrap')) closeCalendar();
+        });
+        document.addEventListener('keydown', event => {
+          if (event.key === 'Escape' && !$('#bndate-calendar').classList.contains('hidden')) {
+            closeCalendar(); $('#bndate-calendar-trigger').focus();
+          }
+        });
+        $('#bndate-gregorian').addEventListener('input', () => { updateCalendarLabel(); update(); });
+        $('#bndate-gregorian').addEventListener('change', () => { updateCalendarLabel(); update(); });
         ['bndate-day', 'bndate-month', 'bndate-year'].forEach(id => {
           const input = $('#' + id);
           input.addEventListener('input', update);
@@ -2252,6 +2364,7 @@
         });
         $('#bndate-today').addEventListener('click', () => {
           $('#bndate-gregorian').value = dhakaToday();
+          updateCalendarLabel();
           const b = gregorianToBangla(parseISO($('#bndate-gregorian').value));
           $('#bndate-day').value = b.day; $('#bndate-month').value = String(b.month); $('#bndate-year').value = b.year;
           update();

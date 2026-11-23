@@ -2297,13 +2297,13 @@
         yearInput.value = String(year);
         const weekdays = Array.from({length:7},(_,i)=>new Intl.DateTimeFormat(I18N.locale(),{weekday:'short'}).format(new Date(2024,0,7+i)));
         $('#bndate-calendar-weekdays').innerHTML = weekdays.map(day=>'<span>'+day+'</span>').join('');
-        const first = new Date(year,month,1), offset = first.getDay();
-        const start = new Date(year,month,1-offset);
+        const first = localDate(year,month,1), offset = first.getDay();
+        const start = localDate(year,month,1-offset);
         const selected = $('#bndate-gregorian').value;
         const today = dhakaToday();
         const cells = [];
         for(let i=0;i<42;i++){
-          const date = new Date(start.getFullYear(),start.getMonth(),start.getDate()+i);
+          const date = localDate(start.getFullYear(),start.getMonth(),start.getDate()+i);
           const iso = calendarISO(date), outside = date.getMonth()!==month;
           const disabled = !parseISO(iso);
           const classes = ['bndate-calendar-day',outside?'is-outside':'',iso===selected?'is-selected':'',iso===today?'is-today':''].filter(Boolean).join(' ');
@@ -2418,7 +2418,7 @@
         const applyBanglaCalendarYear = input => {
           const raw = input.value.trim();
           const year = Number(raw);
-          if (raw && Number.isInteger(year) && Number.isInteger(year) && year <= 1600) {
+          if (raw && Number.isInteger(year) && year >= 1 && year <= 9999) {
             banglaCalendarMonth.year = year;
             renderBanglaCalendar();
           } else {
@@ -2467,7 +2467,7 @@
           const raw = input.value.trim();
           const year = Number(raw);
           if (raw && Number.isInteger(year) && year >= 1 && year <= 9999) {
-            calendarMonth = new Date(year, calendarMonth.getMonth(), 1);
+            calendarMonth = localDate(year, calendarMonth.getMonth(), 1);
             renderCalendar();
           } else {
             input.value = String(calendarMonth.getFullYear());
@@ -2480,10 +2480,10 @@
         });
         gregorianYearInput.addEventListener('blur', () => applyGregorianCalendarYear(gregorianYearInput));
         $('#bndate-calendar-prev').addEventListener('click', () => {
-          calendarMonth = new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()-1,1); renderCalendar();
+          calendarMonth = localDate(calendarMonth.getFullYear(),calendarMonth.getMonth()-1,1); renderCalendar();
         });
         $('#bndate-calendar-next').addEventListener('click', () => {
-          calendarMonth = new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()+1,1); renderCalendar();
+          calendarMonth = localDate(calendarMonth.getFullYear(),calendarMonth.getMonth()+1,1); renderCalendar();
         });
         $('#bndate-calendar-days').addEventListener('click', event => {
           const button = event.target.closest('[data-calendar-date]');

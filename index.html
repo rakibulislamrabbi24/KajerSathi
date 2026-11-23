@@ -709,7 +709,7 @@
                 <button id="bndate-calendar-prev" type="button" class="bndate-calendar-nav" aria-label="Previous month">‹</button>
                 <div class="bndate-calendar-period">
                   <select id="bndate-calendar-month-select" aria-label="Select month"></select>
-                  <input id="bndate-calendar-year-select" class="bndate-year-input" type="number" inputmode="numeric" min="2019" max="2200" step="1" aria-label="Enter year" placeholder="Year" />
+                  <input id="bndate-calendar-year-select" class="bndate-year-input" type="number" inputmode="numeric" step="1" aria-label="Enter year" placeholder="Year" />
                 </div>
                 <button id="bndate-calendar-next" type="button" class="bndate-calendar-nav" aria-label="Next month">›</button>
               </div>
@@ -742,7 +742,7 @@
                 <button id="bndate-calendar-bangla-prev" type="button" class="bndate-calendar-nav" aria-label="Previous Bangla month">‹</button>
                 <div class="bndate-calendar-period">
                   <select id="bndate-calendar-bangla-month-select" aria-label="বাংলা মাস নির্বাচন"></select>
-                  <input id="bndate-calendar-bangla-year-select" class="bndate-year-input" type="number" inputmode="numeric" min="1426" max="1600" step="1" aria-label="বাংলা সন লিখুন" placeholder="সন" />
+                  <input id="bndate-calendar-bangla-year-select" class="bndate-year-input" type="number" inputmode="numeric" step="1" aria-label="বাংলা সন লিখুন" placeholder="সন" />
                 </div>
                 <button id="bndate-calendar-bangla-next" type="button" class="bndate-calendar-nav" aria-label="Next Bangla month">›</button>
               </div>
@@ -2188,12 +2188,17 @@
         { bn: 'শরৎকাল', en: 'Autumn' }, { bn: 'হেমন্তকাল', en: 'Late Autumn' },
         { bn: 'শীতকাল', en: 'Winter' }, { bn: 'বসন্তকাল', en: 'Spring' }
       ];
-      const MIN_ISO = '2019-04-14';
+      const MIN_ISO = '0001-01-01';
       let mode = 'gregorian', lastSummary = '';
       const isLeap = year => year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
       // Falgun's leap day follows the Gregorian leap year in which that Falgun occurs (Bangla year + 594).
       const monthDays = year => [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, isLeap(year + 594) ? 30 : 29, 30];
-      const utcDate = (y, m, d) => new Date(Date.UTC(y, m - 1, d, 12));
+      const utcDate = (y, m, d) => {
+        const date = new Date(0);
+        date.setUTCHours(12, 0, 0, 0);
+        date.setUTCFullYear(y, m - 1, d);
+        return date;
+      };
       const isoDate = date => [date.getUTCFullYear(), String(date.getUTCMonth() + 1).padStart(2, '0'), String(date.getUTCDate()).padStart(2, '0')].join('-');
       const parseISO = value => {
         const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value || '');
@@ -2219,7 +2224,7 @@
       }
       function banglaToGregorian(day, month, year) {
         const days = monthDays(year);
-        if (!Number.isInteger(day) || !Number.isInteger(month) || !Number.isInteger(year) || year < 1426 || year > 1600 || month < 1 || month > 12 || day < 1 || day > days[month - 1]) return null;
+        if (!Number.isInteger(day) || !Number.isInteger(month) || !Number.isInteger(year) || year < 1 || year > 9999 || month < 1 || month > 12 || day < 1 || day > days[month - 1]) return null;
         let offset = day - 1;
         for (let i = 0; i < month - 1; i++) offset += days[i];
         const date = utcDate(year + 593, 4, 14);
@@ -2258,15 +2263,15 @@
           if (mode === 'gregorian') {
             date = parseISO($('#bndate-gregorian').value);
             if (!date) return showError('bndate.invalid_gregorian');
-            if ($('#bndate-gregorian').value < MIN_ISO) return showError('bndate.before_supported');
+            
             bangla = gregorianToBangla(date);
           } else {
             const day = Number($('#bndate-day').value), month = Number($('#bndate-month').value), year = Number($('#bndate-year').value);
             const days = monthDays(year);
-            if (!Number.isInteger(day) || !Number.isInteger(month) || !Number.isInteger(year) || year < 1426 || year > 1600 || month < 1 || month > 12 || day < 1 || day > days[month - 1]) return showError('bndate.invalid_bangla');
+            if (!Number.isInteger(day) || !Number.isInteger(month) || !Number.isInteger(year) || month < 1 || month > 12 || day < 1 || day > days[month - 1]) return showError('bndate.invalid_bangla');
             date = banglaToGregorian(day, month, year);
             bangla = { day, month, year };
-            if (isoDate(date) < MIN_ISO) return showError('bndate.before_supported');
+            
           }
           renderResult(date, bangla);
         } catch (error) {
@@ -2300,12 +2305,12 @@
         for(let i=0;i<42;i++){
           const date = new Date(start.getFullYear(),start.getMonth(),start.getDate()+i);
           const iso = calendarISO(date), outside = date.getMonth()!==month;
-          const disabled = iso < MIN_ISO;
+          const disabled = !parseISO(iso);
           const classes = ['bndate-calendar-day',outside?'is-outside':'',iso===selected?'is-selected':'',iso===today?'is-today':''].filter(Boolean).join(' ');
           cells.push('<button type="button" class="'+classes+'" data-calendar-date="'+iso+'" '+(disabled?'disabled':'')+' aria-pressed="'+String(iso===selected)+'">'+date.getDate()+'</button>');
         }
         $('#bndate-calendar-days').innerHTML = cells.join('');
-        $('#bndate-calendar-prev').disabled = year===2019 && month===3;
+        $('#bndate-calendar-prev').disabled = !Number.isFinite(new Date(year, month - 1, 0).getTime());
       }
       function openCalendar() {
         const current = parseISO($('#bndate-gregorian').value || dhakaToday()) || parseISO(dhakaToday());
@@ -2328,7 +2333,7 @@
       let banglaCalendarMonth = { year: 1426, month: 1 };
       function updateBanglaCalendarLabel() {
         const day = Number($('#bndate-day').value), month = Number($('#bndate-month').value), year = Number($('#bndate-year').value);
-        $('#bndate-calendar-bangla-value').textContent = Number.isInteger(day) && month >= 1 && month <= 12 && year >= 1426
+        $('#bndate-calendar-bangla-value').textContent = Number.isInteger(day) && month >= 1 && month <= 12 && Number.isInteger(year)
           ? number(day) + ' ' + monthName(month) + ' ' + String(year)
           : t('bndate.bangla_date');
       }
@@ -2354,8 +2359,8 @@
           cells.push('<button type="button" class="'+classes+'" data-bangla-calendar-day="'+day+'" aria-pressed="'+String(selected)+'">'+number(day)+'</button>');
         }
         $('#bndate-calendar-bangla-days').innerHTML = cells.join('');
-        $('#bndate-calendar-bangla-prev').disabled = year===1426 && month===1;
-        $('#bndate-calendar-bangla-next').disabled = year===1600 && month===12;
+        $('#bndate-calendar-bangla-prev').disabled = !Number.isFinite(banglaToGregorian(1, 1, year - 1)?.getTime());
+        $('#bndate-calendar-bangla-next').disabled = !Number.isFinite(banglaToGregorian(1, 1, year + 1)?.getTime());
       }
       function openBanglaCalendar() {
         banglaCalendarMonth = {year:Number($('#bndate-year').value)||1426,month:Number($('#bndate-month').value)||1};
@@ -2413,7 +2418,7 @@
         const applyBanglaCalendarYear = input => {
           const raw = input.value.trim();
           const year = Number(raw);
-          if (raw && Number.isInteger(year) && year >= 1426 && year <= 1600) {
+          if (raw && Number.isInteger(year) && Number.isInteger(year) && year <= 1600) {
             banglaCalendarMonth.year = year;
             renderBanglaCalendar();
           } else {
@@ -2461,7 +2466,7 @@
         const applyGregorianCalendarYear = input => {
           const raw = input.value.trim();
           const year = Number(raw);
-          if (raw && Number.isInteger(year) && year >= 2019 && year <= 2200) {
+          if (raw && Number.isInteger(year) && year >= 1 && year <= 9999) {
             calendarMonth = new Date(year, calendarMonth.getMonth(), 1);
             renderCalendar();
           } else {

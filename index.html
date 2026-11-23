@@ -136,20 +136,24 @@
       .bndate-entry-card,.bndate-result-card { padding:.85rem; }
       .bndate-field { padding:.65rem; }
     }
-    .bndate-calendar-wrap,.bndate-bangla-calendar-wrap { position:relative; }
-    .bndate-calendar-trigger { display:flex; width:100%; align-items:center; justify-content:space-between; gap:.75rem; text-align:left; cursor:pointer; }
+    /* One shared calendar design for Gregorian and Bangla date selection */
+    .bndate-calendar-wrap,.bndate-bangla-calendar-wrap { position:relative; min-width:0; }
+    .bndate-calendar-trigger { display:flex; width:100%; min-width:0; align-items:center; justify-content:space-between; gap:.75rem; text-align:left; cursor:pointer; transition:border-color .18s,box-shadow .18s,background .18s; }
+    .bndate-calendar-trigger:hover { border-color:rgba(129,140,248,.55); }
+    .bndate-calendar-trigger:focus-visible { outline:2px solid #818cf8; outline-offset:2px; }
     .bndate-calendar-trigger svg { flex:none; color:#818cf8; }
-    .bndate-calendar { position:absolute; z-index:60; top:calc(100% + .55rem); left:0; width:min(100%,22rem); min-width:min(18rem,calc(100vw - 3rem)); padding:.9rem; border:1px solid rgba(129,140,248,.35); border-radius:1rem; background:#fff; color:#0f172a; box-shadow:0 18px 48px rgba(2,6,23,.28); }
+    .bndate-calendar { position:absolute; z-index:60; top:calc(100% + .55rem); left:0; width:min(22rem,calc(100vw - 3rem)); min-width:0; max-width:calc(100vw - 3rem); padding:.9rem; border:1px solid rgba(129,140,248,.35); border-radius:1rem; background:#fff; color:#0f172a; box-shadow:0 18px 48px rgba(2,6,23,.28); }
     .dark .bndate-calendar { background:#111a30; color:#e2e8f0; border-color:rgba(129,140,248,.3); box-shadow:0 20px 55px rgba(0,0,0,.5); }
-    .bndate-calendar-head { display:grid; grid-template-columns:2.4rem 1fr 2.4rem; align-items:center; gap:.5rem; margin-bottom:.75rem; text-align:center; }
-    .bndate-calendar-head strong { font-size:.95rem; font-weight:800; }
+    .bndate-calendar-head { display:grid; grid-template-columns:2.4rem minmax(0,1fr) 2.4rem; align-items:center; gap:.5rem; margin-bottom:.75rem; text-align:center; }
+    .bndate-calendar-head strong { min-width:0; font-size:.95rem; font-weight:800; overflow-wrap:anywhere; }
     .bndate-calendar-nav { display:grid; place-items:center; width:2.4rem; height:2.4rem; border-radius:.7rem; background:rgba(99,102,241,.1); font-size:1.4rem; line-height:1; }
-    .bndate-calendar-nav:hover,.bndate-calendar-day:hover { background:rgba(99,102,241,.17); }
+    .bndate-calendar-nav:hover:not(:disabled),.bndate-calendar-day:hover:not(:disabled) { background:rgba(99,102,241,.17); }
+    .bndate-calendar-nav:disabled { opacity:.3; cursor:not-allowed; }
     .bndate-calendar-grid { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:.25rem; }
     .bndate-calendar-weekdays { margin-bottom:.35rem; }
-    .bndate-calendar-weekdays span { padding:.35rem 0; text-align:center; font-size:.72rem; font-weight:750; color:#64748b; }
+    .bndate-calendar-weekdays span { min-width:0; padding:.35rem 0; text-align:center; font-size:.72rem; font-weight:750; color:#64748b; }
     .dark .bndate-calendar-weekdays span { color:#94a3b8; }
-    .bndate-calendar-day { min-width:0; aspect-ratio:1; border-radius:.65rem; font-size:.84rem; font-weight:650; }
+    .bndate-calendar-day { display:grid; place-items:center; min-width:0; aspect-ratio:1; border-radius:.65rem; font-size:.84rem; font-weight:650; touch-action:manipulation; }
     .bndate-calendar-day.is-selected { color:white; background:linear-gradient(135deg,#6366f1,#8b5cf6); box-shadow:0 4px 12px rgba(99,102,241,.25); }
     .bndate-calendar-day.is-today:not(.is-selected) { outline:1px solid #818cf8; color:#6366f1; }
     .dark .bndate-calendar-day.is-today:not(.is-selected) { color:#c4b5fd; }
@@ -158,6 +162,7 @@
     .bndate-calendar-foot { display:flex; justify-content:space-between; align-items:center; margin-top:.7rem; padding-top:.65rem; border-top:1px solid rgba(148,163,184,.2); }
     .bndate-calendar-text { padding:.4rem .55rem; border-radius:.55rem; color:#6366f1; font-size:.8rem; font-weight:750; }
     .bndate-calendar-text:hover { background:rgba(99,102,241,.1); }
+    @media (max-width:420px) { .bndate-calendar { width:min(22rem,calc(100vw - 2rem)); max-width:calc(100vw - 2rem); } }
     html:not(.dark) #bndate-gregorian { color-scheme: light; }
     .dark #bndate-gregorian { color-scheme: dark; }
     /* Camera feed rendered by html5-qrcode */

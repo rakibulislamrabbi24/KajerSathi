@@ -136,7 +136,7 @@
       .bndate-entry-card,.bndate-result-card { padding:.85rem; }
       .bndate-field { padding:.65rem; }
     }
-    .bndate-calendar-wrap { position:relative; }
+    .bndate-calendar-wrap,.bndate-bangla-calendar-wrap { position:relative; }
     .bndate-calendar-trigger { display:flex; width:100%; align-items:center; justify-content:space-between; gap:.75rem; text-align:left; cursor:pointer; }
     .bndate-calendar-trigger svg { flex:none; color:#818cf8; }
     .bndate-calendar { position:absolute; z-index:60; top:calc(100% + .55rem); left:0; width:min(100%,22rem); min-width:min(18rem,calc(100vw - 3rem)); padding:.9rem; border:1px solid rgba(129,140,248,.35); border-radius:1rem; background:#fff; color:#0f172a; box-shadow:0 18px 48px rgba(2,6,23,.28); }
@@ -715,18 +715,25 @@
               <p id="bndate-bangla-hint" class="bndate-entry-hint" data-i18n="bndate.bangla_hint">দিন, মাস ও বাংলা সন নির্বাচন করুন।</p>
             </div>
           </div>
-          <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <div class="bndate-field">
-              <label class="label" for="bndate-day"><i data-lucide="calendar" class="h-3.5 w-3.5"></i><span data-i18n="bndate.day">দিন</span></label>
-              <input id="bndate-day" type="number" min="1" max="31" step="1" inputmode="numeric" class="input bndate-field-control text-center" value="1" />
-            </div>
-            <div class="bndate-field">
-              <label class="label" for="bndate-month"><i data-lucide="calendar-range" class="h-3.5 w-3.5"></i><span data-i18n="bndate.month">মাস</span></label>
-              <select id="bndate-month" class="input bndate-field-control"></select>
-            </div>
-            <div class="bndate-field">
-              <label class="label" for="bndate-year"><i data-lucide="calendar-clock" class="h-3.5 w-3.5"></i><span data-i18n="bndate.year">বাংলা সন</span></label>
-              <input id="bndate-year" type="number" min="1426" max="1600" step="1" inputmode="numeric" class="input bndate-field-control text-center" />
+          <div class="bndate-bangla-calendar-wrap">
+            <input id="bndate-day" type="hidden" value="1" />
+            <input id="bndate-month" type="hidden" value="1" />
+            <input id="bndate-year" type="hidden" value="1426" />
+            <button id="bndate-calendar-bangla-trigger" type="button" class="input bndate-date-control bndate-calendar-trigger" aria-haspopup="dialog" aria-expanded="false" aria-controls="bndate-calendar-bangla">
+              <span id="bndate-calendar-bangla-value"></span><i data-lucide="calendar-days" class="h-5 w-5"></i>
+            </button>
+            <div id="bndate-calendar-bangla" class="bndate-calendar hidden" role="dialog" aria-label="Bangla date picker">
+              <div class="bndate-calendar-head">
+                <button id="bndate-calendar-bangla-prev" type="button" class="bndate-calendar-nav" aria-label="Previous Bangla month">‹</button>
+                <strong id="bndate-calendar-bangla-month"></strong>
+                <button id="bndate-calendar-bangla-next" type="button" class="bndate-calendar-nav" aria-label="Next Bangla month">›</button>
+              </div>
+              <div id="bndate-calendar-bangla-weekdays" class="bndate-calendar-grid bndate-calendar-weekdays"></div>
+              <div id="bndate-calendar-bangla-days" class="bndate-calendar-grid"></div>
+              <div class="bndate-calendar-foot">
+                <button id="bndate-calendar-bangla-close" type="button" class="bndate-calendar-text" data-i18n="bndate.calendar_close">বন্ধ করুন</button>
+                <button id="bndate-calendar-bangla-today" type="button" class="bndate-calendar-text" data-i18n="bndate.today">আজ</button>
+              </div>
             </div>
           </div>
         </div>
@@ -2308,6 +2315,55 @@
         update();
         $('#bndate-calendar-trigger').focus();
       }
+      let banglaCalendarMonth = { year: 1426, month: 1 };
+      function updateBanglaCalendarLabel() {
+        const day = Number($('#bndate-day').value), month = Number($('#bndate-month').value), year = Number($('#bndate-year').value);
+        $('#bndate-calendar-bangla-value').textContent = Number.isInteger(day) && month >= 1 && month <= 12 && year >= 1426
+          ? number(day) + ' ' + monthName(month) + ' ' + number(year)
+          : t('bndate.bangla_date');
+      }
+      function renderBanglaCalendar() {
+        const {year, month} = banglaCalendarMonth;
+        $('#bndate-calendar-bangla-month').textContent = monthName(month) + ' ' + number(year);
+        const weekdays = Array.from({length:7},(_,i)=>new Intl.DateTimeFormat(I18N.locale(),{weekday:'short'}).format(new Date(2024,0,7+i)));
+        $('#bndate-calendar-bangla-weekdays').innerHTML = weekdays.map(day=>'<span>'+day+'</span>').join('');
+        const firstWeekday = banglaToGregorian(1,month,year).getUTCDay();
+        const daysInMonth = monthDays(year)[month-1];
+        const selectedDay = Number($('#bndate-day').value), selectedMonth = Number($('#bndate-month').value), selectedYear = Number($('#bndate-year').value);
+        const todayGregorian = parseISO(dhakaToday()), todayBangla = gregorianToBangla(todayGregorian);
+        const cells = [];
+        for(let i=0;i<42;i++){
+          const day = i-firstWeekday+1;
+          if(day<1 || day>daysInMonth){ cells.push('<span aria-hidden="true"></span>'); continue; }
+          const disabled = year===1426 && month===1 && day<1;
+          const selected = day===selectedDay && month===selectedMonth && year===selectedYear;
+          const today = day===todayBangla.day && month===todayBangla.month && year===todayBangla.year;
+          const classes = ['bndate-calendar-day',selected?'is-selected':'',today?'is-today':''].filter(Boolean).join(' ');
+          cells.push('<button type="button" class="'+classes+'" data-bangla-calendar-day="'+day+'" '+(disabled?'disabled':'')+' aria-pressed="'+String(selected)+'">'+number(day)+'</button>');
+        }
+        $('#bndate-calendar-bangla-days').innerHTML = cells.join('');
+        $('#bndate-calendar-bangla-prev').disabled = year===1426 && month===1;
+        $('#bndate-calendar-bangla-next').disabled = year===1600 && month===12;
+      }
+      function openBanglaCalendar() {
+        banglaCalendarMonth = {year:Number($('#bndate-year').value)||1426,month:Number($('#bndate-month').value)||1};
+        renderBanglaCalendar();
+        $('#bndate-calendar-bangla').classList.remove('hidden');
+        $('#bndate-calendar-bangla-trigger').setAttribute('aria-expanded','true');
+      }
+      function closeBanglaCalendar() {
+        $('#bndate-calendar-bangla').classList.add('hidden');
+        $('#bndate-calendar-bangla-trigger').setAttribute('aria-expanded','false');
+      }
+      function chooseBanglaCalendarDate(day) {
+        $('#bndate-day').value = day;
+        $('#bndate-month').value = String(banglaCalendarMonth.month);
+        $('#bndate-year').value = banglaCalendarMonth.year;
+        updateBanglaCalendarLabel();
+        closeBanglaCalendar();
+        update();
+        $('#bndate-calendar-bangla-trigger').focus();
+      }
       function setMode(next) {
         mode = next;
         $$('[data-date-mode]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.dateMode === mode)));
@@ -2319,6 +2375,7 @@
             const b = gregorianToBangla(current);
             $('#bndate-day').value = b.day; $('#bndate-month').value = String(b.month); $('#bndate-year').value = b.year;
           }
+          updateBanglaCalendarLabel();
         } else {
           const converted = banglaToGregorian(Number($('#bndate-day').value), Number($('#bndate-month').value), Number($('#bndate-year').value));
           if (converted && isoDate(converted) >= MIN_ISO) { $('#bndate-gregorian').value = isoDate(converted); updateCalendarLabel(); }
@@ -2328,10 +2385,43 @@
       function init() {
         const today = dhakaToday();
         $('#bndate-gregorian').value = today;
-        $('#bndate-year').value = gregorianToBangla(parseISO(today)).year;
+        const initialBangla = gregorianToBangla(parseISO(today));
+        $('#bndate-day').value = initialBangla.day;
+        $('#bndate-month').value = String(initialBangla.month);
+        $('#bndate-year').value = initialBangla.year;
         renderMonthOptions();
+        updateBanglaCalendarLabel();
         $$('[data-date-mode]').forEach(button => button.addEventListener('click', () => setMode(button.dataset.dateMode)));
         updateCalendarLabel();
+        $('#bndate-calendar-bangla-trigger').addEventListener('click', () => {
+          if ($('#bndate-calendar-bangla').classList.contains('hidden')) openBanglaCalendar(); else closeBanglaCalendar();
+        });
+        $('#bndate-calendar-bangla-prev').addEventListener('click', () => {
+          if(banglaCalendarMonth.month===1){banglaCalendarMonth.year--;banglaCalendarMonth.month=12;}else banglaCalendarMonth.month--;
+          renderBanglaCalendar();
+        });
+        $('#bndate-calendar-bangla-next').addEventListener('click', () => {
+          if(banglaCalendarMonth.month===12){banglaCalendarMonth.year++;banglaCalendarMonth.month=1;}else banglaCalendarMonth.month++;
+          renderBanglaCalendar();
+        });
+        $('#bndate-calendar-bangla-days').addEventListener('click', event => {
+          const button = event.target.closest('[data-bangla-calendar-day]');
+          if(button && !button.disabled) chooseBanglaCalendarDate(Number(button.dataset.banglaCalendarDay));
+        });
+        $('#bndate-calendar-bangla-today').addEventListener('click', () => {
+          const today = gregorianToBangla(parseISO(dhakaToday()));
+          banglaCalendarMonth = {year:today.year,month:today.month};
+          chooseBanglaCalendarDate(today.day);
+        });
+        $('#bndate-calendar-bangla-close').addEventListener('click', closeBanglaCalendar);
+        document.addEventListener('pointerdown', event => {
+          if (!event.target.closest('.bndate-bangla-calendar-wrap')) closeBanglaCalendar();
+        });
+        document.addEventListener('keydown', event => {
+          if(event.key==='Escape' && !$('#bndate-calendar-bangla').classList.contains('hidden')){
+            closeBanglaCalendar(); $('#bndate-calendar-bangla-trigger').focus();
+          }
+        });
         $('#bndate-calendar-trigger').addEventListener('click', () => {
           if ($('#bndate-calendar').classList.contains('hidden')) openCalendar(); else closeCalendar();
         });
@@ -2367,6 +2457,7 @@
           updateCalendarLabel();
           const b = gregorianToBangla(parseISO($('#bndate-gregorian').value));
           $('#bndate-day').value = b.day; $('#bndate-month').value = String(b.month); $('#bndate-year').value = b.year;
+          updateBanglaCalendarLabel();
           update();
         });
         $('#bndate-copy').addEventListener('click', async () => {

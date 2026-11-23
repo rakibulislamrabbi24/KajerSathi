@@ -2155,7 +2155,7 @@
       }
       function setMode(next) {
         mode = next;
-        $('[data-date-mode]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.dateMode === mode)));
+        $$('[data-date-mode]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.dateMode === mode)));
         $('#bndate-gregorian-fields').classList.toggle('hidden', mode !== 'gregorian');
         $('#bndate-bangla-fields').classList.toggle('hidden', mode !== 'bangla');
         if (mode === 'bangla') {
@@ -2175,7 +2175,7 @@
         $('#bndate-gregorian').value = today;
         $('#bndate-year').value = gregorianToBangla(parseISO(today)).year;
         renderMonthOptions();
-        $('[data-date-mode]').forEach(button => button.addEventListener('click', () => setMode(button.dataset.dateMode)));
+        $$('[data-date-mode]').forEach(button => button.addEventListener('click', () => setMode(button.dataset.dateMode)));
         $('#bndate-gregorian').addEventListener('input', update);
         $('#bndate-gregorian').addEventListener('change', update);
         ['bndate-day', 'bndate-month', 'bndate-year'].forEach(id => {

@@ -87,6 +87,17 @@
   <link rel="stylesheet" href="assets/css/app.css" />
 
   <style>
+    @media print {
+      body.ic-printing * { visibility: hidden !important; }
+      body.ic-printing #ic-preview, body.ic-printing #ic-preview * { visibility: visible !important; }
+      body.ic-printing #ic-preview { position: absolute !important; inset: 0 auto auto 0 !important; width: 100% !important; max-width: none !important; margin: 0 !important; padding: 12mm !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; color: #111 !important; background: #fff !important; }
+      body.ic-printing { background: #fff !important; }
+      @page { size: A4; margin: 8mm; }
+    }
+    .ic-paper { min-height: 520px; font-family: Inter, "Noto Sans Bengali", sans-serif; }
+    .ic-paper table { width:100%; border-collapse:collapse; font-size:12px; }
+    .ic-paper th,.ic-paper td { border-bottom:1px solid #e2e8f0; padding:9px 6px; text-align:left; }
+    .ic-paper th { background:#f8fafc; font-weight:700; }
     html { scroll-behavior: smooth; }
     body { font-family: Inter, "Noto Sans Bengali", ui-sans-serif, system-ui, sans-serif; }
     .lang-pending body { visibility: hidden; }
@@ -249,6 +260,9 @@
         </button>
         <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="avro" id="tab-avro" aria-controls="panel-avro" aria-selected="false">
           <i data-lucide="languages" class="h-4 w-4"></i><span data-i18n="nav.avro">অভ্র ↔ বিজয়</span>
+        </button>
+        <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="invoice" id="tab-invoice" aria-controls="panel-invoice" aria-selected="false">
+          <i data-lucide="receipt" class="h-4 w-4"></i><span>ইনভয়েস / ক্যাশ মেমো</span>
         </button>
         <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="upcoming" id="tab-upcoming" aria-controls="panel-upcoming" aria-selected="false">
           <i data-lucide="sparkles" class="h-4 w-4"></i><span data-i18n="nav.upcoming">আসছে</span>
@@ -856,6 +870,73 @@
       </div>
     </section>
 
+    <!-- ============ INVOICE & CASH MEMO ============ -->
+    <section id="panel-invoice" data-panel="invoice" role="tabpanel" aria-labelledby="tab-invoice" class="hidden space-y-6">
+      <div class="mx-auto max-w-5xl">
+        <div class="mb-5">
+          <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">ইনভয়েস ও ক্যাশ মেমো</h2>
+          <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">পণ্য/সার্ভিসের হিসাব তৈরি, সংরক্ষণ এবং প্রিন্ট করুন। ডেটা এই ব্রাউজারেই থাকবে।</p>
+        </div>
+        <div class="mb-5 flex flex-wrap items-center gap-2">
+          <button type="button" class="btn btn-primary" data-doc-mode="invoice" aria-pressed="true">ইনভয়েস</button>
+          <button type="button" class="btn btn-secondary" data-doc-mode="cash">ক্যাশ মেমো</button>
+          <span class="ml-auto text-xs text-slate-500">স্বয়ংক্রিয় হিসাব • লোকাল সেভ</span>
+        </div>
+        <div class="grid items-start gap-6 xl:grid-cols-2">
+          <div class="space-y-5">
+            <div class="card space-y-4 p-4 sm:p-5">
+              <h3 class="font-bold">প্রতিষ্ঠানের তথ্য</h3>
+              <div class="grid gap-3 sm:grid-cols-2">
+                <label class="block text-sm">প্রতিষ্ঠানের নাম<input id="ic-business" class="input mt-1 w-full" placeholder="আপনার প্রতিষ্ঠানের নাম"></label>
+                <label class="block text-sm">মোবাইল নম্বর<input id="ic-business-phone" class="input mt-1 w-full" placeholder="01XXXXXXXXX"></label>
+                <label class="block text-sm sm:col-span-2">ঠিকানা<input id="ic-business-address" class="input mt-1 w-full" placeholder="প্রতিষ্ঠানের ঠিকানা"></label>
+              </div>
+            </div>
+            <div class="card space-y-4 p-4 sm:p-5">
+              <h3 class="font-bold">ডকুমেন্ট ও ক্রেতার তথ্য</h3>
+              <div class="grid gap-3 sm:grid-cols-2">
+                <label class="block text-sm">নম্বর<input id="ic-number" class="input mt-1 w-full" placeholder="INV-0001"></label>
+                <label class="block text-sm">তারিখ<input id="ic-date" type="date" class="input mt-1 w-full"></label>
+                <label class="block text-sm">ক্রেতার নাম<input id="ic-customer" class="input mt-1 w-full" placeholder="ক্রেতার নাম"></label>
+                <label class="block text-sm">মোবাইল<input id="ic-customer-phone" class="input mt-1 w-full" placeholder="ক্রেতার মোবাইল"></label>
+                <label class="block text-sm sm:col-span-2">ঠিকানা<input id="ic-customer-address" class="input mt-1 w-full" placeholder="ক্রেতার ঠিকানা (ঐচ্ছিক)"></label>
+              </div>
+            </div>
+            <div class="card space-y-4 p-4 sm:p-5">
+              <div class="flex items-center justify-between gap-3"><h3 class="font-bold">পণ্য / সার্ভিস</h3><button type="button" class="btn btn-secondary text-sm" id="ic-add">+ আইটেম যোগ</button></div>
+              <div id="ic-items" class="space-y-3"></div>
+              <div class="grid gap-3 sm:grid-cols-2">
+                <label class="block text-sm">ডিসকাউন্ট (৳)<input id="ic-discount" type="number" min="0" step="0.01" value="0" class="input mt-1 w-full"></label>
+                <label class="block text-sm">VAT (%)<input id="ic-vat" type="number" min="0" step="0.01" value="0" class="input mt-1 w-full"></label>
+                <label class="block text-sm">পরিশোধিত (৳)<input id="ic-paid" type="number" min="0" step="0.01" value="0" class="input mt-1 w-full"></label>
+                <label class="block text-sm">নোট<input id="ic-note" class="input mt-1 w-full" placeholder="ধন্যবাদ / অন্যান্য শর্ত"></label>
+              </div>
+              <div class="rounded-xl bg-slate-100 p-3 text-sm dark:bg-white/5">
+                <div class="flex justify-between py-1"><span>সাবটোটাল</span><strong id="ic-subtotal">৳০.০০</strong></div>
+                <div class="flex justify-between py-1"><span>VAT</span><strong id="ic-vat-amount">৳০.০০</strong></div>
+                <div class="flex justify-between py-1"><span>সর্বমোট</span><strong id="ic-total">৳০.০০</strong></div>
+                <div class="flex justify-between py-1"><span>বাকি</span><strong id="ic-due">৳০.০০</strong></div>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button type="button" class="btn btn-primary" id="ic-save">সেভ করুন</button>
+                <button type="button" class="btn btn-secondary" id="ic-print">প্রিন্ট / PDF</button>
+                <button type="button" class="btn btn-secondary" id="ic-reset">নতুন ডকুমেন্ট</button>
+              </div>
+              <p id="ic-status" class="text-xs text-slate-500" aria-live="polite">প্রিন্ট / PDF চাপলে ব্রাউজারের Print dialog খুলবে।</p>
+            </div>
+            <div class="card space-y-3 p-4 sm:p-5">
+              <div class="flex items-center justify-between"><h3 class="font-bold">সংরক্ষিত ডকুমেন্ট</h3><button type="button" id="ic-clear-history" class="text-xs font-semibold text-rose-600">সব মুছুন</button></div>
+              <div id="ic-history" class="space-y-2 text-sm"><p class="text-slate-500">এখনো কিছু সেভ করা হয়নি।</p></div>
+            </div>
+          </div>
+          <div class="xl:sticky xl:top-4">
+            <div class="mb-2 flex items-center justify-between"><h3 class="font-bold">লাইভ প্রিভিউ</h3><span class="text-xs text-slate-500">A4 / প্রিন্ট</span></div>
+            <article id="ic-preview" class="ic-paper rounded-xl border border-slate-200 bg-white p-5 text-slate-900 shadow-lg sm:p-8"></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ UPCOMING ============ -->
     <section id="panel-upcoming" data-panel="upcoming" role="tabpanel" aria-labelledby="tab-upcoming" class="hidden">
       <div class="mx-auto mb-8 max-w-2xl text-center">
@@ -1070,7 +1151,7 @@
      * Tabs
      * ===================================================================== */
     const Tabs = {
-      names: ['generator', 'scanner', 'jobphoto', 'bndate', 'avro', 'upcoming'],
+      names: ['generator', 'scanner', 'jobphoto', 'bndate', 'avro', 'invoice', 'upcoming'],
       show(name, updateHash = true) {
         if (!this.names.includes(name)) name = 'generator';
         $$('[data-tab]').forEach(b => {
@@ -2651,6 +2732,93 @@
       return { init, unicodeToBijoy, bijoyToUnicode };
     })();
 
+
+    /* =====================================================================
+     * Invoice & Cash Memo — local-first document generator
+     * ===================================================================== */
+    const InvoiceCashMemo = (() => {
+      const $id = id => document.getElementById(id);
+      const STORE = 'kajersathi.invoiceCashMemo.v1';
+      let mode = 'invoice';
+      let items = [{ name: '', qty: 1, price: 0 }];
+      const val = id => ($id(id)?.value || '').trim();
+      const num = id => Math.max(0, Number(val(id)) || 0);
+      const money = n => '৳' + Number(n || 0).toLocaleString('bn-BD',{minimumFractionDigits:2,maximumFractionDigits:2});
+      const esc = s => String(s ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+      const setStatus = s => { $id('ic-status').textContent = s; };
+      function itemRows() {
+        const host=$id('ic-items'); host.replaceChildren();
+        items.forEach((it,i)=>{
+          const row=document.createElement('div'); row.className='grid grid-cols-12 gap-2 items-end rounded-xl border border-slate-200 p-3 dark:border-white/10';
+          row.innerHTML='<label class="col-span-12 block text-xs sm:col-span-6">পণ্য / সার্ভিস<input data-item="name" data-index="'+i+'" class="input mt-1 w-full" placeholder="পণ্যের নাম"></label><label class="col-span-4 block text-xs sm:col-span-2">পরিমাণ<input data-item="qty" data-index="'+i+'" type="number" min="0" step="0.01" class="input mt-1 w-full"></label><label class="col-span-5 block text-xs sm:col-span-3">একক মূল্য<input data-item="price" data-index="'+i+'" type="number" min="0" step="0.01" class="input mt-1 w-full"></label><button type="button" data-remove="'+i+'" class="col-span-3 btn btn-secondary text-xs">বাদ</button>';
+          row.querySelector('[data-item="name"]').value=it.name; row.querySelector('[data-item="qty"]').value=it.qty; row.querySelector('[data-item="price"]').value=it.price;
+          host.append(row);
+        });
+      }
+      function calculate() {
+        const subtotal=items.reduce((s,x)=>s+(Math.max(0,Number(x.qty)||0)*Math.max(0,Number(x.price)||0)),0);
+        const discount=Math.min(subtotal,num('ic-discount'));
+        const taxable=Math.max(0,subtotal-discount);
+        const vat=taxable*num('ic-vat')/100;
+        const total=taxable+vat, paid=Math.min(total,num('ic-paid')), due=Math.max(0,total-paid);
+        $id('ic-subtotal').textContent=money(subtotal); $id('ic-vat-amount').textContent=money(vat);
+        $id('ic-total').textContent=money(total); $id('ic-due').textContent=money(due);
+        renderPreview({subtotal,discount,vat,total,paid,due}); return {subtotal,discount,vat,total,paid,due};
+      }
+      function renderPreview(t) {
+        const rows=items.map((x,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(x.name||'—')+'</td><td>'+esc(x.qty)+'</td><td>'+money(x.price)+'</td><td>'+money((Number(x.qty)||0)*(Number(x.price)||0))+'</td></tr>').join('');
+        const title=mode==='invoice'?'INVOICE':'CASH MEMO';
+        $id('ic-preview').innerHTML='<div class="flex justify-between gap-4 border-b-2 border-slate-800 pb-4"><div><h2 class="text-2xl font-extrabold tracking-wide">'+title+'</h2><p class="mt-2 text-lg font-bold">'+esc(val('ic-business')||'প্রতিষ্ঠানের নাম')+'</p><p class="text-xs">'+esc(val('ic-business-address'))+'</p><p class="text-xs">'+esc(val('ic-business-phone'))+'</p></div><div class="text-right text-xs"><p><b>নম্বর:</b> '+esc(val('ic-number'))+'</p><p><b>তারিখ:</b> '+esc(val('ic-date'))+'</p></div></div><div class="grid grid-cols-2 gap-4 py-5 text-xs"><div><b>ক্রেতার তথ্য</b><p>'+esc(val('ic-customer')||'নাম উল্লেখ নেই')+'</p><p>'+esc(val('ic-customer-phone'))+'</p><p>'+esc(val('ic-customer-address'))+'</p></div><div class="text-right"><b>ডকুমেন্ট</b><p>'+title+'</p><p>Payment: '+(t.due<=0?'Paid':'Due')+'</p></div></div><table><thead><tr><th>#</th><th>বিবরণ</th><th>পরিমাণ</th><th>একক মূল্য</th><th>মোট</th></tr></thead><tbody>'+rows+'</tbody></table><div class="ml-auto mt-5 max-w-xs space-y-2 text-xs"><div class="flex justify-between"><span>সাবটোটাল</span><b>'+money(t.subtotal)+'</b></div><div class="flex justify-between"><span>ডিসকাউন্ট</span><b>− '+money(t.discount)+'</b></div><div class="flex justify-between"><span>VAT</span><b>'+money(t.vat)+'</b></div><div class="flex justify-between border-t border-slate-400 pt-2 text-base"><b>সর্বমোট</b><b>'+money(t.total)+'</b></div><div class="flex justify-between"><span>পরিশোধিত</span><b>'+money(t.paid)+'</b></div><div class="flex justify-between text-sm"><b>বাকি</b><b>'+money(t.due)+'</b></div></div><p class="mt-8 border-t border-slate-200 pt-3 text-xs">'+esc(val('ic-note')||'ধন্যবাদ। আবার আসবেন।')+'</p><div class="mt-12 flex justify-between text-xs"><span>ক্রেতার স্বাক্ষর</span><span>অনুমোদিত স্বাক্ষর</span></div>';
+      }
+      function snapshot() {
+        const totals=calculate();
+        return {mode,business:val('ic-business'),businessPhone:val('ic-business-phone'),businessAddress:val('ic-business-address'),number:val('ic-number'),date:val('ic-date'),customer:val('ic-customer'),customerPhone:val('ic-customer-phone'),customerAddress:val('ic-customer-address'),items:items.map(x=>({...x})),discount:num('ic-discount'),vatRate:num('ic-vat'),paid:num('ic-paid'),note:val('ic-note'),totals,updatedAt:new Date().toISOString()};
+      }
+      function getHistory(){try{return JSON.parse(localStorage.getItem(STORE)||'[]')}catch{return []}}
+      function showHistory(){
+        const host=$id('ic-history'), list=getHistory(); host.replaceChildren();
+        if(!list.length){host.textContent='এখনো কিছু সেভ করা হয়নি।';return;}
+        list.slice().reverse().forEach(doc=>{
+          const b=document.createElement('button'); b.type='button'; b.className='flex w-full items-center justify-between gap-3 rounded-lg border border-slate-200 p-3 text-left hover:bg-slate-50 dark:border-white/10 dark:hover:bg-white/5';
+          const left=document.createElement('span'); left.textContent=(doc.mode==='invoice'?'ইনভয়েস':'ক্যাশ মেমো')+' · '+(doc.number||'নম্বর নেই')+' · '+(doc.customer||'ক্রেতা');
+          const right=document.createElement('strong'); right.textContent=money(doc.totals?.total||0); b.append(left,right);
+          b.addEventListener('click',()=>load(doc)); host.append(b);
+        });
+      }
+      function load(d){
+        mode=d.mode==='cash'?'cash':'invoice';
+        const map={business:'ic-business',businessPhone:'ic-business-phone',businessAddress:'ic-business-address',number:'ic-number',date:'ic-date',customer:'ic-customer',customerPhone:'ic-customer-phone',customerAddress:'ic-customer-address',discount:'ic-discount',vatRate:'ic-vat',paid:'ic-paid',note:'ic-note'};
+        Object.entries(map).forEach(([k,id])=>$id(id).value=d[k]??'');
+        items=Array.isArray(d.items)&&d.items.length?d.items.map(x=>({...x})): [{name:'',qty:1,price:0}];
+        setMode(); itemRows(); calculate(); setStatus('সংরক্ষিত ডকুমেন্ট লোড হয়েছে।');
+      }
+      function setMode(){
+        document.querySelectorAll('[data-doc-mode]').forEach(b=>{const on=b.dataset.docMode===mode;b.setAttribute('aria-pressed',String(on));b.classList.toggle('btn-primary',on);b.classList.toggle('btn-secondary',!on)});
+        calculate();
+      }
+      function reset(){
+        ['ic-business','ic-business-phone','ic-business-address','ic-number','ic-customer','ic-customer-phone','ic-customer-address','ic-discount','ic-vat','ic-paid','ic-note'].forEach(id=>$id(id).value=id==='ic-vat'||id==='ic-discount'||id==='ic-paid'?'0':'');
+        $id('ic-date').value=new Date().toISOString().slice(0,10);
+        items=[{name:'',qty:1,price:0}]; mode='invoice'; itemRows();setMode();setStatus('নতুন ডকুমেন্ট তৈরি হয়েছে।');
+      }
+      function init(){
+        if(!$id('panel-invoice'))return;
+        $id('ic-date').value=new Date().toISOString().slice(0,10);
+        itemRows(); setMode(); showHistory();
+        document.querySelectorAll('[data-doc-mode]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.docMode;setMode()}));
+        $id('ic-add').addEventListener('click',()=>{items.push({name:'',qty:1,price:0});itemRows();calculate()});
+        $id('ic-items').addEventListener('input',e=>{const el=e.target;if(!el.dataset.item)return;const i=Number(el.dataset.index);items[i][el.dataset.item]=el.dataset.item==='name'?el.value:Math.max(0,Number(el.value)||0);calculate()});
+        $id('ic-items').addEventListener('click',e=>{const b=e.target.closest('[data-remove]');if(!b)return;if(items.length===1){items=[{name:'',qty:1,price:0}]}else items.splice(Number(b.dataset.remove),1);itemRows();calculate()});
+        ['ic-business','ic-business-phone','ic-business-address','ic-number','ic-date','ic-customer','ic-customer-phone','ic-customer-address','ic-discount','ic-vat','ic-paid','ic-note'].forEach(id=>$id(id).addEventListener('input',calculate));
+        $id('ic-save').addEventListener('click',()=>{const doc=snapshot();const list=getHistory();const idx=list.findIndex(x=>x.number&&x.number===doc.number&&x.mode===doc.mode);if(idx>=0)list[idx]=doc;else list.push(doc);try{localStorage.setItem(STORE,JSON.stringify(list.slice(-100)));showHistory();setStatus('ডকুমেন্টটি এই ব্রাউজারে সেভ হয়েছে।')}catch{setStatus('সেভ করা যায়নি। ব্রাউজারের storage space পরীক্ষা করুন।')}});
+        $id('ic-print').addEventListener('click',()=>{calculate();document.body.classList.add('ic-printing');window.print();setTimeout(()=>document.body.classList.remove('ic-printing'),500)});
+        window.addEventListener('afterprint',()=>document.body.classList.remove('ic-printing'));
+        $id('ic-reset').addEventListener('click',reset);
+        $id('ic-clear-history').addEventListener('click',()=>{if(!confirm('সংরক্ষিত সব ইনভয়েস ও ক্যাশ মেমো মুছে ফেলবেন?'))return;localStorage.removeItem(STORE);showHistory();setStatus('সংরক্ষিত ডকুমেন্ট মুছে ফেলা হয়েছে।')});
+      }
+      return {init};
+    })();
+
     /* =====================================================================
      * Roadmap cards
      * ===================================================================== */
@@ -2808,6 +2976,7 @@
             safeInit('BanglaDateConverter', () => BanglaDateConverter.init());
       safeInit('AvroConverter', () => AvroConverter.init());
             safeInit('JobPhoto', () => JobPhoto.init());
+      safeInit('InvoiceCashMemo', () => InvoiceCashMemo.init());
       safeInit('PWA', () => PWA.init());
       safeInit('Icons', () => refreshIcons());
     });

@@ -104,6 +104,39 @@
     input[type="color"]::-webkit-color-swatch { border: 0; border-radius: .5rem; }
     input[type="color"]::-moz-color-swatch { border: 0; border-radius: .5rem; }
     input[type="range"] { accent-color: #6366f1; }
+    /* Bangla date converter — matching, responsive input surfaces for both directions */
+    .bndate-mode-switch { padding: .3rem; gap: .35rem; }
+    .bndate-mode-switch .seg-btn { min-height: 2.85rem; padding: .65rem .8rem; font-weight: 700; }
+    .bndate-mode-switch .seg-btn[aria-pressed="true"] { color: #fff; background: linear-gradient(120deg,#6366f1,#8b5cf6); box-shadow: 0 5px 14px rgba(99,102,241,.22); }
+    .bndate-entry-card { border: 1px solid rgba(148,163,184,.28); border-radius: 1.15rem; padding: 1rem; background: linear-gradient(135deg,rgba(99,102,241,.055),rgba(139,92,246,.035)); }
+    .dark .bndate-entry-card { border-color: rgba(129,140,248,.22); background: linear-gradient(135deg,rgba(99,102,241,.105),rgba(139,92,246,.07)); }
+    .bndate-entry-heading { display:flex; align-items:center; gap:.75rem; }
+    .bndate-entry-icon,.bndate-result-icon { display:grid; place-items:center; flex:0 0 auto; width:2.5rem; height:2.5rem; border-radius:.85rem; color:#6366f1; background:rgba(99,102,241,.12); }
+    .dark .bndate-entry-icon,.dark .bndate-result-icon { color:#a5b4fc; background:rgba(129,140,248,.16); }
+    .bndate-entry-hint { margin-top:.15rem; font-size:.75rem; color:#64748b; line-height:1.55; }
+    .dark .bndate-entry-hint { color:#94a3b8; }
+    .bndate-entry-card .label { display:flex; align-items:center; gap:.4rem; margin-bottom:.55rem; text-transform:none; letter-spacing:0; }
+    .bndate-entry-card .label svg { color:#818cf8; }
+    .bndate-date-control,.bndate-field-control { min-height:3.35rem; border-radius:.9rem; font-size:1rem; font-weight:650; }
+    .bndate-date-control { padding:.75rem 1rem; }
+    .bndate-field { min-width:0; border:1px solid rgba(148,163,184,.2); border-radius:.95rem; padding:.75rem; background:rgba(255,255,255,.42); }
+    .dark .bndate-field { border-color:rgba(255,255,255,.08); background:rgba(2,6,23,.24); }
+    .bndate-field-control { min-width:0; }
+    .bndate-result-card { border:1px solid rgba(99,102,241,.22); border-radius:1.15rem; padding:1rem; background:linear-gradient(135deg,rgba(99,102,241,.07),rgba(14,165,233,.045)); }
+    .dark .bndate-result-card { border-color:rgba(129,140,248,.22); background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(14,165,233,.07)); }
+    .bndate-result-item { min-width:0; border:1px solid rgba(148,163,184,.2); border-radius:.9rem; padding:.85rem 1rem; background:rgba(255,255,255,.55); }
+    .dark .bndate-result-item { border-color:rgba(255,255,255,.07); background:rgba(2,6,23,.22); }
+    .bndate-result-label { font-size:.72rem; font-weight:700; color:#64748b; }
+    .dark .bndate-result-label { color:#94a3b8; }
+    .bndate-result-value { margin-top:.35rem; font-size:1rem; line-height:1.6; font-weight:750; overflow-wrap:anywhere; }
+    .bndate-result-accent { color:#4f46e5; }
+    .dark .bndate-result-accent { color:#a5b4fc; }
+    @media (max-width: 420px) {
+      .bndate-mode-switch .seg-btn { gap:.3rem; padding-left:.35rem; padding-right:.35rem; font-size:.75rem; }
+      .bndate-entry-card,.bndate-result-card { padding:.85rem; }
+      .bndate-field { padding:.65rem; }
+    }
+    @media (prefers-color-scheme: dark) { #bndate-gregorian { color-scheme: dark; } }
     /* Camera feed rendered by html5-qrcode */
     #camera-reader video { width: 100% !important; height: auto !important; object-fit: cover; border-radius: 1rem; }
     #camera-reader { border: 0 !important; }
@@ -619,25 +652,58 @@
           <div><h2 class="flex items-center gap-2 text-sm font-bold"><i data-lucide="calendar-days" class="h-4 w-4 text-indigo-500"></i><span data-i18n="bndate.title">বাংলা তারিখ ও ঋতু কনভার্টার</span></h2><p class="mt-1 text-xs text-slate-500 dark:text-slate-400" data-i18n="bndate.subtitle">ইংরেজি ও বাংলা তারিখ রূপান্তর করুন এবং বাংলাদেশের ছয় ঋতু জেনে নিন।</p></div>
           <button type="button" id="bndate-today" class="btn btn-soft !px-3 !py-1.5 !text-xs"><i data-lucide="calendar-check" class="h-3.5 w-3.5"></i><span data-i18n="bndate.today">আজকের তারিখ</span></button>
         </div>
-        <div class="seg grid grid-cols-2" role="group" aria-label="রূপান্তরের ধরন">
-          <button type="button" class="seg-btn" data-date-mode="gregorian" aria-pressed="true" data-i18n="bndate.gregorian_to_bangla">ইংরেজি → বাংলা</button>
-          <button type="button" class="seg-btn" data-date-mode="bangla" aria-pressed="false" data-i18n="bndate.bangla_to_gregorian">বাংলা → ইংরেজি</button>
+        <div class="seg bndate-mode-switch grid grid-cols-2" role="group" aria-label="রূপান্তরের ধরন">
+          <button type="button" class="seg-btn" data-date-mode="gregorian" aria-pressed="true" data-i18n="bndate.gregorian_to_bangla"><i data-lucide="calendar-days" class="h-4 w-4 shrink-0"></i><span>ইংরেজি → বাংলা</span></button>
+          <button type="button" class="seg-btn" data-date-mode="bangla" aria-pressed="false" data-i18n="bndate.bangla_to_gregorian"><i data-lucide="calendar-range" class="h-4 w-4 shrink-0"></i><span>বাংলা → ইংরেজি</span></button>
         </div>
-        <div id="bndate-gregorian-fields" class="space-y-2"><label class="label" for="bndate-gregorian" data-i18n="bndate.gregorian_date">ইংরেজি তারিখ</label><input id="bndate-gregorian" type="date" min="2019-04-14" class="input" /></div>
-        <div id="bndate-bangla-fields" class="hidden grid gap-3 sm:grid-cols-3">
-          <div><label class="label" for="bndate-day" data-i18n="bndate.day">দিন</label><input id="bndate-day" type="number" min="1" max="31" inputmode="numeric" class="input" value="1" /></div>
-          <div><label class="label" for="bndate-month" data-i18n="bndate.month">মাস</label><select id="bndate-month" class="input"></select></div>
-          <div><label class="label" for="bndate-year" data-i18n="bndate.year">বাংলা সন</label><input id="bndate-year" type="number" min="1426" max="1600" inputmode="numeric" class="input" /></div>
+        <div id="bndate-gregorian-fields" class="bndate-entry-card space-y-3">
+          <div class="bndate-entry-heading">
+            <span class="bndate-entry-icon"><i data-lucide="calendar-days" class="h-5 w-5"></i></span>
+            <div class="min-w-0">
+              <label class="label !mb-0" for="bndate-gregorian" data-i18n="bndate.gregorian_date">ইংরেজি তারিখ</label>
+              <p id="bndate-gregorian-hint" class="bndate-entry-hint" data-i18n="bndate.gregorian_hint">ক্যালেন্ডার থেকে ইংরেজি তারিখ নির্বাচন করুন।</p>
+            </div>
+          </div>
+          <input id="bndate-gregorian" type="date" min="2019-04-14" class="input bndate-date-control" aria-describedby="bndate-gregorian-hint" />
+        </div>
+        <div id="bndate-bangla-fields" class="hidden bndate-entry-card space-y-4">
+          <div class="bndate-entry-heading">
+            <span class="bndate-entry-icon"><i data-lucide="calendar-range" class="h-5 w-5"></i></span>
+            <div class="min-w-0">
+              <label class="label !mb-0" data-i18n="bndate.bangla_date">বাংলা তারিখ</label>
+              <p id="bndate-bangla-hint" class="bndate-entry-hint" data-i18n="bndate.bangla_hint">দিন, মাস ও বাংলা সন নির্বাচন করুন।</p>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <div class="bndate-field">
+              <label class="label" for="bndate-day"><i data-lucide="calendar" class="h-3.5 w-3.5"></i><span data-i18n="bndate.day">দিন</span></label>
+              <input id="bndate-day" type="number" min="1" max="31" step="1" inputmode="numeric" class="input bndate-field-control text-center" value="1" />
+            </div>
+            <div class="bndate-field">
+              <label class="label" for="bndate-month"><i data-lucide="calendar-range" class="h-3.5 w-3.5"></i><span data-i18n="bndate.month">মাস</span></label>
+              <select id="bndate-month" class="input bndate-field-control"></select>
+            </div>
+            <div class="bndate-field">
+              <label class="label" for="bndate-year"><i data-lucide="calendar-clock" class="h-3.5 w-3.5"></i><span data-i18n="bndate.year">বাংলা সন</span></label>
+              <input id="bndate-year" type="number" min="1426" max="1600" step="1" inputmode="numeric" class="input bndate-field-control text-center" />
+            </div>
+          </div>
         </div>
         <div id="bndate-error" class="hidden rounded-xl border border-rose-300/60 bg-rose-500/10 px-4 py-3 text-sm text-rose-700 dark:text-rose-300" role="alert"></div>
-        <div id="bndate-result" class="rounded-2xl border border-indigo-200/70 bg-indigo-500/5 p-4 dark:border-indigo-400/20" aria-live="polite">
-          <div class="grid gap-4 sm:grid-cols-2">
-            <div><p class="text-xs font-semibold text-slate-500 dark:text-slate-400" data-i18n="bndate.gregorian_date">ইংরেজি তারিখ</p><p id="bndate-result-gregorian" class="mt-1 text-lg font-bold"></p></div>
-            <div><p class="text-xs font-semibold text-slate-500 dark:text-slate-400" data-i18n="bndate.bangla_date">বাংলা তারিখ</p><p id="bndate-result-bangla" class="mt-1 text-lg font-bold text-indigo-600 dark:text-indigo-300"></p></div>
-            <div><p class="text-xs font-semibold text-slate-500 dark:text-slate-400" data-i18n="bndate.weekday">বার</p><p id="bndate-result-weekday" class="mt-1 font-semibold"></p></div>
-            <div><p class="text-xs font-semibold text-slate-500 dark:text-slate-400" data-i18n="bndate.season">ঋতু</p><p id="bndate-result-season" class="mt-1 font-semibold"></p></div>
+        <div id="bndate-result" class="bndate-result-card" aria-live="polite">
+          <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+              <span class="bndate-result-icon"><i data-lucide="check-check" class="h-4 w-4"></i></span>
+              <h3 class="text-sm font-bold" data-i18n="bndate.result_heading">রূপান্তরের ফলাফল</h3>
+            </div>
+            <button type="button" id="bndate-copy" class="btn btn-soft !py-2"><i data-lucide="copy" class="h-4 w-4"></i><span data-i18n="bndate.copy">ফলাফল কপি</span></button>
           </div>
-          <div class="mt-4 flex justify-end"><button type="button" id="bndate-copy" class="btn btn-soft !py-2"><i data-lucide="copy" class="h-4 w-4"></i><span data-i18n="bndate.copy">ফলাফল কপি</span></button></div>
+          <div class="grid gap-3 sm:grid-cols-2">
+            <div class="bndate-result-item"><p class="bndate-result-label" data-i18n="bndate.gregorian_date">ইংরেজি তারিখ</p><p id="bndate-result-gregorian" class="bndate-result-value"></p></div>
+            <div class="bndate-result-item"><p class="bndate-result-label" data-i18n="bndate.bangla_date">বাংলা তারিখ</p><p id="bndate-result-bangla" class="bndate-result-value bndate-result-accent"></p></div>
+            <div class="bndate-result-item"><p class="bndate-result-label" data-i18n="bndate.weekday">বার</p><p id="bndate-result-weekday" class="bndate-result-value"></p></div>
+            <div class="bndate-result-item"><p class="bndate-result-label" data-i18n="bndate.season">ঋতু</p><p id="bndate-result-season" class="bndate-result-value"></p></div>
+          </div>
         </div>
         <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-400" data-i18n="bndate.calendar_note">বাংলাদেশে প্রচলিত বাংলা একাডেমির ২০১৯-সংশোধিত নাগরিক বর্ষপঞ্জি অনুসরণ করা হয়েছে। ১ বৈশাখ ১৪ এপ্রিল; প্রথম ছয় মাস ৩১ দিন, ফাল্গুন ২৯ দিন (অধিবর্ষে ৩০ দিন)।</p>
       </div>

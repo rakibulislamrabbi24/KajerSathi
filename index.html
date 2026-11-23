@@ -136,7 +136,8 @@
       .bndate-entry-card,.bndate-result-card { padding:.85rem; }
       .bndate-field { padding:.65rem; }
     }
-    @media (prefers-color-scheme: dark) { #bndate-gregorian { color-scheme: dark; } }
+    html:not(.dark) #bndate-gregorian { color-scheme: light; }
+    .dark #bndate-gregorian { color-scheme: dark; }
     /* Camera feed rendered by html5-qrcode */
     #camera-reader video { width: 100% !important; height: auto !important; object-fit: cover; border-radius: 1rem; }
     #camera-reader { border: 0 !important; }
@@ -670,7 +671,7 @@
           <div class="bndate-entry-heading">
             <span class="bndate-entry-icon"><i data-lucide="calendar-range" class="h-5 w-5"></i></span>
             <div class="min-w-0">
-              <label class="label !mb-0" data-i18n="bndate.bangla_date">বাংলা তারিখ</label>
+              <p class="label !mb-0" data-i18n="bndate.bangla_date">বাংলা তারিখ</p>
               <p id="bndate-bangla-hint" class="bndate-entry-hint" data-i18n="bndate.bangla_hint">দিন, মাস ও বাংলা সন নির্বাচন করুন।</p>
             </div>
           </div>

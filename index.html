@@ -197,7 +197,62 @@
     @keyframes scanline { 0%,100% { top: 12%; } 50% { top: 86%; } }
     .scanline { animation: scanline 2.4s ease-in-out infinite; }
     @media (prefers-reduced-motion: reduce) { .flash, .scanline { animation: none; } html { scroll-behavior: auto; } }
-  </style>
+  
+    .ic-choice{display:flex;flex-direction:column;align-items:flex-start;gap:3px;border:1px solid #cbd5e1;border-radius:12px;padding:8px;text-align:left;font-size:12px;background:#fff;color:#0f172a}
+    .ic-choice[aria-pressed="true"]{border:2px solid #2563eb;padding:7px;box-shadow:0 0 0 2px #2563eb20}
+    .ic-choice small{color:#64748b;font-size:10px}
+    .ic-swatch{display:block;width:100%;height:30px;border-radius:7px;margin-bottom:3px}
+    .ic-swatch-modern{background:linear-gradient(110deg,#1d4ed8 0 38%,#eff6ff 38%)}
+    .ic-swatch-classic{background:linear-gradient(180deg,#1e293b 0 35%,#f8fafc 35% 70%,#cbd5e1 70%)}
+    .ic-swatch-elegant{background:linear-gradient(110deg,#7c2d12 0 28%,#fff7ed 28%)}
+    .ic-swatch-compact{background:repeating-linear-gradient(0deg,#f8fafc 0 6px,#cbd5e1 6px 7px)}
+    .ic-swatch-corporate{background:linear-gradient(100deg,#064e3b 0 32%,#ecfdf5 32% 100%)}
+    .ic-swatch-minimal{background:linear-gradient(90deg,#111827 0 5px,#fff 5px 100%);border:1px solid #e5e7eb}
+    .ic-paper[data-theme="corporate"] .ic-head{background:#064e3b;color:#fff;padding:22px;border-radius:10px;border-bottom:0}
+    .ic-paper[data-theme="corporate"] .ic-title{color:#fff;font-size:26px}
+    .ic-paper[data-theme="corporate"] .ic-meta{background:#ecfdf5;border-left:4px solid var(--ic-accent);border-radius:5px}
+    .ic-paper[data-theme="corporate"] .ic-table-head{background:#065f46;color:#fff}
+    .ic-paper[data-theme="corporate"] .ic-grand{background:#064e3b;color:#fff}
+    .ic-paper[data-theme="minimal"] .ic-head{border:0;border-left:5px solid var(--ic-accent);padding:4px 0 4px 16px}
+    .ic-paper[data-theme="minimal"] .ic-title{font-size:22px;letter-spacing:.12em}
+    .ic-paper[data-theme="minimal"] .ic-meta{background:#fff;border:1px solid #e5e7eb;border-radius:4px}
+    .ic-paper[data-theme="minimal"] .ic-table-head{background:#f3f4f6;color:#111}
+    .ic-paper[data-theme="minimal"] .ic-grand{background:#111827;color:#fff}
+    .ic-logo{max-width:110px;max-height:76px;object-fit:contain;display:block;margin-bottom:8px}
+    .ic-paper[data-color-mode="mono"]{filter:grayscale(1);--ic-accent:#111!important}
+    .ic-paper[data-color-mode="mono"] .ic-head,.ic-paper[data-color-mode="mono"] .ic-table-head,.ic-paper[data-color-mode="mono"] .ic-grand{background:#e5e7eb!important;color:#111!important;border-color:#555!important}
+    .ic-paper[data-color-mode="mono"] .ic-title{color:#111!important}
+    .ic-paper[data-color-mode="mono"] .ic-meta{background:#f8fafc!important;border-color:#777!important}
+    .ic-paper{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .ic-paper{--ic-accent:#2563eb;min-height:520px;font-family:Inter,"Noto Sans Bengali",sans-serif}
+    .ic-paper .ic-head{border-bottom:3px solid var(--ic-accent);padding-bottom:18px}
+    .ic-paper .ic-title{color:var(--ic-accent);font-size:25px;font-weight:900;letter-spacing:.06em}
+    .ic-paper .ic-brand{font-size:20px;font-weight:800}
+    .ic-paper .ic-meta{background:color-mix(in srgb,var(--ic-accent) 8%,white);border-radius:10px;padding:12px}
+    .ic-paper .ic-table-head{background:var(--ic-accent);color:white}
+    .ic-paper .ic-total-box{border:1px solid color-mix(in srgb,var(--ic-accent) 35%,white);border-radius:10px;padding:12px}
+    .ic-paper .ic-grand{background:var(--ic-accent);color:white;border-radius:7px;padding:10px}
+    .ic-paper[data-theme="classic"]{font-family:Georgia,"Noto Sans Bengali",serif}
+    .ic-paper[data-theme="classic"] .ic-head{border-bottom:4px double var(--ic-accent);text-align:center}
+    .ic-paper[data-theme="classic"] .ic-title{font-family:Georgia,serif;font-size:29px}
+    .ic-paper[data-theme="classic"] .ic-meta{border:1px solid #cbd5e1;background:#fff;border-radius:0}
+    .ic-paper[data-theme="classic"] .ic-table-head{background:#e2e8f0;color:#111}
+    .ic-paper[data-theme="classic"] .ic-grand{background:#f1f5f9;color:#111;border:1px solid #64748b}
+    .ic-paper[data-theme="elegant"] .ic-head{border:0;background:var(--ic-accent);color:white;padding:22px;border-radius:12px}
+    .ic-paper[data-theme="elegant"] .ic-title{color:white;font-size:28px}
+    .ic-paper[data-theme="elegant"] .ic-meta{background:#fff7ed;border-left:4px solid var(--ic-accent);border-radius:0}
+    .ic-paper[data-theme="elegant"] .ic-table-head{background:#7c2d12;color:white}
+    .ic-paper[data-theme="elegant"] .ic-grand{background:#7c2d12}
+    .ic-paper[data-theme="compact"]{font-size:11px;padding:14px}
+    .ic-paper[data-theme="compact"] .ic-head{border-bottom:1px solid var(--ic-accent);padding-bottom:9px}
+    .ic-paper[data-theme="compact"] .ic-title{font-size:19px}
+    .ic-paper[data-theme="compact"] .ic-meta{background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:7px}
+    .ic-paper[data-theme="compact"] .ic-table-head{background:#e2e8f0;color:#111}
+    .ic-paper[data-theme="compact"] .ic-grand{background:#f1f5f9;color:#111;border:1px solid #94a3b8}
+    .ic-paper[data-color-mode="mono"]{--ic-accent:#111 !important;filter:grayscale(1)}
+    .ic-paper[data-color-mode="mono"] .ic-table-head,.ic-paper[data-color-mode="mono"] .ic-grand{background:#e5e7eb!important;color:#111!important;border:1px solid #555}
+    .dark .ic-choice{background:#0f172a;color:#f8fafc;border-color:#334155}
+</style>
 </head>
 
 <body class="min-h-screen bg-slate-50 text-slate-800 antialiased transition-colors duration-300 dark:bg-[#0b1020] dark:text-slate-100">
@@ -890,6 +945,7 @@
                 <label class="block text-sm">প্রতিষ্ঠানের নাম<input id="ic-business" class="input mt-1 w-full" placeholder="আপনার প্রতিষ্ঠানের নাম"></label>
                 <label class="block text-sm">মোবাইল নম্বর<input id="ic-business-phone" class="input mt-1 w-full" placeholder="01XXXXXXXXX"></label>
                 <label class="block text-sm sm:col-span-2">ঠিকানা<input id="ic-business-address" class="input mt-1 w-full" placeholder="প্রতিষ্ঠানের ঠিকানা"></label>
+                <div class="flex flex-wrap items-center gap-3 sm:col-span-2"><label class="block flex-1 text-sm">প্রতিষ্ঠানের লোগো<input id="ic-logo-file" type="file" accept="image/png,image/jpeg,image/webp" class="input mt-1 w-full"></label><div id="ic-logo-tools" class="flex items-center gap-2"><img id="ic-logo-thumb" alt="Logo preview" class="hidden h-14 w-14 rounded-lg border border-slate-200 object-contain p-1"><button type="button" id="ic-logo-remove" class="btn btn-soft text-xs">লোগো সরান</button></div></div>
               </div>
             </div>
             <div class="card space-y-4 p-4 sm:p-5">
@@ -931,6 +987,28 @@
           </div>
           <div class="xl:sticky xl:top-4">
             <div class="mb-2 flex items-center justify-between"><h3 class="font-bold">লাইভ প্রিভিউ</h3><span class="text-xs text-slate-500">A4 / প্রিন্ট</span></div>
+            <div class="card mb-3 space-y-3 p-4">
+              <div>
+                <h4 class="text-sm font-bold">ডিজাইন নির্বাচন</h4>
+                <div class="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4" id="ic-themes">
+                  <button type="button" class="ic-choice" data-theme="modern" aria-pressed="true"><span class="ic-swatch ic-swatch-modern"></span><b>Modern</b><small>Clean & Bold</small></button>
+                  <button type="button" class="ic-choice" data-theme="classic" aria-pressed="false"><span class="ic-swatch ic-swatch-classic"></span><b>Classic</b><small>Traditional</small></button>
+                  <button type="button" class="ic-choice" data-theme="elegant" aria-pressed="false"><span class="ic-swatch ic-swatch-elegant"></span><b>Elegant</b><small>Premium</small></button>
+                  <button type="button" class="ic-choice" data-theme="compact" aria-pressed="false"><span class="ic-swatch ic-swatch-compact"></span><b>Compact</b><small>Minimal</small></button>
+                  <button type="button" class="ic-choice" data-theme="corporate" aria-pressed="false"><span class="ic-swatch ic-swatch-corporate"></span><b>Corporate</b><small>Business</small></button>
+                  <button type="button" class="ic-choice" data-theme="minimal" aria-pressed="false"><span class="ic-swatch ic-swatch-minimal"></span><b>Minimal</b><small>Clean lines</small></button>
+                </div>
+              </div>
+              <div class="flex flex-wrap items-center gap-3 border-t border-slate-200 pt-3 dark:border-white/10">
+                <span class="text-sm font-bold">প্রিন্ট কালার</span>
+                <div class="flex flex-wrap gap-2" id="ic-color-mode">
+                  <button type="button" class="btn btn-primary text-sm" data-color-mode="color" aria-pressed="true">রঙিন</button>
+                  <button type="button" class="btn btn-soft text-sm" data-color-mode="mono" aria-pressed="false">সাদা-কালো</button>
+                </div>
+                <label class="ml-auto flex items-center gap-2 text-xs">Accent <input id="ic-accent" type="color" value="#2563eb" class="h-9 w-12 cursor-pointer rounded-lg border border-slate-200 bg-transparent p-1"></label>
+              </div>
+              <p class="text-xs text-slate-500">রঙিন মোডে Accent Color পরিবর্তন করতে পারবেন। সাদা-কালো মোডে সব রঙ গ্রেস্কেলে প্রিন্ট হবে।</p>
+            </div>
             <article id="ic-preview" class="ic-paper rounded-xl border border-slate-200 bg-white p-5 text-slate-900 shadow-lg sm:p-8"></article>
           </div>
         </div>
@@ -2740,6 +2818,10 @@
       const $id = id => document.getElementById(id);
       const STORE = 'kajersathi.invoiceCashMemo.v1';
       let mode = 'invoice';
+      let theme = 'modern';
+      let colorMode = 'color';
+      let accent = '#2563eb';
+      let logoData = '';
       let items = [{ name: '', qty: 1, price: 0 }];
       const val = id => ($id(id)?.value || '').trim();
       const num = id => Math.max(0, Number(val(id)) || 0);
@@ -2766,13 +2848,15 @@
         renderPreview({subtotal,discount,vat,total,paid,due}); return {subtotal,discount,vat,total,paid,due};
       }
       function renderPreview(t) {
-        const rows=items.map((x,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(x.name||'—')+'</td><td>'+esc(x.qty)+'</td><td>'+money(x.price)+'</td><td>'+money((Number(x.qty)||0)*(Number(x.price)||0))+'</td></tr>').join('');
+        const rows=items.map((x,i)=>'<tr><td>'+(i+1)+'</td><td>'+esc(x.name||'—')+'</td><td>'+esc(x.qty)+'</td><td>'+money(x.price)+'</td><td><b>'+money((Number(x.qty)||0)*(Number(x.price)||0))+'</b></td></tr>').join('');
         const title=mode==='invoice'?'INVOICE':'CASH MEMO';
-        $id('ic-preview').innerHTML='<div class="flex justify-between gap-4 border-b-2 border-slate-800 pb-4"><div><h2 class="text-2xl font-extrabold tracking-wide">'+title+'</h2><p class="mt-2 text-lg font-bold">'+esc(val('ic-business')||'প্রতিষ্ঠানের নাম')+'</p><p class="text-xs">'+esc(val('ic-business-address'))+'</p><p class="text-xs">'+esc(val('ic-business-phone'))+'</p></div><div class="text-right text-xs"><p><b>নম্বর:</b> '+esc(val('ic-number'))+'</p><p><b>তারিখ:</b> '+esc(val('ic-date'))+'</p></div></div><div class="grid grid-cols-2 gap-4 py-5 text-xs"><div><b>ক্রেতার তথ্য</b><p>'+esc(val('ic-customer')||'নাম উল্লেখ নেই')+'</p><p>'+esc(val('ic-customer-phone'))+'</p><p>'+esc(val('ic-customer-address'))+'</p></div><div class="text-right"><b>ডকুমেন্ট</b><p>'+title+'</p><p>Payment: '+(t.due<=0?'Paid':'Due')+'</p></div></div><table><thead><tr><th>#</th><th>বিবরণ</th><th>পরিমাণ</th><th>একক মূল্য</th><th>মোট</th></tr></thead><tbody>'+rows+'</tbody></table><div class="ml-auto mt-5 max-w-xs space-y-2 text-xs"><div class="flex justify-between"><span>সাবটোটাল</span><b>'+money(t.subtotal)+'</b></div><div class="flex justify-between"><span>ডিসকাউন্ট</span><b>− '+money(t.discount)+'</b></div><div class="flex justify-between"><span>VAT</span><b>'+money(t.vat)+'</b></div><div class="flex justify-between border-t border-slate-400 pt-2 text-base"><b>সর্বমোট</b><b>'+money(t.total)+'</b></div><div class="flex justify-between"><span>পরিশোধিত</span><b>'+money(t.paid)+'</b></div><div class="flex justify-between text-sm"><b>বাকি</b><b>'+money(t.due)+'</b></div></div><p class="mt-8 border-t border-slate-200 pt-3 text-xs">'+esc(val('ic-note')||'ধন্যবাদ। আবার আসবেন।')+'</p><div class="mt-12 flex justify-between text-xs"><span>ক্রেতার স্বাক্ষর</span><span>অনুমোদিত স্বাক্ষর</span></div>';
+        const preview=$id('ic-preview'); preview.dataset.theme=theme; preview.dataset.colorMode=colorMode; preview.style.setProperty('--ic-accent',colorMode==='mono'?'#111':accent);
+        const isCash=mode==='cash';
+        preview.innerHTML='<div class="ic-head flex items-start justify-between gap-4"><div>'+(logoData?'<img class="ic-logo" src="'+logoData+'" alt="Logo">':'')+'<p class="ic-title">'+title+'</p><p class="ic-brand mt-3">'+esc(val('ic-business')||'প্রতিষ্ঠানের নাম')+'</p><p class="mt-1 text-xs">'+esc(val('ic-business-address'))+'</p><p class="text-xs">'+esc(val('ic-business-phone'))+'</p></div><div class="ic-meta min-w-[125px] text-right text-xs"><b>'+(isCash?'মেমো নং':'ইনভয়েস নং')+'</b><p class="mt-1">'+esc(val('ic-number')||'—')+'</p><b class="mt-3 block">তারিখ</b><p>'+esc(val('ic-date')||'—')+'</p></div></div><div class="my-5 grid grid-cols-2 gap-3 text-xs"><div class="ic-meta"><b>বিল প্রদানকারী</b><p class="mt-2 text-sm font-bold">'+esc(val('ic-customer')||'নাম উল্লেখ নেই')+'</p><p>'+esc(val('ic-customer-phone'))+'</p><p>'+esc(val('ic-customer-address'))+'</p></div><div class="ic-meta"><b>পেমেন্ট স্ট্যাটাস</b><p class="mt-2 text-sm font-bold">'+(t.due<=0?'পরিশোধিত':'বকেয়া')+'</p><p>'+(t.due<=0?'ধন্যবাদ, সম্পূর্ণ পরিশোধিত।':'অনুগ্রহ করে বকেয়া পরিশোধ করুন।')+'</p></div></div><table><thead><tr class="ic-table-head"><th>#</th><th>বিবরণ</th><th>পরিমাণ</th><th>একক মূল্য</th><th>মোট</th></tr></thead><tbody>'+rows+'</tbody></table><div class="ml-auto mt-5 max-w-xs"><div class="ic-total-box space-y-2 text-xs"><div class="flex justify-between"><span>সাবটোটাল</span><b>'+money(t.subtotal)+'</b></div><div class="flex justify-between"><span>ডিসকাউন্ট</span><b>− '+money(t.discount)+'</b></div><div class="flex justify-between"><span>VAT</span><b>'+money(t.vat)+'</b></div><div class="ic-grand flex justify-between text-sm font-extrabold"><span>সর্বমোট</span><span>'+money(t.total)+'</span></div><div class="flex justify-between"><span>পরিশোধিত</span><b>'+money(t.paid)+'</b></div><div class="flex justify-between text-sm font-bold"><span>বাকি</span><span>'+money(t.due)+'</span></div></div></div><div class="mt-8 flex items-end justify-between gap-4 border-t border-slate-300 pt-4 text-xs"><p class="max-w-[65%]">'+esc(val('ic-note')||'আপনাকে ধন্যবাদ। আবার আসবেন।')+'</p><p class="text-right">____________________<br>অনুমোদিত স্বাক্ষর</p></div><p class="mt-6 text-center text-[10px] text-slate-500">'+(isCash?'পণ্য/সার্ভিস গ্রহণের জন্য ধন্যবাদ':'এই ইনভয়েসটি কম্পিউটার দ্বারা তৈরি')+'</p>';
       }
       function snapshot() {
         const totals=calculate();
-        return {mode,business:val('ic-business'),businessPhone:val('ic-business-phone'),businessAddress:val('ic-business-address'),number:val('ic-number'),date:val('ic-date'),customer:val('ic-customer'),customerPhone:val('ic-customer-phone'),customerAddress:val('ic-customer-address'),items:items.map(x=>({...x})),discount:num('ic-discount'),vatRate:num('ic-vat'),paid:num('ic-paid'),note:val('ic-note'),totals,updatedAt:new Date().toISOString()};
+        return {mode,theme,colorMode,accent,logoData,business:val('ic-business'),businessPhone:val('ic-business-phone'),businessAddress:val('ic-business-address'),number:val('ic-number'),date:val('ic-date'),customer:val('ic-customer'),customerPhone:val('ic-customer-phone'),customerAddress:val('ic-customer-address'),items:items.map(x=>({...x})),discount:num('ic-discount'),vatRate:num('ic-vat'),paid:num('ic-paid'),note:val('ic-note'),totals,updatedAt:new Date().toISOString()};
       }
       function getHistory(){try{return JSON.parse(localStorage.getItem(STORE)||'[]')}catch{return []}}
       function showHistory(){
@@ -2786,25 +2870,46 @@
         });
       }
       function load(d){
-        mode=d.mode==='cash'?'cash':'invoice';
+        mode=d.mode==='cash'?'cash':'invoice'; theme=['modern','classic','elegant','compact','corporate','minimal'].includes(d.theme)?d.theme:'modern'; logoData=typeof d.logoData==='string'&&d.logoData.startsWith('data:image/')?d.logoData:''; colorMode=d.colorMode==='mono'?'mono':'color'; accent=/^#[0-9a-f]{6}$/i.test(d.accent||'')?d.accent:'#2563eb';
         const map={business:'ic-business',businessPhone:'ic-business-phone',businessAddress:'ic-business-address',number:'ic-number',date:'ic-date',customer:'ic-customer',customerPhone:'ic-customer-phone',customerAddress:'ic-customer-address',discount:'ic-discount',vatRate:'ic-vat',paid:'ic-paid',note:'ic-note'};
         Object.entries(map).forEach(([k,id])=>$id(id).value=d[k]??'');
         items=Array.isArray(d.items)&&d.items.length?d.items.map(x=>({...x})): [{name:'',qty:1,price:0}];
+        if(logoData){$id('ic-logo-thumb').src=logoData;$id('ic-logo-thumb').classList.remove('hidden')}else{$id('ic-logo-thumb').classList.add('hidden')}
         setMode(); itemRows(); calculate(); setStatus('সংরক্ষিত ডকুমেন্ট লোড হয়েছে।');
       }
       function setMode(){
         document.querySelectorAll('[data-doc-mode]').forEach(b=>{const on=b.dataset.docMode===mode;b.setAttribute('aria-pressed',String(on));b.classList.toggle('btn-primary',on);b.classList.toggle('btn-soft',!on)});
         calculate();
+        document.querySelectorAll('[data-theme]').forEach(b=>{const on=b.dataset.theme===theme;b.setAttribute('aria-pressed',String(on));});
+        document.querySelectorAll('[data-color-mode]').forEach(b=>{const on=b.dataset.colorMode===colorMode;b.setAttribute('aria-pressed',String(on));b.classList.toggle('btn-primary',on);b.classList.toggle('btn-soft',!on);});
+        if($id('ic-accent'))$id('ic-accent').value=accent;
       }
       function reset(){
         ['ic-business','ic-business-phone','ic-business-address','ic-number','ic-customer','ic-customer-phone','ic-customer-address','ic-discount','ic-vat','ic-paid','ic-note'].forEach(id=>$id(id).value=id==='ic-vat'||id==='ic-discount'||id==='ic-paid'?'0':'');
         $id('ic-date').value=new Date().toISOString().slice(0,10);
-        items=[{name:'',qty:1,price:0}]; mode='invoice'; itemRows();setMode();setStatus('নতুন ডকুমেন্ট তৈরি হয়েছে।');
+        items=[{name:'',qty:1,price:0}]; mode='invoice'; theme='modern'; colorMode='color'; accent='#2563eb'; logoData=''; $id('ic-logo-file').value=''; $id('ic-logo-thumb').classList.add('hidden'); itemRows();setMode();setStatus('নতুন ডকুমেন্ট তৈরি হয়েছে।');
       }
       function init(){
         if(!$id('panel-invoice'))return;
         $id('ic-date').value=new Date().toISOString().slice(0,10);
         itemRows(); setMode(); showHistory();
+        document.querySelectorAll('[data-theme]').forEach(b=>b.addEventListener('click',()=>{theme=b.dataset.theme;setMode()}));
+        document.querySelectorAll('[data-color-mode]').forEach(b=>b.addEventListener('click',()=>{colorMode=b.dataset.colorMode;setMode()}));
+        $id('ic-accent').addEventListener('input',e=>{accent=e.target.value;calculate()});
+        $id('ic-logo-file').addEventListener('change',e=>{
+          const file=e.target.files && e.target.files[0]; if(!file)return;
+          if(!/^image\/(png|jpeg|webp)$/.test(file.type)){setStatus('PNG, JPG অথবা WebP লোগো নির্বাচন করুন।');return;}
+          if(file.size>5*1024*1024){setStatus('লোগোর ফাইল ৫ MB-এর মধ্যে হতে হবে।');e.target.value='';return;}
+          const reader=new FileReader(); reader.onload=()=>{
+            const img=new Image(); img.onload=()=>{
+              const scale=Math.min(1,600/img.width,400/img.height), canvas=document.createElement('canvas');
+              canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));
+              canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+              logoData=canvas.toDataURL('image/png');$id('ic-logo-thumb').src=logoData;$id('ic-logo-thumb').classList.remove('hidden');calculate();setStatus('লোগো যুক্ত হয়েছে। সেভ করলে ডকুমেন্টের সঙ্গে থাকবে।');
+            };img.onerror=()=>setStatus('এই ছবিটি পড়া যায়নি। অন্য লোগো দিন।');img.src=reader.result;
+          };reader.readAsDataURL(file);
+        });
+        $id('ic-logo-remove').addEventListener('click',()=>{logoData='';$id('ic-logo-file').value='';$id('ic-logo-thumb').removeAttribute('src');$id('ic-logo-thumb').classList.add('hidden');calculate();});
         document.querySelectorAll('[data-doc-mode]').forEach(b=>b.addEventListener('click',()=>{mode=b.dataset.docMode;setMode()}));
         $id('ic-add').addEventListener('click',()=>{items.push({name:'',qty:1,price:0});itemRows();calculate()});
         $id('ic-items').addEventListener('input',e=>{const el=e.target;if(!el.dataset.item)return;const i=Number(el.dataset.index);items[i][el.dataset.item]=el.dataset.item==='name'?el.value:Math.max(0,Number(el.value)||0);calculate()});

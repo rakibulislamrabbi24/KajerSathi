@@ -2069,10 +2069,11 @@
         const date = utcDate(Number(match[1]), Number(match[2]), Number(match[3]));
         return date.getUTCFullYear() === Number(match[1]) && date.getUTCMonth() + 1 === Number(match[2]) && date.getUTCDate() === Number(match[3]) ? date : null;
       };
-      const locale = () => I18N.locale() === 'bn' ? 'bn-BD' : 'en-GB';
+      const isBangla = () => I18N.lang === 'bn';
+      const locale = () => isBangla() ? 'bn-BD-u-nu-latn' : 'en-GB';
       const number = value => new Intl.NumberFormat(locale()).format(value);
-      const monthName = month => MONTHS[month - 1][I18N.locale() === 'bn' ? 'bn' : 'en'];
-      const seasonName = month => SEASONS[Math.floor((month - 1) / 2)][I18N.locale() === 'bn' ? 'bn' : 'en'];
+      const monthName = month => MONTHS[month - 1][isBangla() ? 'bn' : 'en'];
+      const seasonName = month => SEASONS[Math.floor((month - 1) / 2)][isBangla() ? 'bn' : 'en'];
       function gregorianToBangla(date) {
         const gy = date.getUTCFullYear(), gm = date.getUTCMonth() + 1, gd = date.getUTCDate();
         const startYear = gm > 4 || (gm === 4 && gd >= 14) ? gy : gy - 1;
@@ -2104,7 +2105,7 @@
         MONTHS.forEach((month, i) => {
           const option = document.createElement('option');
           option.value = String(i + 1);
-          option.textContent = month[I18N.locale() === 'bn' ? 'bn' : 'en'];
+          option.textContent = month[isBangla() ? 'bn' : 'en'];
           select.appendChild(option);
         });
         select.value = String(selected);
@@ -2120,7 +2121,7 @@
         const localeName = locale();
         const gregorianText = new Intl.DateTimeFormat(localeName, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Dhaka' }).format(date);
         const weekday = new Intl.DateTimeFormat(localeName, { weekday: 'long', timeZone: 'Asia/Dhaka' }).format(date);
-        const banglaText = `${number(bangla.day)} ${monthName(bangla.month)} ${number(bangla.year)}${I18N.locale() === 'bn' ? ' বঙ্গাব্দ' : ' BS'}`;
+        const banglaText = `${number(bangla.day)} ${monthName(bangla.month)} ${number(bangla.year)}${isBangla() ? ' বঙ্গাব্দ' : ' BS'}`;
         const season = seasonName(bangla.month);
         $('#bndate-result-gregorian').textContent = gregorianText;
         $('#bndate-result-bangla').textContent = banglaText;

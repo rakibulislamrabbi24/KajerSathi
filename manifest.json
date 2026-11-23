@@ -2,7 +2,7 @@
   "id": "./",
   "name": "KajerSathi (কাজের সাথী)",
   "short_name": "KajerSathi",
-  "description": "আপনার ডিজিটাল কাজের বিশ্বস্ত সাথী: কিউআর, ছবি, সরকারি চাকরির ছবি ও স্বাক্ষর, পাসওয়ার্ডসহ দৈনন্দিন টুলস, অফলাইনেও। Your trusted digital daily utility companion.",
+  "description": "আপনার ডিজিটাল কাজের বিশ্বস্ত সাথী: কিউআর, সরকারি চাকরির ছবি ও স্বাক্ষর, বাংলা তারিখ ও ঋতু কনভার্টারসহ দৈনন্দিন টুলস, অফলাইনেও। Your trusted digital daily utility companion.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -66,18 +66,6 @@
       ]
     },
     {
-      "name": "ছবি কমপ্রেস, রিসাইজ ও ক্রপ",
-      "short_name": "ছবি",
-      "url": "./#image",
-      "icons": [
-        {
-          "src": "assets/icons/icon-192.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
       "name": "সরকারি চাকরির ছবি ও স্বাক্ষর",
       "short_name": "চাকরির ছবি",
       "url": "./#jobphoto",
@@ -90,9 +78,9 @@
       ]
     },
     {
-      "name": "পাসওয়ার্ড জেনারেটর",
-      "short_name": "পাসওয়ার্ড",
-      "url": "./#password",
+      "name": "অভ্র থেকে বিজয় কনভার্টার",
+      "short_name": "অভ্র ↔ বিজয়",
+      "url": "./#avro",
       "icons": [
         {
           "src": "assets/icons/icon-192.png",
@@ -102,9 +90,9 @@
       ]
     },
     {
-      "name": "অভ্র থেকে বিজয় কনভার্টার",
-      "short_name": "অভ্র ↔ বিজয়",
-      "url": "./#avro",
+      "name": "বাংলা তারিখ ও ঋতু কনভার্টার",
+      "short_name": "বাংলা তারিখ",
+      "url": "./#bndate",
       "icons": [
         {
           "src": "assets/icons/icon-192.png",

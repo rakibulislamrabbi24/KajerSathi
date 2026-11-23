@@ -347,6 +347,7 @@
   "bndate.result_heading": "রূপান্তরের ফলাফল",
   "bndate.gregorian_to_bangla": "ইংরেজি → বাংলা",
   "bndate.bangla_to_gregorian": "বাংলা → ইংরেজি",
+  "bndate.calendar_close": "বন্ধ করুন",
   "bndate.gregorian_date": "ইংরেজি তারিখ",
   "bndate.bangla_date": "বাংলা তারিখ",
   "bndate.day": "দিন",

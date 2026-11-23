@@ -5,7 +5,7 @@
 
 const CACHE_PREFIX = 'kajersathi-';
 const LEGACY_PREFIXES = ['aether-'];                // caches from the old brand name are removed on activate
-const CACHE_VERSION = 'kajersathi-1-0-16-ai-photo-enhancer-2';
+const CACHE_VERSION = 'kajersathi-1-0-17-bangla-date-tools-1';
 
 // Every file the app needs. Paths are relative to this file, so it works under /repo-name/ on GitHub Pages.
 const PRECACHE = [
@@ -26,7 +26,6 @@ const PRECACHE = [
   './assets/vendor/easy.qrcode.min.js',
   './assets/vendor/html5-qrcode.min.js',
   './assets/vendor/fflate.min.js',
-  './assets/data/eff-wordlist.js',
   './assets/js/kajersathi-bijoy-engine.js',
   './assets/icons/icon.svg',
   './assets/icons/icon-192.png',

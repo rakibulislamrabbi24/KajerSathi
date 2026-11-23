@@ -2213,17 +2213,6 @@
         const get = type => parts.find(part => part.type === type).value;
         return [get('year'), get('month'), get('day')].join('-');
       }
-      function renderMonthOptions() {
-        const select = $('#bndate-month'), selected = Number(select.value) || 1;
-        select.replaceChildren();
-        MONTHS.forEach((month, i) => {
-          const option = document.createElement('option');
-          option.value = String(i + 1);
-          option.textContent = month[isBangla() ? 'bn' : 'en'];
-          select.appendChild(option);
-        });
-        select.value = String(selected);
-      }
       function showError(key) {
         const error = $('#bndate-error');
         error.textContent = t(key);
@@ -2389,7 +2378,6 @@
         $('#bndate-day').value = initialBangla.day;
         $('#bndate-month').value = String(initialBangla.month);
         $('#bndate-year').value = initialBangla.year;
-        renderMonthOptions();
         updateBanglaCalendarLabel();
         $$('[data-date-mode]').forEach(button => button.addEventListener('click', () => setMode(button.dataset.dateMode)));
         updateCalendarLabel();

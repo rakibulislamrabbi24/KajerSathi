@@ -709,7 +709,7 @@
                 <button id="bndate-calendar-prev" type="button" class="bndate-calendar-nav" aria-label="Previous month">‹</button>
                 <div class="bndate-calendar-period">
                   <select id="bndate-calendar-month-select" aria-label="Select month"></select>
-                  <input id="bndate-calendar-year-select" class="bndate-year-input" type="number" inputmode="numeric" min="2019" step="1" aria-label="Enter year" placeholder="Year" />
+                  <input id="bndate-calendar-year-select" class="bndate-year-input" type="number" inputmode="numeric" min="2019" max="2200" step="1" aria-label="Enter year" placeholder="Year" />
                 </div>
                 <button id="bndate-calendar-next" type="button" class="bndate-calendar-nav" aria-label="Next month">›</button>
               </div>
@@ -742,7 +742,7 @@
                 <button id="bndate-calendar-bangla-prev" type="button" class="bndate-calendar-nav" aria-label="Previous Bangla month">‹</button>
                 <div class="bndate-calendar-period">
                   <select id="bndate-calendar-bangla-month-select" aria-label="বাংলা মাস নির্বাচন"></select>
-                  <input id="bndate-calendar-bangla-year-select" class="bndate-year-input" type="number" inputmode="numeric" min="1426" step="1" aria-label="বাংলা সন লিখুন" placeholder="সন" />
+                  <input id="bndate-calendar-bangla-year-select" class="bndate-year-input" type="number" inputmode="numeric" min="1426" max="1600" step="1" aria-label="বাংলা সন লিখুন" placeholder="সন" />
                 </div>
                 <button id="bndate-calendar-bangla-next" type="button" class="bndate-calendar-nav" aria-label="Next Bangla month">›</button>
               </div>
@@ -2410,12 +2410,22 @@
         $('#bndate-calendar-bangla-month-select').addEventListener('change', event => {
           banglaCalendarMonth.month = Number(event.target.value); renderBanglaCalendar();
         });
-        $('#bndate-calendar-bangla-year-select').addEventListener('change', event => {
-          const year = Number(event.target.value);
-          if (Number.isInteger(year) && year >= 1426 && year <= 275167) {
-            banglaCalendarMonth.year = year; renderBanglaCalendar();
-          } else event.target.value = String(banglaCalendarMonth.year);
+        const applyBanglaCalendarYear = input => {
+          const raw = input.value.trim();
+          const year = Number(raw);
+          if (raw && Number.isInteger(year) && year >= 1426 && year <= 1600) {
+            banglaCalendarMonth.year = year;
+            renderBanglaCalendar();
+          } else {
+            input.value = String(banglaCalendarMonth.year);
+          }
+        };
+        const banglaYearInput = $('#bndate-calendar-bangla-year-select');
+        banglaYearInput.addEventListener('change', () => applyBanglaCalendarYear(banglaYearInput));
+        banglaYearInput.addEventListener('keydown', event => {
+          if (event.key === 'Enter') { event.preventDefault(); applyBanglaCalendarYear(banglaYearInput); }
         });
+        banglaYearInput.addEventListener('blur', () => applyBanglaCalendarYear(banglaYearInput));
         $('#bndate-calendar-bangla-prev').addEventListener('click', () => {
           if(banglaCalendarMonth.month===1){banglaCalendarMonth.year--;banglaCalendarMonth.month=12;}else banglaCalendarMonth.month--;
           renderBanglaCalendar();
@@ -2448,12 +2458,22 @@
         $('#bndate-calendar-month-select').addEventListener('change', event => {
           calendarMonth = new Date(calendarMonth.getFullYear(),Number(event.target.value),1); renderCalendar();
         });
-        $('#bndate-calendar-year-select').addEventListener('change', event => {
-          const year = Number(event.target.value);
-          if (Number.isInteger(year) && year >= 2019 && year <= 275760) {
-            calendarMonth = new Date(year,calendarMonth.getMonth(),1); renderCalendar();
-          } else event.target.value = String(calendarMonth.getFullYear());
+        const applyGregorianCalendarYear = input => {
+          const raw = input.value.trim();
+          const year = Number(raw);
+          if (raw && Number.isInteger(year) && year >= 2019 && year <= 2200) {
+            calendarMonth = new Date(year, calendarMonth.getMonth(), 1);
+            renderCalendar();
+          } else {
+            input.value = String(calendarMonth.getFullYear());
+          }
+        };
+        const gregorianYearInput = $('#bndate-calendar-year-select');
+        gregorianYearInput.addEventListener('change', () => applyGregorianCalendarYear(gregorianYearInput));
+        gregorianYearInput.addEventListener('keydown', event => {
+          if (event.key === 'Enter') { event.preventDefault(); applyGregorianCalendarYear(gregorianYearInput); }
         });
+        gregorianYearInput.addEventListener('blur', () => applyGregorianCalendarYear(gregorianYearInput));
         $('#bndate-calendar-prev').addEventListener('click', () => {
           calendarMonth = new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()-1,1); renderCalendar();
         });

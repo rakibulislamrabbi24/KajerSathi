@@ -879,7 +879,7 @@
         </div>
         <div class="mb-5 flex flex-wrap items-center gap-2">
           <button type="button" class="btn btn-primary" data-doc-mode="invoice" aria-pressed="true">ইনভয়েস</button>
-          <button type="button" class="btn btn-secondary" data-doc-mode="cash">ক্যাশ মেমো</button>
+          <button type="button" class="btn btn-soft" data-doc-mode="cash">ক্যাশ মেমো</button>
           <span class="ml-auto text-xs text-slate-500">স্বয়ংক্রিয় হিসাব • লোকাল সেভ</span>
         </div>
         <div class="grid items-start gap-6 xl:grid-cols-2">
@@ -903,7 +903,7 @@
               </div>
             </div>
             <div class="card space-y-4 p-4 sm:p-5">
-              <div class="flex items-center justify-between gap-3"><h3 class="font-bold">পণ্য / সার্ভিস</h3><button type="button" class="btn btn-secondary text-sm" id="ic-add">+ আইটেম যোগ</button></div>
+              <div class="flex items-center justify-between gap-3"><h3 class="font-bold">পণ্য / সার্ভিস</h3><button type="button" class="btn btn-soft text-sm" id="ic-add">+ আইটেম যোগ</button></div>
               <div id="ic-items" class="space-y-3"></div>
               <div class="grid gap-3 sm:grid-cols-2">
                 <label class="block text-sm">ডিসকাউন্ট (৳)<input id="ic-discount" type="number" min="0" step="0.01" value="0" class="input mt-1 w-full"></label>
@@ -919,8 +919,8 @@
               </div>
               <div class="flex flex-wrap gap-2">
                 <button type="button" class="btn btn-primary" id="ic-save">সেভ করুন</button>
-                <button type="button" class="btn btn-secondary" id="ic-print">প্রিন্ট / PDF</button>
-                <button type="button" class="btn btn-secondary" id="ic-reset">নতুন ডকুমেন্ট</button>
+                <button type="button" class="btn btn-soft" id="ic-print">প্রিন্ট / PDF</button>
+                <button type="button" class="btn btn-soft" id="ic-reset">নতুন ডকুমেন্ট</button>
               </div>
               <p id="ic-status" class="text-xs text-slate-500" aria-live="polite">প্রিন্ট / PDF চাপলে ব্রাউজারের Print dialog খুলবে।</p>
             </div>
@@ -2750,7 +2750,7 @@
         const host=$id('ic-items'); host.replaceChildren();
         items.forEach((it,i)=>{
           const row=document.createElement('div'); row.className='grid grid-cols-12 gap-2 items-end rounded-xl border border-slate-200 p-3 dark:border-white/10';
-          row.innerHTML='<label class="col-span-12 block text-xs sm:col-span-6">পণ্য / সার্ভিস<input data-item="name" data-index="'+i+'" class="input mt-1 w-full" placeholder="পণ্যের নাম"></label><label class="col-span-4 block text-xs sm:col-span-2">পরিমাণ<input data-item="qty" data-index="'+i+'" type="number" min="0" step="0.01" class="input mt-1 w-full"></label><label class="col-span-5 block text-xs sm:col-span-3">একক মূল্য<input data-item="price" data-index="'+i+'" type="number" min="0" step="0.01" class="input mt-1 w-full"></label><button type="button" data-remove="'+i+'" class="col-span-3 btn btn-secondary text-xs">বাদ</button>';
+          row.innerHTML='<label class="col-span-12 block text-xs sm:col-span-6">পণ্য / সার্ভিস<input data-item="name" data-index="'+i+'" class="input mt-1 w-full" placeholder="পণ্যের নাম"></label><label class="col-span-4 block text-xs sm:col-span-2">পরিমাণ<input data-item="qty" data-index="'+i+'" type="number" min="0" step="0.01" class="input mt-1 w-full"></label><label class="col-span-5 block text-xs sm:col-span-3">একক মূল্য<input data-item="price" data-index="'+i+'" type="number" min="0" step="0.01" class="input mt-1 w-full"></label><button type="button" data-remove="'+i+'" class="col-span-3 btn btn-soft text-xs">বাদ</button>';
           row.querySelector('[data-item="name"]').value=it.name; row.querySelector('[data-item="qty"]').value=it.qty; row.querySelector('[data-item="price"]').value=it.price;
           host.append(row);
         });
@@ -2793,7 +2793,7 @@
         setMode(); itemRows(); calculate(); setStatus('সংরক্ষিত ডকুমেন্ট লোড হয়েছে।');
       }
       function setMode(){
-        document.querySelectorAll('[data-doc-mode]').forEach(b=>{const on=b.dataset.docMode===mode;b.setAttribute('aria-pressed',String(on));b.classList.toggle('btn-primary',on);b.classList.toggle('btn-secondary',!on)});
+        document.querySelectorAll('[data-doc-mode]').forEach(b=>{const on=b.dataset.docMode===mode;b.setAttribute('aria-pressed',String(on));b.classList.toggle('btn-primary',on);b.classList.toggle('btn-soft',!on)});
         calculate();
       }
       function reset(){

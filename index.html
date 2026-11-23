@@ -2069,10 +2069,11 @@
         const date = utcDate(Number(match[1]), Number(match[2]), Number(match[3]));
         return date.getUTCFullYear() === Number(match[1]) && date.getUTCMonth() + 1 === Number(match[2]) && date.getUTCDate() === Number(match[3]) ? date : null;
       };
-      const locale = () => I18N.locale() === 'bn' ? 'bn-BD' : 'en-GB';
+      const isBangla = () => I18N.lang === 'bn';
+      const locale = () => isBangla() ? 'bn-BD-u-nu-latn' : 'en-GB';
       const number = value => new Intl.NumberFormat(locale()).format(value);
-      const monthName = month => MONTHS[month - 1][I18N.locale() === 'bn' ? 'bn' : 'en'];
-      const seasonName = month => SEASONS[Math.floor((month - 1) / 2)][I18N.locale() === 'bn' ? 'bn' : 'en'];
+      const monthName = month => MONTHS[month - 1][isBangla() ? 'bn' : 'en'];
+      const seasonName = month => SEASONS[Math.floor((month - 1) / 2)][isBangla() ? 'bn' : 'en'];
       function gregorianToBangla(date) {
         const gy = date.getUTCFullYear(), gm = date.getUTCMonth() + 1, gd = date.getUTCDate();
         const startYear = gm > 4 || (gm === 4 && gd >= 14) ? gy : gy - 1;
@@ -2149,7 +2150,11 @@
           renderResult(date, bangla);
         } catch (error) {
           console.error('[KajerSathi] Bangla date conversion failed:', error);
-          showError(mode === 'gregorian' ? 'bndate.invalid_gregorian' : 'bndate.invalid_bangla');
+          const errorEl = $('#bndate-error');
+          errorEl.textContent = `${t(mode === 'gregorian' ? 'bndate.invalid_gregorian' : 'bndate.invalid_bangla')} (${error && error.message ? error.message : 'unknown error'})`;
+          errorEl.classList.remove('hidden');
+          $('#bndate-result').classList.add('hidden');
+          lastSummary = '';
         }
       }
       function setMode(next) {
@@ -2463,6 +2468,12 @@
         catch (err) {
           console.error(`[KajerSathi] ${name} initialization failed:`, err);
           document.documentElement.dataset.initError = name;
+          if (name === 'BanglaDateConverter') {
+            const errorEl = document.getElementById('bndate-error');
+            const resultEl = document.getElementById('bndate-result');
+            if (errorEl) { errorEl.textContent = `বাংলা তারিখ কনভার্টার চালু করা যায়নি: ${err && err.message ? err.message : 'Unknown initialization error'}`; errorEl.classList.remove('hidden'); }
+            if (resultEl) resultEl.classList.add('hidden');
+          }
         }
       };
 

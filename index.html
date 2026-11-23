@@ -146,6 +146,11 @@
     .dark .bndate-calendar { background:#111a30; color:#e2e8f0; border-color:rgba(129,140,248,.3); box-shadow:0 20px 55px rgba(0,0,0,.5); }
     .bndate-calendar-head { display:grid; grid-template-columns:2.4rem minmax(0,1fr) 2.4rem; align-items:center; gap:.5rem; margin-bottom:.75rem; text-align:center; }
     .bndate-calendar-head strong { min-width:0; font-size:.95rem; font-weight:800; overflow-wrap:anywhere; }
+    .bndate-calendar-period { display:grid; grid-template-columns:minmax(0,1fr) minmax(5.2rem,.9fr); gap:.4rem; min-width:0; }
+    .bndate-calendar-period select { width:100%; min-width:0; height:2.4rem; padding:0 .45rem; border:1px solid rgba(129,140,248,.2); border-radius:.65rem; background:rgba(99,102,241,.09); color:inherit; font-size:.82rem; font-weight:800; text-align:center; cursor:pointer; }
+    .bndate-calendar-period select:focus-visible { outline:2px solid #818cf8; outline-offset:2px; }
+    .bndate-calendar-period option { background:#fff; color:#0f172a; }
+    .dark .bndate-calendar-period option { background:#111a30; color:#e2e8f0; }
     .bndate-calendar-nav { display:grid; place-items:center; width:2.4rem; height:2.4rem; border-radius:.7rem; background:rgba(99,102,241,.1); font-size:1.4rem; line-height:1; }
     .bndate-calendar-nav:hover:not(:disabled),.bndate-calendar-day:hover:not(:disabled) { background:rgba(99,102,241,.17); }
     .bndate-calendar-nav:disabled { opacity:.3; cursor:not-allowed; }
@@ -700,7 +705,10 @@
             <div id="bndate-calendar" class="bndate-calendar hidden" role="dialog" aria-label="Date picker">
               <div class="bndate-calendar-head">
                 <button id="bndate-calendar-prev" type="button" class="bndate-calendar-nav" aria-label="Previous month">‹</button>
-                <strong id="bndate-calendar-month"></strong>
+                <div class="bndate-calendar-period">
+                  <select id="bndate-calendar-month-select" aria-label="Select month"></select>
+                  <select id="bndate-calendar-year-select" aria-label="Select year"></select>
+                </div>
                 <button id="bndate-calendar-next" type="button" class="bndate-calendar-nav" aria-label="Next month">›</button>
               </div>
               <div id="bndate-calendar-weekdays" class="bndate-calendar-grid bndate-calendar-weekdays"></div>
@@ -730,7 +738,10 @@
             <div id="bndate-calendar-bangla" class="bndate-calendar hidden" role="dialog" aria-label="Bangla date picker">
               <div class="bndate-calendar-head">
                 <button id="bndate-calendar-bangla-prev" type="button" class="bndate-calendar-nav" aria-label="Previous Bangla month">‹</button>
-                <strong id="bndate-calendar-bangla-month"></strong>
+                <div class="bndate-calendar-period">
+                  <select id="bndate-calendar-bangla-month-select" aria-label="বাংলা মাস নির্বাচন"></select>
+                  <select id="bndate-calendar-bangla-year-select" aria-label="বাংলা সন নির্বাচন"></select>
+                </div>
                 <button id="bndate-calendar-bangla-next" type="button" class="bndate-calendar-nav" aria-label="Next Bangla month">›</button>
               </div>
               <div id="bndate-calendar-bangla-weekdays" class="bndate-calendar-grid bndate-calendar-weekdays"></div>
@@ -2273,7 +2284,10 @@
       }
       function renderCalendar() {
         const year = calendarMonth.getFullYear(), month = calendarMonth.getMonth();
-        $('#bndate-calendar-month').textContent = new Intl.DateTimeFormat(I18N.locale(), { month:'long', year:'numeric' }).format(new Date(year,month,1));
+        const monthSelect = $('#bndate-calendar-month-select'), yearSelect = $('#bndate-calendar-year-select');
+        if (!monthSelect.options.length) monthSelect.innerHTML = Array.from({length:12},(_,i)=>'<option value="'+i+'">'+new Intl.DateTimeFormat(I18N.locale(),{month:'long'}).format(new Date(2024,i,1))+'</option>').join('');
+        if (!yearSelect.options.length) yearSelect.innerHTML = Array.from({length:182},(_,i)=>{const y=2019+i;return '<option value="'+y+'">'+number(y)+'</option>';}).join('');
+        monthSelect.value = String(month); yearSelect.value = String(year);
         const weekdays = Array.from({length:7},(_,i)=>new Intl.DateTimeFormat(I18N.locale(),{weekday:'short'}).format(new Date(2024,0,7+i)));
         $('#bndate-calendar-weekdays').innerHTML = weekdays.map(day=>'<span>'+day+'</span>').join('');
         const first = new Date(year,month,1), offset = first.getDay();
@@ -2318,7 +2332,10 @@
       }
       function renderBanglaCalendar() {
         const {year, month} = banglaCalendarMonth;
-        $('#bndate-calendar-bangla-month').textContent = monthName(month) + ' ' + number(year);
+        const monthSelect = $('#bndate-calendar-bangla-month-select'), yearSelect = $('#bndate-calendar-bangla-year-select');
+        if (!monthSelect.options.length) monthSelect.innerHTML = Array.from({length:12},(_,i)=>'<option value="'+(i+1)+'">'+monthName(i+1)+'</option>').join('');
+        if (!yearSelect.options.length) yearSelect.innerHTML = Array.from({length:175},(_,i)=>{const y=1426+i;return '<option value="'+y+'">'+number(y)+'</option>';}).join('');
+        monthSelect.value = String(month); yearSelect.value = String(year);
         const weekdays = Array.from({length:7},(_,i)=>new Intl.DateTimeFormat(I18N.locale(),{weekday:'short'}).format(new Date(2024,0,7+i)));
         $('#bndate-calendar-bangla-weekdays').innerHTML = weekdays.map(day=>'<span>'+day+'</span>').join('');
         const firstWeekday = banglaToGregorian(1,month,year).getUTCDay();
@@ -2388,6 +2405,12 @@
         $('#bndate-calendar-bangla-trigger').addEventListener('click', () => {
           if ($('#bndate-calendar-bangla').classList.contains('hidden')) openBanglaCalendar(); else closeBanglaCalendar();
         });
+        $('#bndate-calendar-bangla-month-select').addEventListener('change', event => {
+          banglaCalendarMonth.month = Number(event.target.value); renderBanglaCalendar();
+        });
+        $('#bndate-calendar-bangla-year-select').addEventListener('change', event => {
+          banglaCalendarMonth.year = Number(event.target.value); renderBanglaCalendar();
+        });
         $('#bndate-calendar-bangla-prev').addEventListener('click', () => {
           if(banglaCalendarMonth.month===1){banglaCalendarMonth.year--;banglaCalendarMonth.month=12;}else banglaCalendarMonth.month--;
           renderBanglaCalendar();
@@ -2416,6 +2439,12 @@
         });
         $('#bndate-calendar-trigger').addEventListener('click', () => {
           if ($('#bndate-calendar').classList.contains('hidden')) openCalendar(); else closeCalendar();
+        });
+        $('#bndate-calendar-month-select').addEventListener('change', event => {
+          calendarMonth = new Date(calendarMonth.getFullYear(),Number(event.target.value),1); renderCalendar();
+        });
+        $('#bndate-calendar-year-select').addEventListener('change', event => {
+          calendarMonth = new Date(Number(event.target.value),calendarMonth.getMonth(),1); renderCalendar();
         });
         $('#bndate-calendar-prev').addEventListener('click', () => {
           calendarMonth = new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()-1,1); renderCalendar();

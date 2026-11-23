@@ -2324,11 +2324,10 @@
         for(let i=0;i<42;i++){
           const day = i-firstWeekday+1;
           if(day<1 || day>daysInMonth){ cells.push('<span aria-hidden="true"></span>'); continue; }
-          const disabled = year===1426 && month===1 && day<1;
           const selected = day===selectedDay && month===selectedMonth && year===selectedYear;
           const today = day===todayBangla.day && month===todayBangla.month && year===todayBangla.year;
           const classes = ['bndate-calendar-day',selected?'is-selected':'',today?'is-today':''].filter(Boolean).join(' ');
-          cells.push('<button type="button" class="'+classes+'" data-bangla-calendar-day="'+day+'" '+(disabled?'disabled':'')+' aria-pressed="'+String(selected)+'">'+number(day)+'</button>');
+          cells.push('<button type="button" class="'+classes+'" data-bangla-calendar-day="'+day+'" aria-pressed="'+String(selected)+'">'+number(day)+'</button>');
         }
         $('#bndate-calendar-bangla-days').innerHTML = cells.join('');
         $('#bndate-calendar-bangla-prev').disabled = year===1426 && month===1;

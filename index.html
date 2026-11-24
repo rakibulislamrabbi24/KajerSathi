@@ -103,7 +103,17 @@
     #bfp-grid .bfp-card{min-width:0;overflow:hidden;border:1px solid rgb(148 163 184 / .22);border-radius:16px;background:var(--bfp-card,#fff)}
     #bfp-grid .bfp-card.is-selected{outline:2px solid #6366f1;outline-offset:1px}
     #bfp-grid .bfp-sample{min-height:150px;padding:22px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8}
-    #bfp-grid .bfp-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-top:1px solid rgb(148 163 184 / .2);font-size:12px}
+    #bfp-grid .bfp-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-top:1px solid rgb(148 163 184 / .2);font-size:12px;color:#1e293b;background:#f8fafc}
+    #bfp-grid .bfp-meta .bfp-font-name{min-width:0;color:#1e293b;font-weight:700;overflow-wrap:anywhere}
+    #bfp-grid .bfp-select{flex:none;border:1px solid #64748b;border-radius:9px;padding:6px 10px;background:#fff;color:#172033;font-weight:700;line-height:1.5;cursor:pointer}
+    #bfp-grid .bfp-select[aria-pressed="true"]{background:#4f46e5;border-color:#4f46e5;color:#fff}
+    .dark #bfp-grid .bfp-card{background:#111827;border-color:#475569}
+    .dark #bfp-grid .bfp-meta{background:#1e293b;border-top-color:#475569;color:#f8fafc}
+    .dark #bfp-grid .bfp-meta .bfp-font-name{color:#f8fafc}
+    .dark #bfp-grid .bfp-select{background:#334155;border-color:#64748b;color:#f8fafc}
+    .dark #bfp-grid .bfp-select[aria-pressed="true"]{background:#818cf8;border-color:#818cf8;color:#111827}
+    .dark #bfp-grid .bfp-sample{color:#f8fafc}
+    @media(min-width:1024px){#panel-fontpreview aside{max-height:calc(100vh - 2rem);overflow-y:auto}}
     html { scroll-behavior: smooth; }
     body { font-family: Inter, "Noto Sans Bengali", ui-sans-serif, system-ui, sans-serif; }
     .lang-pending body { visibility: hidden; }
@@ -1137,8 +1147,8 @@
         <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">বাংলা ফন্ট প্রিভিউয়ার</h2>
         <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">একই বাংলা লেখা বিভিন্ন ফন্টে দেখুন, তুলনা করুন এবং PNG হিসেবে সংরক্ষণ করুন।</p>
       </div>
-      <div class="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[minmax(280px,.75fr)_minmax(0,1.5fr)]">
-        <aside class="card h-fit space-y-4 p-4 sm:p-5">
+      <div class="mx-auto grid max-w-7xl items-start gap-5 lg:grid-cols-[minmax(300px,.72fr)_minmax(0,1.55fr)]">
+        <aside class="card h-fit space-y-4 p-4 sm:p-5 lg:sticky lg:top-4">
           <div><label class="label" for="bfp-text">আপনার বাংলা লেখা</label><textarea id="bfp-text" rows="6" class="input w-full resize-y" placeholder="এখানে আপনার বাংলা লেখা লিখুন…">আমার সোনার বাংলা, আমি তোমায় ভালোবাসি।
 বাংলা ভাষা ও সংস্কৃতি আমাদের গর্ব।</textarea></div>
           <div><div class="mb-2 flex items-center justify-between"><label class="label !mb-0" for="bfp-size">ফন্ট সাইজ</label><output id="bfp-size-value" class="text-sm font-semibold tabular-nums">৩০ px</output></div><input id="bfp-size" type="range" min="16" max="64" value="30" class="w-full accent-indigo-600"></div>
@@ -3183,18 +3193,24 @@
     const BanglaFontPreviewer = (() => {
       const fonts=[
         {name:'Noto Sans Bengali',family:'Noto Sans Bengali',category:'Sans Serif'},
+        {name:'Noto Serif Bengali',family:'Noto Serif Bengali',category:'Serif'},
         {name:'Hind Siliguri',family:'Hind Siliguri',category:'Sans Serif'},
         {name:'Baloo Da 2',family:'Baloo Da 2',category:'Rounded'},
         {name:'Anek Bangla',family:'Anek Bangla',category:'Modern'},
         {name:'Atma',family:'Atma',category:'Display'},
-        {name:'Galada',family:'Galada',category:'Decorative'}
+        {name:'Galada',family:'Galada',category:'Decorative'},
+        {name:'Tiro Bangla',family:'Tiro Bangla',category:'Serif'},
+        {name:'Mina',family:'Mina',category:'Classic'},
+        {name:'Laila',family:'Laila',category:'Display'},
+        {name:'Yatra One',family:'Yatra One',category:'Decorative'},
+        {name:'Hind Siliguri SemiBold',family:'Hind Siliguri',category:'SemiBold'}
       ];
       let selected='Noto Sans Bengali',customFont=null,customUrl=null,html2canvasPromise=null;
       const $id=id=>document.getElementById(id);
       const sample=()=> $id('bfp-text').value || 'বাংলা ফন্ট প্রিভিউ';
-      function loadFonts(){if(document.getElementById('bfp-google-fonts'))return;const l=document.createElement('link');l.id='bfp-google-fonts';l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;500;600;700&family=Atma:wght@400;500;600;700&family=Baloo+Da+2:wght@400;500;600;700&family=Galada&family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap';document.head.appendChild(l);}
+      function loadFonts(){if(document.getElementById('bfp-google-fonts'))return;const l=document.createElement('link');l.id='bfp-google-fonts';l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;500;600;700&family=Atma:wght@400;500;600;700&family=Baloo+Da+2:wght@400;500;600;700&family=Galada&family=Hind+Siliguri:wght@400;500;600;700&family=Laila:wght@400;500;600;700&family=Mina:wght@400;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@400;500;600;700&family=Tiro+Bangla&family=Yatra+One&display=swap';document.head.appendChild(l);}
       function background(){return ({paper:'#ffffff',cream:'#fff8e7',dark:'#172033',transparent:'#ffffff'})[$id('bfp-bg').value]||'#fff';}
-      function render(){const host=$id('bfp-grid'),text=sample(),size=Number($id('bfp-size').value),align=$id('bfp-align').value,bold=$id('bfp-bold').checked,bg=background(),dark=$id('bfp-bg').value==='dark';$id('bfp-size-value').textContent=size+' px';const list=[...fonts,...(customFont?[customFont]:[])];host.replaceChildren();for(const f of list){const card=document.createElement('article');card.className='bfp-card'+(selected===f.family?' is-selected':'');card.dataset.font=f.family;const sampleEl=document.createElement('div');sampleEl.className='bfp-sample';sampleEl.textContent=text;sampleEl.style.cssText='font-family:'+JSON.stringify(f.family)+',sans-serif;font-size:'+size+'px;text-align:'+align+';font-weight:'+(bold?700:400)+';background:'+bg+';color:'+(dark?'#f8fafc':'#172033');const meta=document.createElement('div');meta.className='bfp-meta';const label=document.createElement('span');label.textContent=f.name+' · '+f.category;label.className='font-semibold truncate';const btn=document.createElement('button');btn.type='button';btn.className='btn '+(selected===f.family?'btn-primary':'btn-secondary')+' !px-3 !py-1.5';btn.textContent=selected===f.family?'নির্বাচিত':'নির্বাচন';btn.addEventListener('click',()=>{selected=f.family;render();});meta.append(label,btn);card.append(sampleEl,meta);host.append(card);}$id('bfp-count').textContent=list.length+'টি ফন্ট';}
+      function render(){const host=$id('bfp-grid'),text=sample(),size=Number($id('bfp-size').value),align=$id('bfp-align').value,bold=$id('bfp-bold').checked,bg=background(),dark=$id('bfp-bg').value==='dark';$id('bfp-size-value').textContent=size+' px';const list=[...fonts,...(customFont?[customFont]:[])];host.replaceChildren();for(const f of list){const card=document.createElement('article');card.className='bfp-card'+(selected===f.family?' is-selected':'');card.dataset.font=f.family;const sampleEl=document.createElement('div');sampleEl.className='bfp-sample';sampleEl.textContent=text;sampleEl.style.cssText='font-family:'+JSON.stringify(f.family)+',sans-serif;font-size:'+size+'px;text-align:'+align+';font-weight:'+(bold?700:400)+';background:'+bg+';color:'+(dark?'#f8fafc':'#172033');const meta=document.createElement('div');meta.className='bfp-meta';const label=document.createElement('span');label.textContent=f.name+' · '+f.category;label.className='bfp-font-name';const btn=document.createElement('button');btn.type='button';btn.className='bfp-select';btn.setAttribute('aria-pressed',String(selected===f.family));btn.textContent=selected===f.family?'নির্বাচিত':'নির্বাচন';btn.addEventListener('click',()=>{selected=f.family;render();});meta.append(label,btn);card.append(sampleEl,meta);host.append(card);}$id('bfp-count').textContent=list.length+'টি ফন্ট';}
       async function loadCanvas(){if(window.html2canvas)return; if(html2canvasPromise)return html2canvasPromise;html2canvasPromise=new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';s.onload=()=>window.html2canvas?res():rej(Error('PNG export engine লোড হয়নি'));s.onerror=()=>rej(Error('PNG export engine লোড হয়নি'));document.head.appendChild(s);});return html2canvasPromise;}
       async function exportPng(){try{const card=[...$id('bfp-grid').children].find(x=>x.dataset.font===selected);if(!card)return;const btn=$id('bfp-png');btn.disabled=true;btn.textContent='PNG তৈরি হচ্ছে…';await loadCanvas();const canvas=await html2canvas(card.querySelector('.bfp-sample'),{backgroundColor:background(),scale:2,useCORS:true,logging:false});const a=document.createElement('a');a.download='kajersathi-'+selected.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.png';a.href=canvas.toDataURL('image/png');a.click();toast('PNG ডাউনলোড তৈরি হয়েছে','success');}catch(e){console.error(e);toast(e.message||'PNG তৈরি করা যায়নি','error');}finally{$id('bfp-png').disabled=false;$id('bfp-png').innerHTML='<i data-lucide="image-down" class="h-4 w-4"></i> PNG ডাউনলোড';if(window.lucide)lucide.createIcons();}}
       async function upload(e){const f=e.target.files[0];if(!f)return;if(f.size>12*1024*1024){toast('ফন্ট ফাইল 12 MB-এর কম হতে হবে','error');e.target.value='';return;}if(customUrl)URL.revokeObjectURL(customUrl);customUrl=URL.createObjectURL(f);const family='My Font '+Date.now();try{const face=new FontFace(family,'url('+customUrl+')');await face.load();document.fonts.add(face);customFont={name:f.name.replace(/\.(ttf|otf|woff2?)$/i,''),family,category:'Uploaded'};selected=family;$id('bfp-upload-status').textContent='লোড হয়েছে: '+f.name;render();toast('নিজস্ব ফন্ট লোড হয়েছে','success');}catch(err){console.error(err);toast('এই ফন্ট ফাইলটি পড়া যায়নি','error');}}

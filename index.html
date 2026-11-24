@@ -1113,6 +1113,8 @@
               <div id="ocr-empty" class="space-y-2 text-slate-500"><i data-lucide="image-up" class="mx-auto h-9 w-9"></i><p class="font-semibold">এখানে ছবি Drag & Drop করুন</p><p class="text-xs">অথবা উপরের বাটন থেকে ছবি বাছাই করুন</p></div><img id="ocr-image" class="hidden max-h-80 max-w-full rounded-lg object-contain" alt="OCR source preview">
             </div>
             <div><label class="label" for="ocr-language">OCR Language</label><select id="ocr-language" class="input"><option value="ben+eng">বাংলা + English</option><option value="ben">শুধু বাংলা</option><option value="eng">English only</option></select></div>
+            <div><label class="label" for="ocr-mode">ছবির ধরন</label><select id="ocr-mode" class="input"><option value="auto">Auto — স্বয়ংক্রিয় (Recommended)</option><option value="photo">মোবাইল ছবি / লেবেল</option><option value="document">স্ক্যান / ডকুমেন্ট</option></select><p class="mt-1 text-xs text-slate-500">ছবি বা ছোট লেবেলের জন্য Photo / Label নির্বাচন করুন।</p></div>
+            <label class="flex items-start gap-2 text-sm"><input id="ocr-preprocess" type="checkbox" class="mt-1" checked><span><strong>Image Enhancement</strong><span class="block text-xs text-slate-500">Grayscale, contrast ও upscale করে একাধিক পদ্ধতিতে OCR চালাবে।</span></span></label>
             <div class="space-y-2"><div class="flex items-center justify-between text-xs"><span id="ocr-status" class="text-slate-500" aria-live="polite">ছবি নির্বাচন করে লেখা বের করুন</span><span id="ocr-percent" class="font-semibold tabular-nums">0%</span></div><div class="h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-white/10"><div id="ocr-progress" class="h-full w-0 rounded-full bg-indigo-500 transition-all" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div></div>
             <div class="flex flex-wrap gap-2"><button type="button" id="ocr-run" class="btn btn-primary inline-flex items-center gap-2" disabled><i data-lucide="scan-text" class="h-4 w-4"></i> লেখা বের করুন</button><button type="button" id="ocr-clear" class="btn btn-secondary">রিসেট</button></div>
             <p class="text-xs leading-relaxed text-slate-500">প্রথমবার OCR চালালে প্রয়োজনীয় ভাষার মডেল ইন্টারনেট থেকে ডাউনলোড হবে। পরবর্তী ব্যবহারে ব্রাউজারের ক্যাশ থেকে দ্রুত লোড হতে পারে।</p>
@@ -3125,7 +3127,47 @@
       function loadScript(){if(window.Tesseract)return Promise.resolve();if(scriptPromise)return scriptPromise;scriptPromise=new Promise((resolve,reject)=>{const sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';sc.async=true;sc.onload=()=>window.Tesseract?resolve():reject(Error('OCR engine did not initialize'));sc.onerror=()=>reject(Error('OCR engine download failed. ইন্টারনেট সংযোগ পরীক্ষা করুন।'));document.head.appendChild(sc);});return scriptPromise;}
       async function getWorker(lang){if(worker){await worker.terminate();worker=null;}await loadScript();worker=await Tesseract.createWorker(lang,Tesseract.OEM.LSTM_ONLY,{workerPath:'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/worker.min.js',corePath:'https://cdn.jsdelivr.net/npm/tesseract.js-core@5/tesseract-core-simd-lstm.wasm.js',langPath:'https://tessdata.projectnaptha.com/4.0.0',gzip:true,logger:m=>{if(m.status==='loading language traineddata')status('ভাষার মডেল ডাউনলোড হচ্ছে…',3+(m.progress||0)*12);else if(m.status==='recognizing text')status('ছবি থেকে লেখা শনাক্ত হচ্ছে…',18+(m.progress||0)*80);}});return worker;}
       function choose(f){if(!f)return;const types=['image/png','image/jpeg','image/webp','image/bmp','image/tiff'];if(!types.includes(f.type)){toast('শুধু JPG, PNG, WebP, BMP বা TIFF ছবি ব্যবহার করুন।','error');return;}if(f.size>MAX_BYTES){toast('ছবির সাইজ 15 MB-এর কম হতে হবে।','error');return;}file=f;if(imageUrl)URL.revokeObjectURL(imageUrl);imageUrl=URL.createObjectURL(f);el('ocr-image').src=imageUrl;el('ocr-image').classList.remove('hidden');el('ocr-empty').classList.add('hidden');el('ocr-run').disabled=false;el('ocr-result').value='';actions();status('ছবি প্রস্তুত। এখন লেখা বের করুন।',0);}
-      async function run(){if(!file||busy)return;busy=true;el('ocr-run').disabled=true;el('ocr-clear').disabled=true;el('ocr-language').disabled=true;status('OCR প্রস্তুত করা হচ্ছে…',2);try{await getWorker(el('ocr-language').value);status('ছবি বিশ্লেষণ করা হচ্ছে…',20);const r=await worker.recognize(file);el('ocr-result').value=(r.data.text||'').trim();actions();status(el('ocr-result').value?'লেখা শনাক্ত সম্পন্ন। ফলাফল সম্পাদনা করতে পারবেন।':'কোনো লেখা শনাক্ত করা যায়নি। পরিষ্কার ছবি দিয়ে চেষ্টা করুন।',100);if(el('ocr-result').value)toast('ছবি থেকে লেখা বের হয়েছে।','success');}catch(e){console.error('[KajerSathi] OCR failed:',e);status(e.message||'OCR চালানো যায়নি।',0);toast('OCR চালাতে সমস্যা হয়েছে। ইন্টারনেট সংযোগ ও ছবিটি পরীক্ষা করুন।','error');}finally{busy=false;el('ocr-run').disabled=!file;el('ocr-clear').disabled=false;el('ocr-language').disabled=false;}}
+      function makeEnhancedImage(source,mode){
+        const im=new Image();const src=URL.createObjectURL(source);
+        return new Promise((resolve,reject)=>{im.onload=()=>{try{
+          const scale=Math.min(3,Math.max(1.6,2200/Math.max(im.naturalWidth,im.naturalHeight)));
+          const canvas=document.createElement('canvas');canvas.width=Math.round(im.naturalWidth*scale);canvas.height=Math.round(im.naturalHeight*scale);
+          const ctx=canvas.getContext('2d',{willReadFrequently:true});ctx.drawImage(im,0,0,canvas.width,canvas.height);
+          const frame=ctx.getImageData(0,0,canvas.width,canvas.height),d=frame.data;
+          let sum=0;for(let i=0;i<d.length;i+=4){const y=.299*d[i]+.587*d[i+1]+.114*d[i+2];sum+=y;d[i]=d[i+1]=d[i+2]=y;}
+          const avg=sum/(d.length/4),contrast=mode==='photo'?1.55:1.35,offset=(128-avg)*.12;
+          for(let i=0;i<d.length;i+=4){let y=(d[i]-128)*contrast+128+offset;d[i]=d[i+1]=d[i+2]=Math.max(0,Math.min(255,y));}
+          ctx.putImageData(frame,0,0);canvas.toBlob(blob=>{URL.revokeObjectURL(src);blob?resolve(blob):reject(Error('ছবি উন্নত করা যায়নি।'));},'image/png');
+        }catch(e){URL.revokeObjectURL(src);reject(e);}},im.onerror=()=>{URL.revokeObjectURL(src);reject(Error('ছবি পড়া যায়নি।'));};im.src=src;});
+      }
+      async function recognizePass(input,psm,label){
+        await worker.setParameters({tessedit_pageseg_mode:String(psm),preserve_interword_spaces:'1'});
+        status(label,30);
+        return await worker.recognize(input);
+      }
+      async function run(){if(!file||busy)return;busy=true;el('ocr-run').disabled=true;el('ocr-clear').disabled=true;el('ocr-language').disabled=true;el('ocr-mode').disabled=true;el('ocr-preprocess').disabled=true;status('OCR প্রস্তুত করা হচ্ছে…',2);
+        try{
+          await getWorker(el('ocr-language').value);
+          const mode=el('ocr-mode').value,enhance=el('ocr-preprocess').checked;
+          const passes=mode==='photo'?[11,6]:mode==='document'?[6,3]:[3,11];
+          const inputs=[{image:file,label:'মূল ছবি'}];
+          if(enhance){status('ছবির আলো ও কনট্রাস্ট উন্নত করা হচ্ছে…',15);inputs.push({image:await makeEnhancedImage(file,mode),label:'উন্নত ছবি'});}
+          let best=null,bestScore=-1;
+          for(let i=0;i<inputs.length;i++){
+            for(let j=0;j<passes.length;j++){
+              const r=await recognizePass(inputs[i].image,passes[j],`OCR চলছে — ${inputs[i].label} (${j+1}/${passes.length})`);
+              const textValue=(r.data.text||'').trim(),confidence=Number(r.data.confidence)||0;
+              const useful=(textValue.match(/[\p{L}\p{N}]/gu)||[]).length;
+              const score=confidence+Math.min(useful,500)*.025;
+              if(textValue&&score>bestScore){bestScore=score;best={text:textValue,confidence};}
+            }
+          }
+          el('ocr-result').value=best?best.text:'';actions();
+          status(best?`OCR সম্পন্ন · আনুমানিক Confidence: ${Math.round(best.confidence)}%`:'কোনো লেখা শনাক্ত করা যায়নি। পরিষ্কার বা Crop করা ছবি দিয়ে চেষ্টা করুন।',100);
+          if(best)toast('OCR সম্পন্ন। ফলাফল যাচাই করে নিন।','success');
+        }catch(e){console.error('[KajerSathi] OCR failed:',e);status(e.message||'OCR চালানো যায়নি।',0);toast('OCR চালাতে সমস্যা হয়েছে। ইন্টারনেট সংযোগ ও ছবিটি পরীক্ষা করুন।','error');}
+        finally{busy=false;el('ocr-run').disabled=!file;el('ocr-clear').disabled=false;el('ocr-language').disabled=false;el('ocr-mode').disabled=false;el('ocr-preprocess').disabled=false;}
+      }
       function reset(){if(busy)return;file=null;if(imageUrl)URL.revokeObjectURL(imageUrl);imageUrl='';el('ocr-file').value='';el('ocr-image').removeAttribute('src');el('ocr-image').classList.add('hidden');el('ocr-empty').classList.remove('hidden');el('ocr-result').value='';actions();status('ছবি নির্বাচন করে লেখা বের করুন',0);el('ocr-run').disabled=true;}
       function init(){el('ocr-file').addEventListener('change',e=>choose(e.target.files[0]));el('ocr-run').addEventListener('click',run);el('ocr-clear').addEventListener('click',reset);el('ocr-result').addEventListener('input',actions);el('ocr-copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(el('ocr-result').value);toast('লেখা কপি হয়েছে।','success');}catch{el('ocr-result').select();document.execCommand('copy');toast('লেখা কপি হয়েছে।','success');}});el('ocr-download').addEventListener('click',()=>{const u=URL.createObjectURL(new Blob([el('ocr-result').value],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=u;a.download='kajersathi-ocr.txt';a.click();URL.revokeObjectURL(u);});const d=el('ocr-drop');d.addEventListener('dragover',e=>{e.preventDefault();d.classList.add('border-indigo-500');});d.addEventListener('dragleave',()=>d.classList.remove('border-indigo-500'));d.addEventListener('drop',e=>{e.preventDefault();d.classList.remove('border-indigo-500');choose(e.dataTransfer.files[0]);});window.addEventListener('beforeunload',()=>{if(imageUrl)URL.revokeObjectURL(imageUrl);if(worker)worker.terminate();});actions();}
       return {init};

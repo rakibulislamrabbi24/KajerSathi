@@ -252,6 +252,69 @@
     .ic-paper[data-color-mode="mono"]{--ic-accent:#111 !important;filter:grayscale(1)}
     .ic-paper[data-color-mode="mono"] .ic-table-head,.ic-paper[data-color-mode="mono"] .ic-grand{background:#e5e7eb!important;color:#111!important;border:1px solid #555}
     .dark .ic-choice{background:#0f172a;color:#f8fafc;border-color:#334155}
+
+    /* Six genuinely different invoice/cash memo compositions */
+    .ic-paper{--ic-accent:#2563eb;min-height:520px;padding:0!important;overflow:hidden;background:#fff;color:#111827}
+    .ic-layout{min-height:520px;padding:28px;font-family:Inter,"Noto Sans Bengali",sans-serif;color:#172033;background:#fff}
+    .ic-layout h1{margin:0;font-size:26px;font-weight:900;letter-spacing:.04em}
+    .ic-layout .ic-brand{font-size:19px;font-weight:850}
+    .ic-layout .ic-address,.ic-layout .ic-phone{font-size:11px;color:#64748b;margin-top:3px}
+    .ic-layout .ic-logo{max-width:92px;max-height:64px;object-fit:contain;margin:0 0 9px}
+    .ic-layout .ic-doc-meta{display:grid;grid-template-columns:auto auto;gap:5px 14px;font-size:10px;align-items:center}
+    .ic-layout .ic-doc-meta span{color:#64748b}.ic-layout .ic-doc-meta b{text-align:right}
+    .ic-layout .ic-kicker{display:block;font-size:9px;letter-spacing:.13em;font-weight:900;color:#64748b;margin-bottom:8px}
+    .ic-layout .ic-customer,.ic-layout .ic-status{display:flex;flex-direction:column;gap:4px;font-size:11px;padding:12px}
+    .ic-layout .ic-customer>b,.ic-layout .ic-status>b{font-size:14px}.ic-layout .ic-status{background:#f3f6fb}
+    .ic-layout .ic-status small{font-size:10px;color:#64748b}
+    .ic-layout .ic-items-table{width:100%;border-collapse:collapse;margin:20px 0;font-size:11px}
+    .ic-layout .ic-items-table th,.ic-layout .ic-items-table td{padding:10px 7px;text-align:left;border-bottom:1px solid #e2e8f0}
+    .ic-layout .ic-items-table th{font-size:9px;text-transform:uppercase;letter-spacing:.04em}
+    .ic-layout .ic-totals{width:min(100%,270px);margin-left:auto;padding:12px;font-size:11px}
+    .ic-layout .ic-totals>div{display:flex;justify-content:space-between;gap:12px;padding:5px 0}
+    .ic-layout .ic-grand{font-size:14px;font-weight:900;padding:10px!important}.ic-layout .ic-due{font-weight:850;border-top:1px solid #cbd5e1}
+    .ic-layout .ic-footer{display:flex;justify-content:space-between;align-items:end;gap:20px;border-top:1px solid #dbe2ea;padding-top:14px;margin-top:22px;font-size:10px}
+    .ic-layout .ic-footer p{max-width:65%}.ic-layout .ic-footer div{display:flex;flex-direction:column;text-align:center;gap:5px}
+    .ic-layout-modern{padding:0}.ic-modern-head{display:flex;justify-content:space-between;gap:20px;padding:26px;background:#f1f5f9;border-bottom:4px solid var(--ic-accent)}
+    .ic-branding{max-width:58%}.ic-modern-doc{text-align:right}.ic-modern-doc>strong{display:block;color:var(--ic-accent);font-size:25px;letter-spacing:.1em}
+    .ic-modern-body{padding:24px}.ic-modern-body>.ic-customer,.ic-modern-body>.ic-status{display:inline-flex;vertical-align:top;width:calc(50% - 7px);min-height:100px}
+    .ic-modern-body>.ic-status{margin-left:10px}
+    .ic-layout-classic{font-family:Georgia,"Noto Sans Bengali",serif;border:8px double #9ca3af;padding:24px}
+    .ic-classic-head{text-align:center;padding-bottom:18px;border-bottom:3px double #9ca3af}.ic-classic-head .ic-logo{margin:0 auto 8px}
+    .ic-classic-head h1{margin:14px 0;font-family:Georgia,serif;letter-spacing:.16em}.ic-classic-business{font-size:12px;line-height:1.7}
+    .ic-classic-head .ic-doc-meta{max-width:280px;margin:12px auto 0}.ic-classic-body>.ic-customer{margin:18px 0;background:#fafafa;border:1px solid #d1d5db}
+    .ic-classic-bottom{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}.ic-classic-bottom .ic-status{border:1px solid #d1d5db;background:white}
+    .ic-classic-bottom .ic-totals{width:100%;border:1px solid #d1d5db}
+    .ic-layout-elegant{padding:0}.ic-elegant-head{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:30px;background:#172033;color:white}
+    .ic-elegant-head .ic-brand,.ic-elegant-head .ic-address,.ic-elegant-head .ic-phone{color:#e2e8f0}.ic-elegant-head h1{font-size:22px;color:#fff;margin:8px 0}
+    .ic-elegant-head .ic-doc-meta span{color:#cbd5e1}.ic-elegant-head .ic-doc-meta b{color:white}.ic-elegant-head>div:last-child{text-align:right}
+    .ic-elegant-head .ic-doc-meta{margin-left:auto;max-width:220px}.ic-elegant-body{padding:24px}
+    .ic-elegant-parties{display:grid;grid-template-columns:1fr 1fr;gap:12px}.ic-elegant-parties .ic-customer{border-left:3px solid var(--ic-accent)}
+    .ic-elegant-parties .ic-status{background:#f8f5f2}.ic-elegant-total{border-top:2px solid var(--ic-accent);margin-top:8px}
+    .ic-layout-compact{padding:18px;font-size:10px}.ic-compact-head{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;border-bottom:2px solid #111;padding-bottom:10px}
+    .ic-compact-head .ic-logo{max-width:54px;max-height:42px}.ic-compact-head .ic-brand{font-size:14px}.ic-compact-title{text-align:right}
+    .ic-compact-title h1{font-size:17px}.ic-compact-title .ic-doc-meta{margin-top:5px}.ic-compact-customer{margin-top:10px;border-bottom:1px dashed #9ca3af}
+    .ic-compact-customer .ic-customer{padding:7px 0}.ic-layout-compact .ic-items-table{margin:10px 0;font-size:9px}
+    .ic-layout-compact .ic-items-table th,.ic-layout-compact .ic-items-table td{padding:5px 4px}.ic-layout-compact .ic-totals{padding:6px;width:220px;font-size:9px}
+    .ic-layout-compact .ic-totals>div{padding:3px 0}.ic-layout-compact .ic-footer{margin-top:10px;padding-top:8px}
+    .ic-layout-corporate{display:grid;grid-template-columns:155px 1fr;padding:0;min-height:560px}.ic-corp-rail{background:#123d34;color:#fff;padding:22px 14px}
+    .ic-corp-rail .ic-logo{max-width:100%;filter:brightness(0) invert(1)}.ic-corp-rail>span{display:block;margin-top:24px;color:#a7f3d0;font-size:9px;letter-spacing:.16em}
+    .ic-corp-rail h1{font-size:20px;line-height:1.3;margin:8px 0 20px;overflow-wrap:anywhere}.ic-corp-rail .ic-doc-meta{grid-template-columns:1fr;gap:4px}
+    .ic-corp-rail .ic-doc-meta b{text-align:left;color:#fff;margin-bottom:10px}.ic-corp-rail .ic-doc-meta span{color:#a7f3d0}
+    .ic-corp-main{padding:22px 18px}.ic-corp-main>header{padding-bottom:15px;border-bottom:1px solid #d1d5db}
+    .ic-corp-parties{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+    .ic-corp-parties .ic-customer,.ic-corp-parties .ic-status{padding:8px;background:#f1f5f4}.ic-corp-main .ic-items-table{font-size:10px;margin:14px 0}
+    .ic-corp-main .ic-items-table th{background:#e7efec}.ic-corp-bottom{display:grid;grid-template-columns:1fr;gap:4px}
+    .ic-corp-bottom .ic-totals{background:#f1f5f4;border-left:3px solid #123d34}
+    .ic-layout-minimal{padding:34px}.ic-minimal-head{display:flex;justify-content:space-between;gap:20px;border-bottom:1px solid #111;padding-bottom:22px}
+    .ic-minimal-head>div:last-child{text-align:right}.ic-minimal-head .ic-logo{margin-left:auto}
+    .ic-minimal-head h1{font-size:30px;font-weight:400;letter-spacing:.12em;margin-top:8px}
+    .ic-minimal-meta{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:22px 0}.ic-minimal-meta .ic-doc-meta{align-content:start}
+    .ic-minimal-meta .ic-customer{padding:0}.ic-layout-minimal .ic-items-table th{background:#111;color:#fff}
+    .ic-minimal-summary{display:flex;justify-content:flex-end;border-top:1px solid #111}.ic-minimal-summary .ic-totals{border-left:1px solid #111}
+    .ic-paper[data-color-mode="mono"] .ic-layout{filter:grayscale(1)}
+    @media(max-width:560px){.ic-layout{padding:16px}.ic-layout-corporate{grid-template-columns:105px 1fr}.ic-corp-rail{padding:14px 9px}.ic-corp-main{padding:14px 10px}
+    .ic-modern-head,.ic-elegant-head{padding:16px}.ic-modern-body,.ic-elegant-body{padding:14px}.ic-layout-minimal{padding:18px}
+    .ic-layout .ic-items-table{font-size:9px}.ic-layout .ic-items-table th,.ic-layout .ic-items-table td{padding:6px 3px}.ic-layout .ic-totals{width:100%}}
 </style>
 </head>
 
@@ -2852,7 +2915,23 @@
         const title=mode==='invoice'?'INVOICE':'CASH MEMO';
         const preview=$id('ic-preview'); preview.dataset.theme=theme; preview.dataset.colorMode=colorMode; preview.style.setProperty('--ic-accent',colorMode==='mono'?'#111':accent);
         const isCash=mode==='cash';
-        preview.innerHTML='<div class="ic-head flex items-start justify-between gap-4"><div>'+(logoData?'<img class="ic-logo" src="'+logoData+'" alt="Logo">':'')+'<p class="ic-title">'+title+'</p><p class="ic-brand mt-3">'+esc(val('ic-business')||'প্রতিষ্ঠানের নাম')+'</p><p class="mt-1 text-xs">'+esc(val('ic-business-address'))+'</p><p class="text-xs">'+esc(val('ic-business-phone'))+'</p></div><div class="ic-meta min-w-[125px] text-right text-xs"><b>'+(isCash?'মেমো নং':'ইনভয়েস নং')+'</b><p class="mt-1">'+esc(val('ic-number')||'—')+'</p><b class="mt-3 block">তারিখ</b><p>'+esc(val('ic-date')||'—')+'</p></div></div><div class="my-5 grid grid-cols-2 gap-3 text-xs"><div class="ic-meta"><b>বিল প্রদানকারী</b><p class="mt-2 text-sm font-bold">'+esc(val('ic-customer')||'নাম উল্লেখ নেই')+'</p><p>'+esc(val('ic-customer-phone'))+'</p><p>'+esc(val('ic-customer-address'))+'</p></div><div class="ic-meta"><b>পেমেন্ট স্ট্যাটাস</b><p class="mt-2 text-sm font-bold">'+(t.due<=0?'পরিশোধিত':'বকেয়া')+'</p><p>'+(t.due<=0?'ধন্যবাদ, সম্পূর্ণ পরিশোধিত।':'অনুগ্রহ করে বকেয়া পরিশোধ করুন।')+'</p></div></div><table><thead><tr class="ic-table-head"><th>#</th><th>বিবরণ</th><th>পরিমাণ</th><th>একক মূল্য</th><th>মোট</th></tr></thead><tbody>'+rows+'</tbody></table><div class="ml-auto mt-5 max-w-xs"><div class="ic-total-box space-y-2 text-xs"><div class="flex justify-between"><span>সাবটোটাল</span><b>'+money(t.subtotal)+'</b></div><div class="flex justify-between"><span>ডিসকাউন্ট</span><b>− '+money(t.discount)+'</b></div><div class="flex justify-between"><span>VAT</span><b>'+money(t.vat)+'</b></div><div class="ic-grand flex justify-between text-sm font-extrabold"><span>সর্বমোট</span><span>'+money(t.total)+'</span></div><div class="flex justify-between"><span>পরিশোধিত</span><b>'+money(t.paid)+'</b></div><div class="flex justify-between text-sm font-bold"><span>বাকি</span><span>'+money(t.due)+'</span></div></div></div><div class="mt-8 flex items-end justify-between gap-4 border-t border-slate-300 pt-4 text-xs"><p class="max-w-[65%]">'+esc(val('ic-note')||'আপনাকে ধন্যবাদ। আবার আসবেন।')+'</p><p class="text-right">____________________<br>অনুমোদিত স্বাক্ষর</p></div><p class="mt-6 text-center text-[10px] text-slate-500">'+(isCash?'পণ্য/সার্ভিস গ্রহণের জন্য ধন্যবাদ':'এই ইনভয়েসটি কম্পিউটার দ্বারা তৈরি')+'</p>';
+        const business='<div class="ic-brand">'+esc(val('ic-business')||'প্রতিষ্ঠানের নাম')+'</div><div class="ic-address">'+esc(val('ic-business-address'))+'</div><div class="ic-phone">'+esc(val('ic-business-phone'))+'</div>';
+        const logo=logoData?'<img class="ic-logo" src="'+logoData+'" alt="Logo">':'';
+        const doc='<div class="ic-doc-meta"><span>'+(isCash?'মেমো নং':'ইনভয়েস নং')+'</span><b>'+esc(val('ic-number')||'—')+'</b><span>তারিখ</span><b>'+esc(val('ic-date')||'—')+'</b></div>';
+        const customer='<div class="ic-customer"><span class="ic-kicker">BILL TO / ক্রেতার তথ্য</span><b>'+esc(val('ic-customer')||'নাম উল্লেখ নেই')+'</b><span>'+esc(val('ic-customer-phone'))+'</span><span>'+esc(val('ic-customer-address'))+'</span></div>';
+        const status='<div class="ic-status"><span>পেমেন্ট স্ট্যাটাস</span><b>'+(t.due<=0?'পরিশোধিত':'বকেয়া')+'</b><small>'+(t.due<=0?'সম্পূর্ণ পরিশোধিত':'অনুগ্রহ করে বকেয়া পরিশোধ করুন')+'</small></div>';
+        const table='<table class="ic-items-table"><thead><tr><th>#</th><th>বিবরণ</th><th>পরিমাণ</th><th>একক মূল্য</th><th>মোট</th></tr></thead><tbody>'+rows+'</tbody></table>';
+        const totals='<div class="ic-totals"><div><span>সাবটোটাল</span><b>'+money(t.subtotal)+'</b></div><div><span>ডিসকাউন্ট</span><b>− '+money(t.discount)+'</b></div><div><span>VAT</span><b>'+money(t.vat)+'</b></div><div class="ic-grand"><span>সর্বমোট</span><b>'+money(t.total)+'</b></div><div><span>পরিশোধিত</span><b>'+money(t.paid)+'</b></div><div class="ic-due"><span>বাকি</span><b>'+money(t.due)+'</b></div></div>';
+        const footer='<footer class="ic-footer"><p>'+esc(val('ic-note')||'আপনাকে ধন্যবাদ। আবার আসবেন।')+'</p><div><span>____________________</span><b>অনুমোদিত স্বাক্ষর</b></div></footer>';
+        const standard=customer+status+table+totals+footer;
+        let layout='';
+        if(theme==='modern') layout='<div class="ic-layout ic-layout-modern"><header class="ic-modern-head"><div class="ic-branding">'+logo+business+'</div><div class="ic-modern-doc"><strong>'+title+'</strong>'+doc+'</div></header><div class="ic-modern-body">'+standard+'</div></div>';
+        else if(theme==='classic') layout='<div class="ic-layout ic-layout-classic"><header class="ic-classic-head">'+logo+'<div class="ic-classic-business">'+business+'</div><h1>'+title+'</h1>'+doc+'</header><div class="ic-classic-body">'+customer+table+'<div class="ic-classic-bottom">'+status+totals+'</div>'+footer+'</div></div>';
+        else if(theme==='elegant') layout='<div class="ic-layout ic-layout-elegant"><header class="ic-elegant-head"><div>'+logo+business+'</div><div><span>DOCUMENT</span><h1>'+title+'</h1>'+doc+'</div></header><div class="ic-elegant-body"><div class="ic-elegant-parties">'+customer+status+'</div>'+table+'<div class="ic-elegant-total">'+totals+'</div>'+footer+'</div></div>';
+        else if(theme==='compact') layout='<div class="ic-layout ic-layout-compact"><header class="ic-compact-head">'+logo+'<div>'+business+'</div><div class="ic-compact-title"><h1>'+title+'</h1>'+doc+'</div></header><div class="ic-compact-customer">'+customer+'</div>'+table+totals+footer+'</div>';
+        else if(theme==='corporate') layout='<div class="ic-layout ic-layout-corporate"><aside class="ic-corp-rail"><div class="ic-corp-mark">'+logo+'</div><span>DOCUMENT</span><h1>'+title+'</h1>'+doc+'</aside><main class="ic-corp-main"><header>'+business+'</header><div class="ic-corp-parties">'+customer+status+'</div>'+table+'<div class="ic-corp-bottom">'+totals+footer+'</div></main></div>';
+        else layout='<div class="ic-layout ic-layout-minimal"><header class="ic-minimal-head"><div><span class="ic-kicker">DOCUMENT / '+(isCash?'RECEIPT':'BILLING')+'</span><h1>'+title+'</h1></div><div>'+logo+business+'</div></header><div class="ic-minimal-meta">'+doc+customer+'</div>'+table+'<div class="ic-minimal-summary">'+totals+'</div>'+footer+'</div>';
+        preview.innerHTML=layout;
       }
       function snapshot() {
         const totals=calculate();

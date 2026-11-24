@@ -315,6 +315,29 @@
     @media(max-width:560px){.ic-layout{padding:16px}.ic-layout-corporate{grid-template-columns:105px 1fr}.ic-corp-rail{padding:14px 9px}.ic-corp-main{padding:14px 10px}
     .ic-modern-head,.ic-elegant-head{padding:16px}.ic-modern-body,.ic-elegant-body{padding:14px}.ic-layout-minimal{padding:18px}
     .ic-layout .ic-items-table{font-size:9px}.ic-layout .ic-items-table th,.ic-layout .ic-items-table td{padding:6px 3px}.ic-layout .ic-totals{width:100%}}
+
+    /* Desktop invoice workspace: editable form and persistent live document side by side */
+    #panel-invoice .ic-invoice-shell{max-width:1600px!important;width:100%}
+    #panel-invoice .ic-workspace{display:grid!important;grid-template-columns:minmax(390px,.92fr) minmax(480px,1.08fr);gap:20px;align-items:start}
+    #panel-invoice .ic-form-column{min-width:0;display:flex;flex-direction:column;gap:16px}
+    #panel-invoice .ic-preview-column{min-width:0;position:sticky;top:84px;align-self:start;max-height:calc(100vh - 100px);overflow-y:auto;overscroll-behavior:contain;padding-right:3px;scrollbar-width:thin}
+    #panel-invoice .ic-preview-column>article#ic-preview{min-height:0;overflow:visible}
+    #panel-invoice .ic-preview-column .card{margin-bottom:12px}
+    #panel-invoice .ic-preview-column #ic-themes{grid-template-columns:repeat(3,minmax(0,1fr))}
+    #panel-invoice .ic-preview-column #ic-preview{box-shadow:0 12px 32px rgba(2,6,23,.14)}
+    @media(max-width:1100px){
+      #panel-invoice .ic-workspace{grid-template-columns:minmax(0,1fr)}
+      #panel-invoice .ic-preview-column{position:static;max-height:none;overflow:visible;padding:0}
+      #panel-invoice .ic-preview-column #ic-themes{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media(min-width:1101px) and (max-width:1350px){
+      #panel-invoice .ic-workspace{grid-template-columns:minmax(350px,.88fr) minmax(420px,1.12fr);gap:14px}
+      #panel-invoice .ic-preview-column #ic-themes{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media print{
+      body.ic-printing #panel-invoice .ic-preview-column{position:static!important;max-height:none!important;overflow:visible!important}
+      body.ic-printing #ic-preview{width:100%!important}
+    }
 </style>
 </head>
 
@@ -544,7 +567,7 @@
         <hr class="border-slate-200 dark:border-white/10" />
 
         <!-- Customization -->
-        <div class="space-y-5">
+        <div class="ic-form-column space-y-5">
           <h3 class="flex items-center gap-2 text-sm font-bold"><i data-lucide="palette" class="h-4 w-4 text-indigo-500"></i> <span data-i18n="generator.customize">কাস্টমাইজ করুন</span></h3>
 
           <div class="grid gap-4 sm:grid-cols-2">
@@ -990,7 +1013,7 @@
 
     <!-- ============ INVOICE & CASH MEMO ============ -->
     <section id="panel-invoice" data-panel="invoice" role="tabpanel" aria-labelledby="tab-invoice" class="hidden space-y-6">
-      <div class="mx-auto max-w-5xl">
+      <div class="ic-invoice-shell mx-auto w-full max-w-[1600px]">
         <div class="mb-5">
           <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">ইনভয়েস ও ক্যাশ মেমো</h2>
           <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">পণ্য/সার্ভিসের হিসাব তৈরি, সংরক্ষণ এবং প্রিন্ট করুন। ডেটা এই ব্রাউজারেই থাকবে।</p>
@@ -1000,7 +1023,7 @@
           <button type="button" class="btn btn-soft" data-doc-mode="cash">ক্যাশ মেমো</button>
           <span class="ml-auto text-xs text-slate-500">স্বয়ংক্রিয় হিসাব • লোকাল সেভ</span>
         </div>
-        <div class="grid items-start gap-6 xl:grid-cols-2">
+        <div class="ic-workspace grid items-start gap-6">
           <div class="space-y-5">
             <div class="card space-y-4 p-4 sm:p-5">
               <h3 class="font-bold">প্রতিষ্ঠানের তথ্য</h3>
@@ -1048,7 +1071,7 @@
               <div id="ic-history" class="space-y-2 text-sm"><p class="text-slate-500">এখনো কিছু সেভ করা হয়নি।</p></div>
             </div>
           </div>
-          <div class="xl:sticky xl:top-4">
+          <div class="ic-preview-column">
             <div class="mb-2 flex items-center justify-between"><h3 class="font-bold">লাইভ প্রিভিউ</h3><span class="text-xs text-slate-500">A4 / প্রিন্ট</span></div>
             <div class="card mb-3 space-y-3 p-4">
               <div>

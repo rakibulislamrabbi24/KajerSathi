@@ -3201,7 +3201,8 @@
       function init(){loadFonts();['bfp-text','bfp-size','bfp-align','bfp-bold','bfp-bg'].forEach(id=>$id(id).addEventListener('input',render));$id('bfp-upload').addEventListener('change',upload);$id('bfp-copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(sample());toast('লেখা কপি হয়েছে','success');}catch{const t=$id('bfp-text');t.select();document.execCommand('copy');toast('লেখা কপি হয়েছে','success');}});$id('bfp-png').addEventListener('click',exportPng);render();}
       return{init};
     })();
-\n    const PWA = {
+
+    const PWA = {
       deferredPrompt: null,
       isStandalone: () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true,
       isIOS: () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1),

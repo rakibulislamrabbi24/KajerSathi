@@ -98,6 +98,12 @@
     .ic-paper table { width:100%; border-collapse:collapse; font-size:12px; }
     .ic-paper th,.ic-paper td { border-bottom:1px solid #e2e8f0; padding:9px 6px; text-align:left; }
     .ic-paper th { background:#f8fafc; font-weight:700; }
+
+    /* Bangla Font Previewer */
+    #bfp-grid .bfp-card{min-width:0;overflow:hidden;border:1px solid rgb(148 163 184 / .22);border-radius:16px;background:var(--bfp-card,#fff)}
+    #bfp-grid .bfp-card.is-selected{outline:2px solid #6366f1;outline-offset:1px}
+    #bfp-grid .bfp-sample{min-height:150px;padding:22px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8}
+    #bfp-grid .bfp-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-top:1px solid rgb(148 163 184 / .2);font-size:12px}
     html { scroll-behavior: smooth; }
     body { font-family: Inter, "Noto Sans Bengali", ui-sans-serif, system-ui, sans-serif; }
     .lang-pending body { visibility: hidden; }
@@ -406,6 +412,7 @@
           <i data-lucide="receipt" class="h-4 w-4"></i><span>ইনভয়েস / ক্যাশ মেমো</span>
         </button>
         <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="ocr" id="tab-ocr" aria-controls="panel-ocr" aria-selected="false"><i data-lucide="scan-text" class="h-4 w-4"></i><span>ছবি থেকে লেখা</span></button>
+        <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="fontpreview" id="tab-fontpreview" aria-controls="panel-fontpreview"><i data-lucide="type" class="h-4 w-4"></i><span>বাংলা ফন্ট</span></button>
         <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="upcoming" id="tab-upcoming" aria-controls="panel-upcoming" aria-selected="false">
           <i data-lucide="sparkles" class="h-4 w-4"></i><span data-i18n="nav.upcoming">আসছে</span>
         </button>
@@ -1125,6 +1132,29 @@
     </section>
 
     <!-- ============ UPCOMING ============ -->
+    <section id="panel-fontpreview" data-panel="fontpreview" role="tabpanel" aria-labelledby="tab-fontpreview" class="hidden">
+      <div class="mx-auto mb-6 max-w-3xl text-center">
+        <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">বাংলা ফন্ট প্রিভিউয়ার</h2>
+        <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">একই বাংলা লেখা বিভিন্ন ফন্টে দেখুন, তুলনা করুন এবং PNG হিসেবে সংরক্ষণ করুন।</p>
+      </div>
+      <div class="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[minmax(280px,.75fr)_minmax(0,1.5fr)]">
+        <aside class="card h-fit space-y-4 p-4 sm:p-5">
+          <div><label class="label" for="bfp-text">আপনার বাংলা লেখা</label><textarea id="bfp-text" rows="6" class="input w-full resize-y" placeholder="এখানে আপনার বাংলা লেখা লিখুন…">আমার সোনার বাংলা, আমি তোমায় ভালোবাসি।
+বাংলা ভাষা ও সংস্কৃতি আমাদের গর্ব।</textarea></div>
+          <div><div class="mb-2 flex items-center justify-between"><label class="label !mb-0" for="bfp-size">ফন্ট সাইজ</label><output id="bfp-size-value" class="text-sm font-semibold tabular-nums">৩০ px</output></div><input id="bfp-size" type="range" min="16" max="64" value="30" class="w-full accent-indigo-600"></div>
+          <div><label class="label" for="bfp-align">লেখার অবস্থান</label><select id="bfp-align" class="input w-full"><option value="left">বামে</option><option value="center" selected>মাঝে</option><option value="right">ডানে</option><option value="justify">দুই পাশে সমান</option></select></div>
+          <label class="flex items-center gap-2 text-sm"><input id="bfp-bold" type="checkbox" class="accent-indigo-600"> Bold / মোটা লেখা</label>
+          <div><label class="label" for="bfp-bg">প্রিভিউ ব্যাকগ্রাউন্ড</label><select id="bfp-bg" class="input w-full"><option value="paper">সাদা কাগজ</option><option value="cream">হালকা ক্রিম</option><option value="dark">ডার্ক</option><option value="transparent">স্বচ্ছ (PNG-তে সাদা)</option></select></div>
+          <div class="border-t border-slate-200 pt-4 dark:border-white/10"><label class="label" for="bfp-upload">নিজের ফন্ট যোগ করুন (.ttf / .otf / .woff / .woff2)</label><input id="bfp-upload" type="file" accept=".ttf,.otf,.woff,.woff2,font/ttf,font/otf,font/woff,font/woff2" class="input w-full text-xs"><p id="bfp-upload-status" class="mt-1 text-xs text-slate-500">ফন্টটি শুধু এই ব্রাউজার সেশনে ব্যবহার হবে।</p></div>
+          <div class="flex flex-wrap gap-2"><button id="bfp-copy" type="button" class="btn btn-secondary flex-1"><i data-lucide="copy" class="h-4 w-4"></i> লেখা কপি</button><button id="bfp-png" type="button" class="btn btn-primary flex-1"><i data-lucide="image-down" class="h-4 w-4"></i> PNG ডাউনলোড</button></div>
+          <p class="text-xs leading-relaxed text-slate-500">Google Fonts-এর ফন্ট প্রথমবার ইন্টারনেট থেকে লোড হবে। নিজের আপলোড করা ফন্ট সার্ভারে পাঠানো হয় না।</p>
+        </aside>
+        <div class="min-w-0">
+          <div class="mb-3 flex items-center justify-between gap-2"><h3 class="font-bold">ফন্ট তুলনা</h3><span id="bfp-count" class="text-xs text-slate-500">৬টি ফন্ট</span></div>
+          <div id="bfp-grid" class="grid gap-3 sm:grid-cols-2"></div>
+        </div>
+      </div>
+    </section>
     <section id="panel-upcoming" data-panel="upcoming" role="tabpanel" aria-labelledby="tab-upcoming" class="hidden">
       <div class="mx-auto mb-8 max-w-2xl text-center">
         <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl" data-i18n="upcoming.the_kajersathi_roadmap">KajerSathi-র রোডম্যাপ</h2>
@@ -1338,7 +1368,7 @@
      * Tabs
      * ===================================================================== */
     const Tabs = {
-      names: ['generator', 'scanner', 'jobphoto', 'bndate', 'avro', 'invoice', 'ocr', 'upcoming'],
+      names: ['generator', 'scanner', 'jobphoto', 'bndate', 'avro', 'invoice', 'ocr', 'fontpreview', 'upcoming'],
       show(name, updateHash = true) {
         if (!this.names.includes(name)) name = 'generator';
         $$('[data-tab]').forEach(b => {
@@ -3061,7 +3091,7 @@
       { id: 'pdf',      icon: 'file-text',      cat: 'docs',      eta: 'live', href: 'pdf-tools.html' },
       { id: 'invoice',  icon: 'receipt',        cat: 'docs',      eta: 'live', href: '#invoice' },
       { id: 'bndate',   icon: 'calendar-days',  cat: 'bangla',    eta: 'live', href: '#bndate' },
-      { id: 'bnfont',   icon: 'type',           cat: 'bangla',    eta: 'planned' },
+      { id: 'bnfont',   icon: 'type',           cat: 'bangla',    eta: 'live', href: '#fontpreview' },
       { id: 'color',    icon: 'palette',        cat: 'utilities', eta: 'planned' },
       { id: 'json',     icon: 'file-json',      cat: 'utilities', eta: 'planned' },
       { id: 'hash',     icon: 'hash',           cat: 'utilities', eta: 'planned' },
@@ -3146,7 +3176,32 @@
     /* =====================================================================
      * PWA — offline support, install button, update prompt
      * ===================================================================== */
-    const PWA = {
+
+    /* =====================================================================
+     * Bangla Font Previewer
+     * ===================================================================== */
+    const BanglaFontPreviewer = (() => {
+      const fonts=[
+        {name:'Noto Sans Bengali',family:'Noto Sans Bengali',category:'Sans Serif'},
+        {name:'Hind Siliguri',family:'Hind Siliguri',category:'Sans Serif'},
+        {name:'Baloo Da 2',family:'Baloo Da 2',category:'Rounded'},
+        {name:'Anek Bangla',family:'Anek Bangla',category:'Modern'},
+        {name:'Atma',family:'Atma',category:'Display'},
+        {name:'Galada',family:'Galada',category:'Decorative'}
+      ];
+      let selected='Noto Sans Bengali',customFont=null,customUrl=null,html2canvasPromise=null;
+      const $id=id=>document.getElementById(id);
+      const sample=()=> $id('bfp-text').value || 'বাংলা ফন্ট প্রিভিউ';
+      function loadFonts(){if(document.getElementById('bfp-google-fonts'))return;const l=document.createElement('link');l.id='bfp-google-fonts';l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;500;600;700&family=Atma:wght@400;500;600;700&family=Baloo+Da+2:wght@400;500;600;700&family=Galada&family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap';document.head.appendChild(l);}
+      function background(){return ({paper:'#ffffff',cream:'#fff8e7',dark:'#172033',transparent:'#ffffff'})[$id('bfp-bg').value]||'#fff';}
+      function render(){const host=$id('bfp-grid'),text=sample(),size=Number($id('bfp-size').value),align=$id('bfp-align').value,bold=$id('bfp-bold').checked,bg=background(),dark=$id('bfp-bg').value==='dark';$id('bfp-size-value').textContent=size+' px';const list=[...fonts,...(customFont?[customFont]:[])];host.replaceChildren();for(const f of list){const card=document.createElement('article');card.className='bfp-card'+(selected===f.family?' is-selected':'');card.dataset.font=f.family;const sampleEl=document.createElement('div');sampleEl.className='bfp-sample';sampleEl.textContent=text;sampleEl.style.cssText='font-family:'+JSON.stringify(f.family)+',sans-serif;font-size:'+size+'px;text-align:'+align+';font-weight:'+(bold?700:400)+';background:'+bg+';color:'+(dark?'#f8fafc':'#172033');const meta=document.createElement('div');meta.className='bfp-meta';const label=document.createElement('span');label.textContent=f.name+' · '+f.category;label.className='font-semibold truncate';const btn=document.createElement('button');btn.type='button';btn.className='btn '+(selected===f.family?'btn-primary':'btn-secondary')+' !px-3 !py-1.5';btn.textContent=selected===f.family?'নির্বাচিত':'নির্বাচন';btn.addEventListener('click',()=>{selected=f.family;render();});meta.append(label,btn);card.append(sampleEl,meta);host.append(card);}$id('bfp-count').textContent=list.length+'টি ফন্ট';}
+      async function loadCanvas(){if(window.html2canvas)return; if(html2canvasPromise)return html2canvasPromise;html2canvasPromise=new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';s.onload=()=>window.html2canvas?res():rej(Error('PNG export engine লোড হয়নি'));s.onerror=()=>rej(Error('PNG export engine লোড হয়নি'));document.head.appendChild(s);});return html2canvasPromise;}
+      async function exportPng(){try{const card=[...$id('bfp-grid').children].find(x=>x.dataset.font===selected);if(!card)return;const btn=$id('bfp-png');btn.disabled=true;btn.textContent='PNG তৈরি হচ্ছে…';await loadCanvas();const canvas=await html2canvas(card.querySelector('.bfp-sample'),{backgroundColor:background(),scale:2,useCORS:true,logging:false});const a=document.createElement('a');a.download='kajersathi-'+selected.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.png';a.href=canvas.toDataURL('image/png');a.click();toast('PNG ডাউনলোড তৈরি হয়েছে','success');}catch(e){console.error(e);toast(e.message||'PNG তৈরি করা যায়নি','error');}finally{$id('bfp-png').disabled=false;$id('bfp-png').innerHTML='<i data-lucide="image-down" class="h-4 w-4"></i> PNG ডাউনলোড';if(window.lucide)lucide.createIcons();}}
+      async function upload(e){const f=e.target.files[0];if(!f)return;if(f.size>12*1024*1024){toast('ফন্ট ফাইল 12 MB-এর কম হতে হবে','error');e.target.value='';return;}if(customUrl)URL.revokeObjectURL(customUrl);customUrl=URL.createObjectURL(f);const family='My Font '+Date.now();try{const face=new FontFace(family,'url('+customUrl+')');await face.load();document.fonts.add(face);customFont={name:f.name.replace(/\\.(ttf|otf|woff2?)$/i,''),family,category:'Uploaded'};selected=family;$id('bfp-upload-status').textContent='লোড হয়েছে: '+f.name;render();toast('নিজস্ব ফন্ট লোড হয়েছে','success');}catch(err){console.error(err);toast('এই ফন্ট ফাইলটি পড়া যায়নি','error');}}
+      function init(){loadFonts();['bfp-text','bfp-size','bfp-align','bfp-bold','bfp-bg'].forEach(id=>$id(id).addEventListener('input',render));$id('bfp-upload').addEventListener('change',upload);$id('bfp-copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(sample());toast('লেখা কপি হয়েছে','success');}catch{const t=$id('bfp-text');t.select();document.execCommand('copy');toast('লেখা কপি হয়েছে','success');}});$id('bfp-png').addEventListener('click',exportPng);render();}
+      return{init};
+    })();
+\n    const PWA = {
       deferredPrompt: null,
       isStandalone: () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true,
       isIOS: () => /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1),
@@ -3232,7 +3287,7 @@
       safeInit('AvroConverter', () => AvroConverter.init());
             safeInit('JobPhoto', () => JobPhoto.init());
       safeInit('InvoiceCashMemo', () => InvoiceCashMemo.init());
-      safeInit('ImageOCR', () => ImageOCR.init());
+      safeInit('ImageOCR', () => ImageOCR.init());\n      safeInit('BanglaFontPreviewer', () => BanglaFontPreviewer.init());
       safeInit('PWA', () => PWA.init());
       safeInit('Icons', () => refreshIcons());
     });

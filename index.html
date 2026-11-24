@@ -405,6 +405,7 @@
         <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="invoice" id="tab-invoice" aria-controls="panel-invoice" aria-selected="false">
           <i data-lucide="receipt" class="h-4 w-4"></i><span>ইনভয়েস / ক্যাশ মেমো</span>
         </button>
+        <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="ocr" id="tab-ocr" aria-controls="panel-ocr" aria-selected="false"><i data-lucide="scan-text" class="h-4 w-4"></i><span>ছবি থেকে লেখা</span></button>
         <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="upcoming" id="tab-upcoming" aria-controls="panel-upcoming" aria-selected="false">
           <i data-lucide="sparkles" class="h-4 w-4"></i><span data-i18n="nav.upcoming">আসছে</span>
         </button>
@@ -1101,6 +1102,26 @@
       </div>
     </section>
 
+    <!-- ============ IMAGE TO TEXT OCR ============ -->
+    <section id="panel-ocr" data-panel="ocr" role="tabpanel" aria-labelledby="tab-ocr" class="hidden">
+      <div class="mx-auto max-w-6xl space-y-6">
+        <header class="max-w-3xl"><h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">ছবি থেকে লেখা (OCR)</h2><p class="mt-2 text-sm text-slate-600 dark:text-slate-400">ছবি বা স্ক্যান করা ডকুমেন্ট থেকে বাংলা ও ইংরেজি লেখা বের করুন। আপনার ছবি ব্রাউজারেই প্রসেস হবে; সার্ভারে আপলোড করা হবে না।</p></header>
+        <div class="grid gap-6 lg:grid-cols-2">
+          <div class="card space-y-5 p-5 sm:p-6">
+            <div><label class="label" for="ocr-file">ছবি নির্বাচন করুন</label><input id="ocr-file" type="file" accept="image/png,image/jpeg,image/webp,image/bmp,image/tiff" class="input"><p class="mt-2 text-xs text-slate-500">JPG, PNG, WebP, BMP বা TIFF · সর্বোচ্চ 15 MB</p></div>
+            <div id="ocr-drop" class="grid min-h-48 place-items-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50/70 p-4 text-center dark:border-white/15 dark:bg-white/[.03]">
+              <div id="ocr-empty" class="space-y-2 text-slate-500"><i data-lucide="image-up" class="mx-auto h-9 w-9"></i><p class="font-semibold">এখানে ছবি Drag & Drop করুন</p><p class="text-xs">অথবা উপরের বাটন থেকে ছবি বাছাই করুন</p></div><img id="ocr-image" class="hidden max-h-80 max-w-full rounded-lg object-contain" alt="OCR source preview">
+            </div>
+            <div><label class="label" for="ocr-language">OCR Language</label><select id="ocr-language" class="input"><option value="ben+eng">বাংলা + English</option><option value="ben">শুধু বাংলা</option><option value="eng">English only</option></select></div>
+            <div class="space-y-2"><div class="flex items-center justify-between text-xs"><span id="ocr-status" class="text-slate-500" aria-live="polite">ছবি নির্বাচন করে লেখা বের করুন</span><span id="ocr-percent" class="font-semibold tabular-nums">0%</span></div><div class="h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-white/10"><div id="ocr-progress" class="h-full w-0 rounded-full bg-indigo-500 transition-all" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div></div>
+            <div class="flex flex-wrap gap-2"><button type="button" id="ocr-run" class="btn btn-primary inline-flex items-center gap-2" disabled><i data-lucide="scan-text" class="h-4 w-4"></i> লেখা বের করুন</button><button type="button" id="ocr-clear" class="btn btn-secondary">রিসেট</button></div>
+            <p class="text-xs leading-relaxed text-slate-500">প্রথমবার OCR চালালে প্রয়োজনীয় ভাষার মডেল ইন্টারনেট থেকে ডাউনলোড হবে। পরবর্তী ব্যবহারে ব্রাউজারের ক্যাশ থেকে দ্রুত লোড হতে পারে।</p>
+          </div>
+          <div class="card space-y-4 p-5 sm:p-6"><div class="flex flex-wrap items-center justify-between gap-2"><h3 class="font-bold">Extracted Text / প্রাপ্ত লেখা</h3><span id="ocr-count" class="text-xs text-slate-500">0 characters</span></div><textarea id="ocr-result" rows="15" class="input min-h-[320px] resize-y font-mono text-sm" placeholder="ছবি থেকে পাওয়া লেখা এখানে দেখা যাবে। প্রয়োজন হলে এখানেই সম্পাদনা করুন..." spellcheck="false"></textarea><div class="flex flex-wrap gap-2"><button type="button" id="ocr-copy" class="btn btn-secondary inline-flex items-center gap-2" disabled><i data-lucide="copy" class="h-4 w-4"></i> কপি</button><button type="button" id="ocr-download" class="btn btn-secondary inline-flex items-center gap-2" disabled><i data-lucide="download" class="h-4 w-4"></i> TXT ডাউনলোড</button></div></div>
+        </div><p class="text-xs text-slate-500">নোট: OCR-এর নির্ভুলতা ছবির রেজোলিউশন, আলো, ফন্ট ও স্ক্যানের মানের ওপর নির্ভর করে। হাতে লেখা বা ঝাপসা লেখা ভুল আসতে পারে।</p>
+      </div>
+    </section>
+
     <!-- ============ UPCOMING ============ -->
     <section id="panel-upcoming" data-panel="upcoming" role="tabpanel" aria-labelledby="tab-upcoming" class="hidden">
       <div class="mx-auto mb-8 max-w-2xl text-center">
@@ -1315,7 +1336,7 @@
      * Tabs
      * ===================================================================== */
     const Tabs = {
-      names: ['generator', 'scanner', 'jobphoto', 'bndate', 'avro', 'invoice', 'upcoming'],
+      names: ['generator', 'scanner', 'jobphoto', 'bndate', 'avro', 'invoice', 'ocr', 'upcoming'],
       show(name, updateHash = true) {
         if (!this.names.includes(name)) name = 'generator';
         $$('[data-tab]').forEach(b => {
@@ -3095,6 +3116,21 @@
       show('all');
     }
 
+    /* Image to Text OCR — local browser processing */
+    const ImageOCR = (() => {
+      const MAX_BYTES=15*1024*1024; let file=null,imageUrl='',worker=null,busy=false,scriptPromise=null;
+      const el=id=>$('#'+id);
+      function status(message,percent){el('ocr-status').textContent=message;const p=Math.max(0,Math.min(100,Math.round(percent||0)));el('ocr-percent').textContent=p+'%';el('ocr-progress').style.width=p+'%';el('ocr-progress').setAttribute('aria-valuenow',String(p));}
+      function actions(){const ok=!!el('ocr-result').value.trim();el('ocr-copy').disabled=!ok;el('ocr-download').disabled=!ok;el('ocr-count').textContent=el('ocr-result').value.length.toLocaleString()+' characters';}
+      function loadScript(){if(window.Tesseract)return Promise.resolve();if(scriptPromise)return scriptPromise;scriptPromise=new Promise((resolve,reject)=>{const sc=document.createElement('script');sc.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';sc.async=true;sc.onload=()=>window.Tesseract?resolve():reject(Error('OCR engine did not initialize'));sc.onerror=()=>reject(Error('OCR engine download failed. ইন্টারনেট সংযোগ পরীক্ষা করুন।'));document.head.appendChild(sc);});return scriptPromise;}
+      async function getWorker(lang){if(worker){await worker.terminate();worker=null;}await loadScript();worker=await Tesseract.createWorker(lang,Tesseract.OEM.LSTM_ONLY,{workerPath:'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/worker.min.js',corePath:'https://cdn.jsdelivr.net/npm/tesseract.js-core@5/tesseract-core-simd-lstm.wasm.js',langPath:'https://tessdata.projectnaptha.com/4.0.0',gzip:true,logger:m=>{if(m.status==='loading language traineddata')status('ভাষার মডেল ডাউনলোড হচ্ছে…',3+(m.progress||0)*12);else if(m.status==='recognizing text')status('ছবি থেকে লেখা শনাক্ত হচ্ছে…',18+(m.progress||0)*80);}});return worker;}
+      function choose(f){if(!f)return;const types=['image/png','image/jpeg','image/webp','image/bmp','image/tiff'];if(!types.includes(f.type)){toast('শুধু JPG, PNG, WebP, BMP বা TIFF ছবি ব্যবহার করুন।','error');return;}if(f.size>MAX_BYTES){toast('ছবির সাইজ 15 MB-এর কম হতে হবে।','error');return;}file=f;if(imageUrl)URL.revokeObjectURL(imageUrl);imageUrl=URL.createObjectURL(f);el('ocr-image').src=imageUrl;el('ocr-image').classList.remove('hidden');el('ocr-empty').classList.add('hidden');el('ocr-run').disabled=false;el('ocr-result').value='';actions();status('ছবি প্রস্তুত। এখন লেখা বের করুন।',0);}
+      async function run(){if(!file||busy)return;busy=true;el('ocr-run').disabled=true;el('ocr-clear').disabled=true;el('ocr-language').disabled=true;status('OCR প্রস্তুত করা হচ্ছে…',2);try{await getWorker(el('ocr-language').value);status('ছবি বিশ্লেষণ করা হচ্ছে…',20);const r=await worker.recognize(file);el('ocr-result').value=(r.data.text||'').trim();actions();status(el('ocr-result').value?'লেখা শনাক্ত সম্পন্ন। ফলাফল সম্পাদনা করতে পারবেন।':'কোনো লেখা শনাক্ত করা যায়নি। পরিষ্কার ছবি দিয়ে চেষ্টা করুন।',100);if(el('ocr-result').value)toast('ছবি থেকে লেখা বের হয়েছে।','success');}catch(e){console.error('[KajerSathi] OCR failed:',e);status(e.message||'OCR চালানো যায়নি।',0);toast('OCR চালাতে সমস্যা হয়েছে। ইন্টারনেট সংযোগ ও ছবিটি পরীক্ষা করুন।','error');}finally{busy=false;el('ocr-run').disabled=!file;el('ocr-clear').disabled=false;el('ocr-language').disabled=false;}}
+      function reset(){if(busy)return;file=null;if(imageUrl)URL.revokeObjectURL(imageUrl);imageUrl='';el('ocr-file').value='';el('ocr-image').removeAttribute('src');el('ocr-image').classList.add('hidden');el('ocr-empty').classList.remove('hidden');el('ocr-result').value='';actions();status('ছবি নির্বাচন করে লেখা বের করুন',0);el('ocr-run').disabled=true;}
+      function init(){el('ocr-file').addEventListener('change',e=>choose(e.target.files[0]));el('ocr-run').addEventListener('click',run);el('ocr-clear').addEventListener('click',reset);el('ocr-result').addEventListener('input',actions);el('ocr-copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(el('ocr-result').value);toast('লেখা কপি হয়েছে।','success');}catch{el('ocr-result').select();document.execCommand('copy');toast('লেখা কপি হয়েছে।','success');}});el('ocr-download').addEventListener('click',()=>{const u=URL.createObjectURL(new Blob([el('ocr-result').value],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=u;a.download='kajersathi-ocr.txt';a.click();URL.revokeObjectURL(u);});const d=el('ocr-drop');d.addEventListener('dragover',e=>{e.preventDefault();d.classList.add('border-indigo-500');});d.addEventListener('dragleave',()=>d.classList.remove('border-indigo-500'));d.addEventListener('drop',e=>{e.preventDefault();d.classList.remove('border-indigo-500');choose(e.dataTransfer.files[0]);});window.addEventListener('beforeunload',()=>{if(imageUrl)URL.revokeObjectURL(imageUrl);if(worker)worker.terminate();});actions();}
+      return {init};
+    })();
+
     /* =====================================================================
      * PWA — offline support, install button, update prompt
      * ===================================================================== */
@@ -3184,6 +3220,7 @@
       safeInit('AvroConverter', () => AvroConverter.init());
             safeInit('JobPhoto', () => JobPhoto.init());
       safeInit('InvoiceCashMemo', () => InvoiceCashMemo.init());
+      safeInit('ImageOCR', () => ImageOCR.init());
       safeInit('PWA', () => PWA.init());
       safeInit('Icons', () => refreshIcons());
     });

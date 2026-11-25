@@ -362,7 +362,7 @@
   "bndate.invalid_bangla": "That Bangla date is not valid. Check the day, month and Bangla year.",
   "bndate.before_supported": "This converter supports dates from 14 April 2019 onward.",
   "bndate.calendar_note": "Uses Bangladesh’s Bangla Academy revised civil calendar (2019). The year starts on 14 April; the first six months have 31 days and Falgun has 29 days (30 in a Gregorian leap year).",
-  "road.bndate.desc": "Convert Gregorian and Bangla dates using Bangladesh’s revised Bangla Academy calendar and identify the six seasons."
+  "road.bndate.desc": "Convert Gregorian and Bangla dates using Bangladesh’s revised Bangla Academy calendar and identify the six seasons.",
   "nav.dummy_profile": "Dummy Profile",
   "dummy.title": "Dummy Data & Mock Profiles",
   "dummy.subtitle": "Generate fictional profiles for testing, demos, form practice and development.",

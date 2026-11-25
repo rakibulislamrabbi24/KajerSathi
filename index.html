@@ -103,6 +103,13 @@
     #bfp-grid .bfp-card{min-width:0;overflow:hidden;border:1px solid rgb(148 163 184 / .22);border-radius:16px;background:var(--bfp-card,#fff)}
     #bfp-grid .bfp-card.is-selected{outline:2px solid #6366f1;outline-offset:1px}
     #bfp-grid .bfp-sample{min-height:150px;padding:22px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.8}
+    /* Reliable two-column font preview workspace (independent of Tailwind responsive utilities) */
+    #panel-fontpreview .bfp-workspace{display:grid!important;grid-template-columns:minmax(320px,.78fr) minmax(0,1.42fr);gap:20px;align-items:start;width:100%}
+    #panel-fontpreview .bfp-controls{min-width:0;position:sticky;top:84px;align-self:start;max-height:calc(100vh - 100px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+    #panel-fontpreview .bfp-results{min-width:0}
+    #panel-fontpreview #bfp-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    @media(max-width:1050px){#panel-fontpreview .bfp-workspace{grid-template-columns:minmax(0,1fr)}#panel-fontpreview .bfp-controls{position:static;max-height:none;overflow:visible}#panel-fontpreview #bfp-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:620px){#panel-fontpreview #bfp-grid{grid-template-columns:minmax(0,1fr)}}
     #bfp-grid .bfp-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-top:1px solid rgb(148 163 184 / .2);font-size:12px;color:#1e293b;background:#f8fafc}
     #bfp-grid .bfp-meta .bfp-font-name{min-width:0;color:#1e293b;font-weight:700;overflow-wrap:anywhere}
     #bfp-grid .bfp-select{flex:none;border:1px solid #64748b;border-radius:9px;padding:6px 10px;background:#fff;color:#172033;font-weight:700;line-height:1.5;cursor:pointer}
@@ -1147,8 +1154,8 @@
         <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">বাংলা ফন্ট প্রিভিউয়ার</h2>
         <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">একই বাংলা লেখা বিভিন্ন ফন্টে দেখুন, তুলনা করুন এবং PNG হিসেবে সংরক্ষণ করুন।</p>
       </div>
-      <div class="mx-auto grid max-w-7xl items-start gap-5 lg:grid-cols-[minmax(300px,.72fr)_minmax(0,1.55fr)]">
-        <aside class="card h-fit space-y-4 p-4 sm:p-5 lg:sticky lg:top-4">
+      <div class="bfp-workspace mx-auto max-w-[1600px] items-start gap-5">
+        <aside class="bfp-controls card h-fit space-y-4 p-4 sm:p-5">
           <div><label class="label" for="bfp-text">আপনার বাংলা লেখা</label><textarea id="bfp-text" rows="6" class="input w-full resize-y" placeholder="এখানে আপনার বাংলা লেখা লিখুন…">আমার সোনার বাংলা, আমি তোমায় ভালোবাসি।
 বাংলা ভাষা ও সংস্কৃতি আমাদের গর্ব।</textarea></div>
           <div><div class="mb-2 flex items-center justify-between"><label class="label !mb-0" for="bfp-size">ফন্ট সাইজ</label><output id="bfp-size-value" class="text-sm font-semibold tabular-nums">৩০ px</output></div><input id="bfp-size" type="range" min="16" max="64" value="30" class="w-full accent-indigo-600"></div>
@@ -1159,7 +1166,7 @@
           <div class="flex flex-wrap gap-2"><button id="bfp-copy" type="button" class="btn btn-secondary flex-1"><i data-lucide="copy" class="h-4 w-4"></i> লেখা কপি</button><button id="bfp-png" type="button" class="btn btn-primary flex-1"><i data-lucide="image-down" class="h-4 w-4"></i> PNG ডাউনলোড</button></div>
           <p class="text-xs leading-relaxed text-slate-500">Google Fonts ও বাংলা Web Font CDN থেকে ফন্ট লোড হয়; প্রথমবার ইন্টারনেট প্রয়োজন। নিজের আপলোড করা ফন্ট সার্ভারে পাঠানো হয় না।</p>
         </aside>
-        <div class="min-w-0">
+        <div class="bfp-results min-w-0">
           <div class="mb-3 flex items-center justify-between gap-2"><h3 class="font-bold">ফন্ট তুলনা</h3><span id="bfp-count" class="text-xs text-slate-500">৬টি ফন্ট</span></div>
           <div id="bfp-grid" class="grid gap-3 sm:grid-cols-2"></div>
         </div>

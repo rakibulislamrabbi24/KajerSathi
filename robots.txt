@@ -1,4 +1,16 @@
+# Public website access for search engines and AI assistants
 User-agent: *
 Allow: /
+
+# OpenAI search indexing for ChatGPT Search
+User-agent: OAI-SearchBot
+Allow: /
+
+# User-initiated page visits from ChatGPT
+User-agent: ChatGPT-User
+Allow: /
+
+# GPTBot is kept under the general policy above.
+# No private paths or files are published through this rule.
 
 Sitemap: https://kajersathi.vercel.app/sitemap.xml

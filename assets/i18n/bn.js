@@ -397,6 +397,7 @@
   "dummy.copy_all": "সব কপি",
   "dummy.empty": "এখনো কোনো প্রোফাইল তৈরি হয়নি।",
   "dummy.profiles": "টি প্রোফাইল",
+  "dummy.profile": "প্রোফাইল",
   "dummy.copy": "কপি",
   "dummy.copied": "প্রোফাইল কপি হয়েছে।",
   "dummy.choose_field": "অন্তত একটি তথ্যের ধরন নির্বাচন করুন।",

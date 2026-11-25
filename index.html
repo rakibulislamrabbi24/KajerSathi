@@ -3294,7 +3294,7 @@
       }
       function init(){
         $id('dummy-generate').addEventListener('click',run);
-        $id('dummy-copy-all').addEventListener('click',()=>copyProfile({fields:Object.assign({},...profiles.map(p=>p.fields))}));
+        $id('dummy-copy-all').addEventListener('click',()=>copyText(profiles.map((p,i)=>'--- '+ui('profile')+' '+(i+1)+' ---\\n'+Object.entries(p.fields).map(([k,v])=>k+': '+v).join('\\n')).join('\\n\\n')).then(()=>toast('dummy.copied','success')));
         $id('dummy-json').addEventListener('click',()=>download(JSON.stringify(profiles,null,2),'application/json;charset=utf-8','kajersathi-dummy-profiles.json'));
         $id('dummy-csv').addEventListener('click',()=>download('\uFEFF'+csv(),'text/csv;charset=utf-8','kajersathi-dummy-profiles.csv'));
         I18N.onChange(()=>{if(profiles.length)render();});

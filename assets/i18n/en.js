@@ -397,6 +397,7 @@
   "dummy.copy_all": "Copy all",
   "dummy.empty": "No profiles generated yet.",
   "dummy.profiles": "profiles",
+  "dummy.profile": "Profile",
   "dummy.copy": "Copy",
   "dummy.copied": "Profile copied.",
   "dummy.choose_field": "Select at least one field group.",

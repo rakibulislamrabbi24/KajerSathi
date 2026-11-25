@@ -430,6 +430,7 @@
         </button>
         <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="ocr" id="tab-ocr" aria-controls="panel-ocr" aria-selected="false"><i data-lucide="scan-text" class="h-4 w-4"></i><span>ছবি থেকে লেখা</span></button>
         <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="fontpreview" id="tab-fontpreview" aria-controls="panel-fontpreview"><i data-lucide="type" class="h-4 w-4"></i><span>বাংলা ফন্ট</span></button>
+        <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="jsonformatter" id="tab-jsonformatter" aria-controls="panel-jsonformatter" aria-selected="false"><i data-lucide="braces" class="h-4 w-4"></i><span data-i18n="nav.json_formatter">JSON ফরম্যাটার</span></button>
         <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="dummyprofile" id="tab-dummyprofile" aria-controls="panel-dummyprofile" aria-selected="false"><i data-lucide="users" class="h-4 w-4"></i><span data-i18n="nav.dummy_profile">ডামি প্রোফাইল</span></button>
         <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="upcoming" id="tab-upcoming" aria-controls="panel-upcoming" aria-selected="false">
           <i data-lucide="sparkles" class="h-4 w-4"></i><span data-i18n="nav.upcoming">আসছে</span>
@@ -1170,6 +1171,41 @@
         <div class="bfp-results min-w-0">
           <div class="mb-3 flex items-center justify-between gap-2"><h3 class="font-bold">ফন্ট তুলনা</h3><span id="bfp-count" class="text-xs text-slate-500">৬টি ফন্ট</span></div>
           <div id="bfp-grid" class="grid gap-3 sm:grid-cols-2"></div>
+        </div>
+      </div>
+    </section>
+    <section id="panel-jsonformatter" data-panel="jsonformatter" role="tabpanel" aria-labelledby="tab-jsonformatter" class="hidden space-y-5">
+      <div class="mx-auto max-w-3xl text-center">
+        <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl" data-i18n="json.title">JSON ফরম্যাটার</h2>
+        <p class="mt-2 text-sm text-slate-600 dark:text-slate-400" data-i18n="json.subtitle">JSON সুন্দরভাবে সাজান, Minify করুন এবং Syntax Error যাচাই করুন।</p>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <button type="button" id="json-format" class="btn btn-primary"><i data-lucide="wand-sparkles" class="h-4 w-4"></i><span data-i18n="json.format">Format / Beautify</span></button>
+          <button type="button" id="json-minify" class="btn btn-soft"><i data-lucide="minimize-2" class="h-4 w-4"></i><span data-i18n="json.minify">Minify</span></button>
+          <button type="button" id="json-validate" class="btn btn-soft"><i data-lucide="shield-check" class="h-4 w-4"></i><span data-i18n="json.validate">Validate</span></button>
+        </div>
+        <div class="flex items-center gap-2">
+          <label for="json-indent" class="text-sm font-medium text-slate-600 dark:text-slate-300" data-i18n="json.indent">Indent</label>
+          <select id="json-indent" class="input !w-20"><option value="2">2</option><option value="4">4</option><option value="1">1</option><option value="tab">Tab</option></select>
+        </div>
+      </div>
+      <div class="grid min-w-0 gap-4 lg:grid-cols-2">
+        <section class="card min-w-0 overflow-hidden">
+          <div class="flex items-center justify-between border-b border-slate-200/70 px-4 py-3 dark:border-white/10"><label for="json-input" class="font-bold" data-i18n="json.input">Input JSON</label><button type="button" id="json-sample" class="text-xs font-semibold text-indigo-600 hover:underline dark:text-indigo-300" data-i18n="json.sample">Load sample</button></div>
+          <textarea id="json-input" spellcheck="false" autocapitalize="off" autocomplete="off" class="min-h-[420px] w-full resize-y border-0 bg-transparent p-4 font-mono text-[13px] leading-6 outline-none focus:ring-0" placeholder='{"name":"KajerSathi","active":true}' data-i18n-placeholder="json.input_placeholder"></textarea>
+        </section>
+        <section class="card min-w-0 overflow-hidden">
+          <div class="flex items-center justify-between border-b border-slate-200/70 px-4 py-3 dark:border-white/10"><div class="font-bold" data-i18n="json.output">Formatted output</div><span id="json-status" class="text-xs text-slate-500" data-i18n="json.waiting">অপেক্ষমাণ</span></div>
+          <textarea id="json-output" readonly spellcheck="false" class="min-h-[420px] w-full resize-y border-0 bg-transparent p-4 font-mono text-[13px] leading-6 outline-none focus:ring-0" placeholder="Formatted JSON will appear here"></textarea>
+        </section>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <p id="json-message" role="status" aria-live="polite" class="min-w-0 text-sm text-slate-500 dark:text-slate-400" data-i18n="json.hint">JSON পেস্ট করে Format, Minify অথবা Validate চাপুন।</p>
+        <div class="flex flex-wrap gap-2">
+          <button type="button" id="json-copy" class="btn btn-soft" disabled><i data-lucide="copy" class="h-4 w-4"></i><span data-i18n="json.copy">Copy output</span></button>
+          <button type="button" id="json-download" class="btn btn-soft" disabled><i data-lucide="download" class="h-4 w-4"></i><span data-i18n="json.download">Download .json</span></button>
+          <button type="button" id="json-clear" class="btn btn-soft"><i data-lucide="trash-2" class="h-4 w-4"></i><span data-i18n="json.clear">Clear</span></button>
         </div>
       </div>
     </section>
@@ -3229,6 +3265,55 @@
      * PWA — offline support, install button, update prompt
      * ===================================================================== */
 
+    /* JSON Formatter — local-only JSON validation and formatting */
+    const JSONFormatter = (() => {
+      const $ = id => document.getElementById(id);
+      let validOutput = '';
+      const sample = {project:'KajerSathi',version:'1.0',active:true,features:['format','minify','validate'],settings:{language:'bn',theme:'dark'},usage:{count:125,offline:true}};
+      const t = key => I18N.t('json.'+key);
+      function setMessage(key, type='neutral', detail='') {
+        const el=$('json-message'); el.textContent=detail || t(key);
+        el.className='min-w-0 text-sm '+(type==='error'?'font-medium text-rose-600 dark:text-rose-400':type==='success'?'font-medium text-emerald-600 dark:text-emerald-400':'text-slate-500 dark:text-slate-400');
+      }
+      function setStatus(key,type='neutral') {
+        const el=$('json-status');el.textContent=t(key);
+        el.className='text-xs '+(type==='error'?'text-rose-600 dark:text-rose-400':type==='success'?'text-emerald-600 dark:text-emerald-400':'text-slate-500');
+      }
+      function parse() {
+        const source=$('json-input').value;
+        if(!source.trim()) {setStatus('waiting');setMessage('hint');validOutput='';$('json-output').value='';updateButtons();return null;}
+        try {return JSON.parse(source);}
+        catch(err) {
+          const match=String(err.message).match(/position\s+(\d+)/i);
+          let detail=err.message;
+          if(match){const pos=Number(match[1]),before=source.slice(0,pos),line=before.split('\n').length,column=pos-(before.lastIndexOf('\n')+1)+1;detail=t('invalid')+' '+t('line')+' '+line+', '+t('column')+' '+column+' — '+err.message;}
+          setStatus('invalid','error');setMessage('invalid','error',detail);validOutput='';$('json-output').value='';updateButtons();return null;
+        }
+      }
+      function updateButtons(){const enabled=!!validOutput;$('json-copy').disabled=!enabled;$('json-download').disabled=!enabled;}
+      function spaces(){const v=$('json-indent').value;return v==='tab'?'\t':Number(v);}
+      function render(compact=false) {
+        const value=parse();if(value===null)return;
+        try {validOutput=JSON.stringify(value,null,compact?0:spaces());$('json-output').value=validOutput;setStatus('valid','success');setMessage(compact?'minified':'formatted','success');updateButtons();}
+        catch(err){validOutput='';setStatus('invalid','error');setMessage('invalid','error',err.message);$('json-output').value='';updateButtons();}
+      }
+      function validate(){const value=parse();if(value!==null){setStatus('valid','success');setMessage('valid_message','success');}}
+      function clear(){ $('json-input').value='';$('json-output').value='';validOutput='';setStatus('waiting');setMessage('hint');updateButtons();$('json-input').focus();}
+      function init(){
+        $('json-format').addEventListener('click',()=>render(false));
+        $('json-minify').addEventListener('click',()=>render(true));
+        $('json-validate').addEventListener('click',validate);
+        $('json-indent').addEventListener('change',()=>{if(validOutput)render(false);});
+        $('json-copy').addEventListener('click',async()=>{if(!validOutput)return;await copyText(validOutput);setMessage('copied','success');});
+        $('json-download').addEventListener('click',()=>{if(validOutput)downloadBlob(new Blob([validOutput],{type:'application/json;charset=utf-8'}),'kajersathi-formatted.json');});
+        $('json-clear').addEventListener('click',clear);
+        $('json-sample').addEventListener('click',()=>{$('json-input').value=JSON.stringify(sample,null,2);render(false);});
+        $('json-input').addEventListener('input',()=>{if(!$('json-input').value.trim()){validOutput='';$('json-output').value='';setStatus('waiting');setMessage('hint');updateButtons();}else setMessage('ready');});
+        I18N.onChange(()=>{if(!$('json-message').dataset.custom)setMessage('hint');});
+      }
+      return {init};
+    })();
+
     /* Dummy Profile Generator — fictional, local-only test data */
     const DummyProfileGenerator = (() => {
       let profiles=[];
@@ -3432,6 +3517,7 @@
       safeInit('InvoiceCashMemo', () => InvoiceCashMemo.init());
       safeInit('ImageOCR', () => ImageOCR.init());
       safeInit('BanglaFontPreviewer', () => BanglaFontPreviewer.init());
+      safeInit('JSONFormatter', () => JSONFormatter.init());
       safeInit('DummyProfileGenerator', () => DummyProfileGenerator.init());
       safeInit('PWA', () => PWA.init());
       safeInit('Icons', () => refreshIcons());

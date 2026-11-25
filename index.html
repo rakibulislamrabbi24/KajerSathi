@@ -430,6 +430,7 @@
         </button>
         <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="ocr" id="tab-ocr" aria-controls="panel-ocr" aria-selected="false"><i data-lucide="scan-text" class="h-4 w-4"></i><span>ছবি থেকে লেখা</span></button>
         <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="fontpreview" id="tab-fontpreview" aria-controls="panel-fontpreview"><i data-lucide="type" class="h-4 w-4"></i><span>বাংলা ফন্ট</span></button>
+        <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="dummyprofile" id="tab-dummyprofile" aria-controls="panel-dummyprofile" aria-selected="false"><i data-lucide="users" class="h-4 w-4"></i><span data-i18n="nav.dummy_profile">ডামি প্রোফাইল</span></button>
         <button class="seg-btn min-w-[4.6rem] flex-col gap-1 px-0.5 !py-2.5 text-[11px] sm:min-w-[6.5rem] sm:flex-row sm:gap-1.5 sm:px-2.5 sm:text-sm" role="tab" data-tab="upcoming" id="tab-upcoming" aria-controls="panel-upcoming" aria-selected="false">
           <i data-lucide="sparkles" class="h-4 w-4"></i><span data-i18n="nav.upcoming">আসছে</span>
         </button>
@@ -1172,6 +1173,40 @@
         </div>
       </div>
     </section>
+    <section id="panel-dummyprofile" data-panel="dummyprofile" role="tabpanel" aria-labelledby="tab-dummyprofile" class="hidden">
+      <div class="mx-auto mb-6 max-w-3xl text-center">
+        <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl" data-i18n="dummy.title">ডামি ডেটা ও মক প্রোফাইল</h2>
+        <p class="mt-2 text-sm text-slate-600 dark:text-slate-400" data-i18n="dummy.subtitle">পরীক্ষা, ডেমো, ফর্ম প্র্যাকটিস ও ডেভেলপমেন্টের জন্য কাল্পনিক প্রোফাইল তৈরি করুন।</p>
+      </div>
+      <div class="grid items-start gap-5 lg:grid-cols-5">
+        <form id="dummy-form" class="card space-y-4 p-4 sm:p-5 lg:col-span-2" onsubmit="return false" autocomplete="off">
+          <div><label class="label" for="dummy-type" data-i18n="dummy.profile_type">প্রোফাইলের ধরন</label><select id="dummy-type" class="input w-full"><option value="general" data-i18n="dummy.general">সাধারণ</option><option value="student" data-i18n="dummy.student">শিক্ষার্থী</option><option value="job" data-i18n="dummy.job">চাকরিজীবী</option><option value="business" data-i18n="dummy.business">ব্যবসায়ী</option><option value="freelancer" data-i18n="dummy.freelancer">ফ্রিল্যান্সার</option></select></div>
+          <div><label class="label" for="dummy-count" data-i18n="dummy.quantity">কতটি প্রোফাইল তৈরি করবেন?</label><select id="dummy-count" class="input w-full"><option value="1">1</option><option value="5" selected>5</option><option value="10">10</option><option value="20">20</option></select></div>
+          <div><label class="label" for="dummy-gender" data-i18n="dummy.gender">লিঙ্গ</label><select id="dummy-gender" class="input w-full"><option value="any" data-i18n="dummy.any">যেকোনো</option><option value="male" data-i18n="dummy.male">পুরুষ</option><option value="female" data-i18n="dummy.female">নারী</option></select></div>
+          <div><label class="label" for="dummy-region" data-i18n="dummy.region">ডেটার অঞ্চল</label><select id="dummy-region" class="input w-full"><option value="bd" data-i18n="dummy.bangladesh">বাংলাদেশ</option><option value="global" data-i18n="dummy.global">আন্তর্জাতিক</option></select></div>
+          <div><label class="label" for="dummy-language" data-i18n="dummy.data_language">ডেটার ভাষা</label><select id="dummy-language" class="input w-full"><option value="auto" data-i18n="dummy.same_ui">UI ভাষা অনুসারে</option><option value="bn" data-i18n="dummy.bangla">বাংলা</option><option value="en" data-i18n="dummy.english">English</option><option value="mixed" data-i18n="dummy.mixed">মিশ্র (বাংলা + English)</option></select></div>
+          <div class="space-y-2">
+            <span class="label" data-i18n="dummy.include_fields">যে তথ্যগুলো যুক্ত করবেন</span>
+            <div class="grid grid-cols-2 gap-2 text-sm">
+              <label class="flex items-center gap-2"><input type="checkbox" class="dummy-field accent-indigo-600" value="identity" checked><span data-i18n="dummy.identity">পরিচয়</span></label>
+              <label class="flex items-center gap-2"><input type="checkbox" class="dummy-field accent-indigo-600" value="contact" checked><span data-i18n="dummy.contact">যোগাযোগ</span></label>
+              <label class="flex items-center gap-2"><input type="checkbox" class="dummy-field accent-indigo-600" value="address" checked><span data-i18n="dummy.address">ঠিকানা</span></label>
+              <label class="flex items-center gap-2"><input type="checkbox" class="dummy-field accent-indigo-600" value="work" checked><span data-i18n="dummy.work_education">কাজ / শিক্ষা</span></label>
+              <label class="flex items-center gap-2"><input type="checkbox" class="dummy-field accent-indigo-600" value="extras" checked><span data-i18n="dummy.extras">অতিরিক্ত তথ্য</span></label>
+            </div>
+          </div>
+          <button id="dummy-generate" type="button" class="btn btn-primary w-full"><i data-lucide="wand-sparkles" class="h-4 w-4"></i><span data-i18n="dummy.generate">প্রোফাইল তৈরি করুন</span></button>
+          <p class="text-xs leading-relaxed text-slate-500 dark:text-slate-400" data-i18n="dummy.safety">সব তথ্য সম্পূর্ণ কাল্পনিক। ফোন, ইমেইল ও পরিচয় শনাক্তকারী বাস্তব ব্যবহারের জন্য নয়।</p>
+        </form>
+        <div class="min-w-0 space-y-4 lg:col-span-3">
+          <div class="card flex flex-wrap items-center justify-between gap-3 p-4">
+            <div><h3 class="font-bold" data-i18n="dummy.results">তৈরি করা প্রোফাইল</h3><p id="dummy-count-label" class="mt-1 text-xs text-slate-500">0 profiles</p></div>
+            <div class="flex flex-wrap gap-2"><button id="dummy-copy-all" type="button" class="btn btn-soft" disabled><i data-lucide="copy" class="h-4 w-4"></i><span data-i18n="dummy.copy_all">সব কপি</span></button><button id="dummy-json" type="button" class="btn btn-soft" disabled><i data-lucide="file-json" class="h-4 w-4"></i><span>JSON</span></button><button id="dummy-csv" type="button" class="btn btn-soft" disabled><i data-lucide="file-spreadsheet" class="h-4 w-4"></i><span>CSV</span></button></div>
+          </div>
+          <div id="dummy-results" class="grid gap-3 sm:grid-cols-2" aria-live="polite"><div class="card p-6 text-center text-sm text-slate-500 sm:col-span-2" data-i18n="dummy.empty">এখনো কোনো প্রোফাইল তৈরি হয়নি।</div></div>
+        </div>
+      </div>
+    </section>
     <section id="panel-upcoming" data-panel="upcoming" role="tabpanel" aria-labelledby="tab-upcoming" class="hidden">
       <div class="mx-auto mb-8 max-w-2xl text-center">
         <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl" data-i18n="upcoming.the_kajersathi_roadmap">KajerSathi-র রোডম্যাপ</h2>
@@ -1385,7 +1420,7 @@
      * Tabs
      * ===================================================================== */
     const Tabs = {
-      names: ['generator', 'scanner', 'jobphoto', 'bndate', 'avro', 'invoice', 'ocr', 'fontpreview', 'upcoming'],
+      names: ['generator', 'scanner', 'jobphoto', 'bndate', 'avro', 'invoice', 'ocr', 'fontpreview', 'dummyprofile', 'upcoming'],
       show(name, updateHash = true) {
         if (!this.names.includes(name)) name = 'generator';
         $$('[data-tab]').forEach(b => {
@@ -3194,6 +3229,79 @@
      * PWA — offline support, install button, update prompt
      * ===================================================================== */
 
+    /* Dummy Profile Generator — fictional, local-only test data */
+    const DummyProfileGenerator = (() => {
+      let profiles=[];
+      const $id=id=>document.getElementById(id);
+      const pick=a=>a[Math.floor(Math.random()*a.length)];
+      const pools={
+        bn:{male:['আরিফ হোসেন','সাব্বির আহমেদ','তানভীর ইসলাম','মাহমুদুল হাসান','রাকিবুল করিম','নাঈম উদ্দিন'],female:['সাদিয়া আক্তার','নুসরাত জাহান','তাসনিম রহমান','ফারজানা ইসলাম','মেহজাবিন নূর','আফরিন সুলতানা'],last:['হোসেন','আহমেদ','ইসলাম','রহমান','আক্তার'],father:['মোঃ আব্দুল করিম','মোঃ জাহিদুল ইসলাম','মোঃ আনোয়ার হোসেন'],mother:['মোসাঃ নাসরিন আক্তার','মোসাঃ রোকেয়া বেগম','মোসাঃ শামীমা খাতুন'],district:['ঢাকা','কুষ্টিয়া','খুলনা','রাজশাহী','চট্টগ্রাম','সিলেট','বরিশাল','রংপুর'],area:['মিরপুর','ঝাউদিয়া','সদর','উপশহর','নতুন বাজার'],street:['রোড ৩, বাড়ি ১২','লেন ২, বাড়ি ৮','ব্লক সি, বাড়ি ২১'],jobs:['সফটওয়্যার সহকারী','হিসাব সহকারী','গ্রাফিক ডিজাইনার','শিক্ষক','বিক্রয় নির্বাহী'],study:['কম্পিউটার বিজ্ঞান','ব্যবসায় শিক্ষা','বাংলা','ইংরেজি','হিসাববিজ্ঞান'],companies:['নমুনা টেক সলিউশন','ডেমো ট্রেডার্স','কাল্পনিক ডিজিটাল'],schools:['উদাহরণ সরকারি কলেজ','নমুনা উচ্চ বিদ্যালয়','ডেমো বিশ্ববিদ্যালয়']},
+        en:{male:['Alex Morgan','Jordan Taylor','Ethan Parker','Noah Bennett','Ryan Cooper','Daniel Brooks'],female:['Olivia Carter','Emma Wilson','Ava Mitchell','Sophia Reed','Mia Foster','Grace Turner'],last:['Morgan','Taylor','Parker','Bennett','Cooper'],father:['Robert Morgan','David Taylor','Michael Parker'],mother:['Linda Morgan','Sarah Taylor','Emily Parker'],district:['Dhaka','Kushtia','Khulna','Rajshahi','Chattogram','Sylhet','Barishal','Rangpur'],area:['Central','North District','New Town','Lake View','Market Area'],street:['House 12, Road 3','House 8, Lane 2','House 21, Block C'],jobs:['Software Assistant','Accounts Officer','Graphic Designer','Teacher','Sales Executive'],study:['Computer Science','Business Studies','English','Accounting','Economics'],companies:['Sample Tech Solutions','Demo Traders','Fictional Digital'],schools:['Example Government College','Sample High School','Demo University']}
+      };
+      const dict={bn:{general:'সাধারণ',student:'শিক্ষার্থী',job:'চাকরিজীবী',business:'ব্যবসায়ী',freelancer:'ফ্রিল্যান্সার',male:'পুরুষ',female:'নারী',single:'অবিবাহিত',married:'বিবাহিত',id:'প্রোফাইল আইডি',name:'নাম',gender:'লিঙ্গ',dob:'জন্মতারিখ',age:'বয়স',status:'বৈবাহিক অবস্থা',father:'পিতার নাম',mother:'মাতার নাম',phone:'ফোন (নমুনা)',email:'ইমেইল (নমুনা)',website:'ওয়েবসাইট',address:'ঠিকানা',district:'জেলা',postal:'পোস্ট কোড',country:'দেশ',role:'পেশা / পদবি',org:'প্রতিষ্ঠান',education:'শিক্ষাগত বিষয়',institution:'শিক্ষাপ্রতিষ্ঠান',income:'নমুনা মাসিক আয়',blood:'নমুনা রক্তের গ্রুপ',username:'ইউজারনেম',company:'কোম্পানি',currency:'মুদ্রা'},en:{general:'General',student:'Student',job:'Employee',business:'Business',freelancer:'Freelancer',male:'Male',female:'Female',single:'Single',married:'Married',id:'Profile ID',name:'Name',gender:'Gender',dob:'Date of birth',age:'Age',status:'Marital status',father:'Father name',mother:'Mother name',phone:'Phone (sample)',email:'Email (sample)',website:'Website',address:'Address',district:'District / City',postal:'Postal code',country:'Country',role:'Role / Occupation',org:'Organization',education:'Field of study',institution:'Institution',income:'Sample monthly income',blood:'Sample blood group',username:'Username',company:'Company',currency:'Currency'}};
+      const ui=(key)=>I18N.t('dummy.'+key);
+      function generateOne(opts,index){
+        const lang=opts.language==='auto'?I18N.lang:opts.language==='mixed'?(Math.random()<.5?'bn':'en'):opts.language;
+        const p=pools[lang],gender=opts.gender==='any'?(Math.random()<.5?'male':'female'):opts.gender;
+        const first=pick(p[gender]),last=pick(p.last),name=lang==='bn'?first:first;
+        const year=1978+Math.floor(Math.random()*25),month=Math.floor(Math.random()*12),day=1+Math.floor(Math.random()*27);
+        const dob=new Date(Date.UTC(year,month,day)),age=new Date().getUTCFullYear()-year;
+        const type=opts.type, district=pick(p.district),country=opts.region==='bd'?(lang==='bn'?'বাংলাদেশ':'Bangladesh'):pick(['United States','United Kingdom','Canada','Australia','Singapore']);
+        const phone=opts.region==='bd'?'+880 1XXX-XXX-'+String(1000+Math.floor(Math.random()*9000)):'+'+pick(['1 202 555','44 20 7946','61 2 5550'])+'-XXXX';
+        const username='demo_'+String(1000+Math.floor(Math.random()*9000));
+        const email=username+'@example.com';
+        const postal=opts.region==='bd'?String(1000+Math.floor(Math.random()*9000)):'XXXXX';
+        const fields={};
+        const add=(group,key,value)=>{if(opts.fields.includes(group))fields[dict[lang][key]]=value;};
+        add('identity','id','MOCK-'+String(Date.now()).slice(-6)+'-'+String(index+1).padStart(2,'0'));
+        add('identity','name',name);add('identity','gender',dict[lang][gender]);add('identity','dob',lang==='bn'?dob.toLocaleDateString('bn-BD-u-nu-latn') :dob.toISOString().slice(0,10));add('identity','age',age+(lang==='bn'?' বছর':' years'));
+        add('identity','status',dict[lang][Math.random()<.65?'single':'married']);
+        add('identity','father',pick(p.father));add('identity','mother',pick(p.mother));
+        add('contact','phone',phone);add('contact','email',email);add('contact','website','https://example.com');add('contact','username',username);
+        add('address','address',pick(p.street)+', '+pick(p.area));add('address','district',district);add('address','postal',postal);add('address','country',country);
+        const role=type==='student'?(lang==='bn'?'শিক্ষার্থী':'Student'):pick(p.jobs);
+        add('work','role',role);add('work','org',pick(p.companies));add('work','education',pick(p.study));add('work','institution',pick(p.schools));
+        add('extras','income',(opts.region==='bd'?'৳ ':'$ ')+(10000+Math.floor(Math.random()*90000)).toLocaleString(lang==='bn'?'bn-BD':'en-US'));add('extras','blood',pick(['A+','A−','B+','B−','O+','O−','AB+','AB−']));add('extras','currency',opts.region==='bd'?'BDT':'USD');
+        return {type:dict[lang][type],language:lang==='bn'?'বাংলা':'English',fields};
+      }
+      function esc(s){return String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+      function render(){
+        const box=$id('dummy-results');box.replaceChildren();
+        profiles.forEach((p,i)=>{
+          const card=document.createElement('article');card.className='card min-w-0 overflow-hidden';
+          const head=document.createElement('div');head.className='flex items-center justify-between gap-2 border-b border-slate-200/70 bg-slate-50/70 p-3 dark:border-white/10 dark:bg-white/5';
+          const title=document.createElement('div');title.className='min-w-0';title.innerHTML='<div class="truncate font-bold">'+esc(p.fields[dict[p.language==='বাংলা'?'bn':'en'].name]||p.type)+'</div><div class="text-xs text-slate-500">'+esc(p.type)+' · '+esc(p.language)+'</div>';
+          const copy=document.createElement('button');copy.type='button';copy.className='btn btn-soft !px-3 !py-2';copy.innerHTML='<i data-lucide="copy" class="h-4 w-4"></i><span>'+esc(ui('copy'))+'</span>';copy.addEventListener('click',()=>copyProfile(p));
+          head.append(title,copy);card.append(head);
+          const body=document.createElement('dl');body.className='space-y-2 p-3 text-sm';
+          Object.entries(p.fields).forEach(([k,v])=>{const row=document.createElement('div');row.className='grid grid-cols-[minmax(0,.85fr)_minmax(0,1.15fr)] gap-2';const dt=document.createElement('dt');dt.className='text-slate-500 dark:text-slate-400';dt.textContent=k;const dd=document.createElement('dd');dd.className='break-words font-medium';dd.textContent=v;row.append(dt,dd);body.append(row);});
+          card.append(body);box.append(card);
+        });
+        $id('dummy-count-label').textContent=profiles.length+' '+ui('profiles');
+        ['dummy-copy-all','dummy-json','dummy-csv'].forEach(id=>$id(id).disabled=!profiles.length);
+        if(window.lucide)lucide.createIcons({nodes:[box]});
+      }
+      async function copyProfile(p){await copyText(Object.entries(p.fields).map(([k,v])=>k+': '+v).join('\n'));toast('dummy.copied','success');}
+      function csv(){
+        const rows=[];profiles.forEach(p=>Object.entries(p.fields).forEach(([k,v])=>rows.push([p.type,p.language,k,v])));
+        return [['Profile type','Language','Field','Value'],...rows].map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+      }
+      function download(text,type,name){downloadBlob(new Blob([text],{type}),name);}
+      function run(){
+        const opts={type:$id('dummy-type').value,count:Number($id('dummy-count').value),gender:$id('dummy-gender').value,region:$id('dummy-region').value,language:$id('dummy-language').value,fields:[...document.querySelectorAll('.dummy-field:checked')].map(x=>x.value)};
+        if(!opts.fields.length){toast('dummy.choose_field','error');return;}
+        profiles=Array.from({length:opts.count},(_,i)=>generateOne(opts,i));render();
+      }
+      function init(){
+        $id('dummy-generate').addEventListener('click',run);
+        $id('dummy-copy-all').addEventListener('click',()=>copyProfile({fields:Object.assign({},...profiles.map(p=>p.fields))}));
+        $id('dummy-json').addEventListener('click',()=>download(JSON.stringify(profiles,null,2),'application/json;charset=utf-8','kajersathi-dummy-profiles.json'));
+        $id('dummy-csv').addEventListener('click',()=>download('\uFEFF'+csv(),'text/csv;charset=utf-8','kajersathi-dummy-profiles.csv'));
+        I18N.onChange(()=>{if(profiles.length)render();});
+      }
+      return {init};
+    })();
+
     /* =====================================================================
      * Bangla Font Previewer
      * ===================================================================== */
@@ -3324,6 +3432,7 @@
       safeInit('InvoiceCashMemo', () => InvoiceCashMemo.init());
       safeInit('ImageOCR', () => ImageOCR.init());
       safeInit('BanglaFontPreviewer', () => BanglaFontPreviewer.init());
+      safeInit('DummyProfileGenerator', () => DummyProfileGenerator.init());
       safeInit('PWA', () => PWA.init());
       safeInit('Icons', () => refreshIcons());
     });
